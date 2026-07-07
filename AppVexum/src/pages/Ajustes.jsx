@@ -11,41 +11,16 @@ import { useState, useEffect } from 'react';
 import useAuthStore from '../stores/useAuthStore';
 import { useToast } from '../context/ToastContext';
 import { saveSetting, getSetting } from '../db';
-
-// Iconos SVG inline para evitar dependencia de lucide-react
-const Store = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-  </svg>
-);
-
-const CreditCard = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-  </svg>
-);
-
-const Calendar = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-);
-
-const Save = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-  </svg>
-);
-
-const RefreshCw = ({ size = 24, className = "" }) => (
-  <svg width={size} height={size} className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-  </svg>
-);
+import { useDarkMode } from '../hooks/useDarkMode';
+import { Moon, Sun, Store, CreditCard, Calendar, Save, RefreshCw } from 'lucide-react';
+import Modal from '../components/Modal';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 function Ajustes() {
   const { user, subscription, isActive, logout, activateDemoSubscription } = useAuthStore();
   const toast = useToast();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   
   // Estado para datos del negocio
@@ -206,37 +181,32 @@ function Ajustes() {
             <Store size={20} />
             Datos del Negocio
           </h2>
-
           <form onSubmit={handleSaveBusiness} className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nombre del Negocio *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={businessData.name}
-                onChange={handleChange}
-                placeholder="Ej. Abarrotes Don Pepe"
-                className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all h-12"
-                required
-              />
-            </div>
 
-            <div>
-              <label htmlFor="rfc" className="block text-sm font-medium text-gray-700 mb-1">RFC</label>
-              <input
-                type="text"
-                id="rfc"
-                name="rfc"
-                value={businessData.rfc}
-                onChange={handleChange}
-                placeholder="Ej. XAXX010101000"
-                className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all h-12 uppercase"
-              />
-            </div>
+            <Input
+              label="Nombre del Negocio *"
+              type="text"
+              id="name"
+              name="name"
+              value={businessData.name}
+              onChange={handleChange}
+              placeholder="Ej. Abarrotes Don Pepe"
+              required
+            />
 
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Dirección Fiscal</label>
+            <Input
+              label="RFC"
+              type="text"
+              id="rfc"
+              name="rfc"
+              value={businessData.rfc}
+              onChange={handleChange}
+              placeholder="Ej. XAXX010101000"
+              className="uppercase"
+            />
+
+            <div className="space-y-1">
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección Fiscal</label>
               <textarea
                 id="address"
                 name="address"
@@ -244,31 +214,14 @@ function Ajustes() {
                 onChange={handleChange}
                 placeholder="Calle, Número, Colonia, Ciudad..."
                 rows="3"
-                className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={isSaving}
-              className={`w-full flex items-center justify-center gap-2 py-3 px-4 rounded font-medium transition-all h-12 ${
-                isSaving 
-                  ? 'bg-gray-400 cursor-not-allowed text-white' 
-                  : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
-              }`}
-            >
-              {isSaving ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Guardando...
-                </>
-              ) : (
-                <>
-                  <Save size={20} />
-                  Guardar Cambios
-                </>
-              )}
-            </button>
+            <Button type="submit" isLoading={isSaving}>
+              <Save size={20} />
+              Guardar Cambios
+            </Button>
           </form>
         </section>
         
@@ -286,6 +239,32 @@ function Ajustes() {
             </div>
           </div>
         </div>
+
+        {/* Modo Oscuro */}
+        <section className="bg-white rounded-lg shadow p-4 border border-gray-100">
+          <h2 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
+            Apariencia
+          </h2>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-700">Modo Oscuro</p>
+              <p className="text-sm text-gray-500">Cambia la apariencia de la aplicación</p>
+            </div>
+            <button
+              onClick={toggleDarkMode}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                isDarkMode ? 'bg-blue-600' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  isDarkMode ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+        </section>
         
         {/* Cerrar sesión */}
         <button

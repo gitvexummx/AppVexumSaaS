@@ -13,11 +13,14 @@ import Dashboard from './pages/Dashboard';
 import POS from './pages/POS';
 import Inventario from './pages/Inventario';
 import Ajustes from './pages/Ajustes';
+import { useDarkMode } from './hooks/useDarkMode';
 
 function App() {
+  const { isDarkMode } = useDarkMode();
+  
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className={`min-h-screen bg-gray-50 ${isDarkMode ? 'dark' : ''}`}>
         <Routes>
           {/* Ruta pública: Login */}
           <Route path="/" element={<Login />} />
