@@ -147,7 +147,7 @@ function Ajustes() {
         {/* Estado de Suscripción */}
         <section className={`ajustes-suscripcion ${statusColor}`}>
           <div className="ajustes-suscripcion-header">
-            <h2 className="ajustes-suscripcion-title flex items-center gap-2">
+            <h2 className="ajustes-suscripcion-title">
               <IconStatus size={20} />
               Estado de Suscripción
             </h2>
@@ -178,7 +178,7 @@ function Ajustes() {
 
         {/* Formulario de Datos del Negocio */}
         <section className="ajustes-negocio">
-          <h2 className="ajustes-negocio-title flex items-center gap-2">
+          <h2 className="ajustes-negocio-title">
             <Store size={20} />
             Datos del Negocio
           </h2>
@@ -207,7 +207,7 @@ function Ajustes() {
             />
 
             <div className="space-y-1">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección Fiscal</label>
+              <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark-text-gray-300">Dirección Fiscal</label>
               <textarea
                 id="address"
                 name="address"
@@ -243,7 +243,7 @@ function Ajustes() {
 
         {/* Modo Oscuro */}
         <section className="ajustes-apariencia">
-          <h2 className="ajustes-apariencia-title flex items-center gap-2">
+          <h2 className="ajustes-apariencia-title">
             {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
             Apariencia
           </h2>

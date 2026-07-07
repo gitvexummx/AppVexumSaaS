@@ -103,7 +103,7 @@ function POS() {
     <div className="pos-container">
       {/* Header con buscador */}
       <header className="pos-header">
-        <div className="flex justify-between items-center mb-3">
+        <div className="pos-header-top">
           <h1 className="pos-title">Punto de Venta</h1>
           <button
             onClick={() => setShowCart(true)}
@@ -244,7 +244,7 @@ function POS() {
       {showCheckout && (
         <div className="pos-modal-overlay">
           <div className="pos-modal">
-            <h2 className="pos-modal-title mb-4">Finalizar venta</h2>
+            <h2 className="pos-modal-title pos-modal-title-mb">Finalizar venta</h2>
             
             <div className="pos-checkout-form">
               <div>
@@ -261,7 +261,7 @@ function POS() {
               </div>
               
               <div>
-                <label className="pos-checkout-label mb-2">
+                <label className="pos-checkout-label pos-checkout-label-mb">
                   Método de pago
                 </label>
                 <div className="pos-payment-methods">
@@ -307,7 +307,7 @@ function POS() {
                 <button
                   onClick={() => setShowCheckout(false)}
                   disabled={isSaving}
-                  className="pos-cancel-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="pos-cancel-btn pos-cancel-btn-disabled"
                 >
                   Cancelar
                 </button>

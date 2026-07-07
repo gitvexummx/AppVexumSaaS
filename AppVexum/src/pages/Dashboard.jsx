@@ -70,14 +70,14 @@ const Dashboard = () => {
         </div>
 
         {/* Skeleton List */}
-        <div className="dashboard-section mt-6">
+        <section className="dashboard-section mt-6">
           <div className="skeleton-line short mb-4"></div>
           <div className="space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="skeleton-list-item"></div>
             ))}
           </div>
-        </div>
+        </section>
       </div>
     );
   }
@@ -94,7 +94,7 @@ const Dashboard = () => {
         {/* Total Vendido */}
         <div className="dashboard-metric-card">
           <div className="dashboard-metric-info">
-            <p className="flex items-center gap-1">
+            <p>
               <DollarSign size={16} /> Total Vendido
             </p>
             <p className="dashboard-metric-value">{formatCurrency(stats.total)}</p>
@@ -107,7 +107,7 @@ const Dashboard = () => {
         {/* Número de Ventas */}
         <div className="dashboard-metric-card">
           <div className="dashboard-metric-info">
-            <p className="flex items-center gap-1">
+            <p>
               <ShoppingCart size={16} /> Ventas Hoy
             </p>
             <p className="dashboard-metric-value">{stats.count}</p>
@@ -120,13 +120,13 @@ const Dashboard = () => {
         {/* Producto Destacado */}
         <div className="dashboard-metric-card">
           <div className="dashboard-metric-info">
-            <p className="flex items-center gap-1">
+            <p>
               <Package size={16} /> Más Vendido
             </p>
-            <p className="dashboard-metric-value truncate max-w-[150px]">
+            <p className="dashboard-metric-value truncate max-w-150">
               {topProduct ? topProduct.name : 'Sin datos'}
             </p>
-            {topProduct && <p className="text-xs text-gray-500 dark:text-gray-400">{topProduct.soldQty} un.</p>}
+            {topProduct && <p className="text-xs text-gray-500 dark-text-gray-400">{topProduct.soldQty} un.</p>}
           </div>
           <div className="dashboard-metric-icon purple">
             <Package size={24} />
@@ -142,7 +142,7 @@ const Dashboard = () => {
           <div className="dashboard-empty-state">
             <AlertCircle size={40} className="mb-2 text-gray-300" />
             <p>No hay ventas registradas hoy.</p>
-            <Link to="/pos" className="mt-2 text-blue-600 dark:text-blue-400 font-medium hover:underline">Ir al POS</Link>
+            <Link to="/pos" className="mt-2 text-blue-600 dark-text-blue-400 font-medium hover-underline">Ir al POS</Link>
           </div>
         ) : (
           <div className="dashboard-table-container">
@@ -157,12 +157,12 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {recentSales.map((sale) => (
-                  <tr key={sale.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-3 py-3 font-medium text-gray-800 dark:text-white">#{sale.id}</td>
-                    <td className="px-3 py-3 text-gray-800 dark:text-white">
+                  <tr key={sale.id} className="border-b border-gray-100 dark-border-gray-700 hover-bg-gray-50 dark-hover-bg-gray-700">
+                    <td className="px-3 py-3 font-medium text-gray-800 dark-text-white">#{sale.id}</td>
+                    <td className="px-3 py-3 text-gray-800 dark-text-white">
                       {new Date(sale.date).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
                     </td>
-                    <td className="px-3 py-3 font-bold text-gray-700 dark:text-gray-300">{formatCurrency(sale.total)}</td>
+                    <td className="px-3 py-3 font-bold text-gray-700 dark-text-gray-300">{formatCurrency(sale.total)}</td>
                     <td className="px-3 py-3 text-right">
                       <span className="dashboard-status-badge">Completada</span>
                     </td>
