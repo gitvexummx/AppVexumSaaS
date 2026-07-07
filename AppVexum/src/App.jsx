@@ -2,9 +2,9 @@
  * App.jsx - Componente principal con routing
  * 
  * Configura las rutas de la aplicación Vexum MX
- * Incluye navegación inferior y protección de rutas
+ * Incluye navegación responsiva y protección de rutas
  */
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
 import ProtectedRoute from './components/ProtectedRoute';
 import SubscriptionGuard from './components/guards/SubscriptionGuard';
@@ -64,7 +64,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         
-        {/* Navegación inferior (solo en rutas autenticadas) */}
+        {/* Navegación responsiva (solo en rutas autenticadas) */}
         <AuthNavWrapper />
       </div>
     </Router>
@@ -72,11 +72,13 @@ function App() {
 }
 
 /**
- * Wrapper condicional para mostrar BottomNav solo en rutas autenticadas
+ * Wrapper condicional para mostrar BottomNav/Sidebar solo en rutas autenticadas
  */
 function AuthNavWrapper() {
+  const location = useLocation();
+  
   // Verificar si estamos en ruta pública
-  const isPublicRoute = window.location.pathname === '/';
+  const isPublicRoute = location.pathname === '/';
   
   if (isPublicRoute) return null;
   

@@ -2,7 +2,7 @@
  * ProtectedRoute - Componente para rutas protegidas
  * 
  * Verifica si el usuario está autenticado y tiene suscripción activa
- * Si no, redirige a la página de inicio/login
+ * Si no, redirige a la página de inicio/login o ajustes según corresponda
  */
 import { Navigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
@@ -22,7 +22,7 @@ function ProtectedRoute({ children, requireSubscription = true }) {
   
   // Verificar suscripción si es requerido
   if (requireSubscription && !isActive) {
-    return <Navigate to="/suscripcion" replace />;
+    return <Navigate to="/ajustes" replace />;
   }
   
   return children;
