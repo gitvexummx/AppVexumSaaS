@@ -236,3 +236,4 @@ const useSalesStore = create((set, get) => ({
 }));
 
 export default useSalesStore;
+export { useSalesStore };

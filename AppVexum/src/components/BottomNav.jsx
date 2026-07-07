@@ -63,14 +63,10 @@ function BottomNav() {
               }`
             }
           >
-            {({ isActive }) => (
-              <>
-                <div className={`${isActive ? 'text-blue-600' : ''}`}>
-                  {item.icon}
-                </div>
-                <span className="text-xs mt-1 font-medium">{item.label}</span>
-              </>
-            )}
+            <div className={`${isActive ? 'text-blue-600' : ''}`}>
+              {item.icon}
+            </div>
+            <span className="text-xs mt-1 font-medium">{item.label}</span>
           </NavLink>
         ))}
       </div>
