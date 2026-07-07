@@ -73,6 +73,65 @@ const useAuthStore = create((set, get) => ({
       console.error('Error cerrando sesión:', error);
       throw error;
     }
+  },
+
+  // Verificar si la suscripción está activa
+  checkSubscription: async () => {
+    try {
+      const subscriptionEntry = await db.settings.get('subscription');
+      const subscription = subscriptionEntry?.value || null;
+      
+      if (!subscription) {
+        set({ subscription: null, isActive: false });
+        return false;
+      }
+
+      const now = new Date();
+      const expirationDate = new Date(subscription.expiresAt);
+      const isActive = subscription.status === 'active' && now < expirationDate;
+
+      // Actualizar estado si cambió
+      if (isActive !== get().isActive) {
+        set({ 
+          subscription,
+          isActive 
+        });
+      }
+
+      return isActive;
+    } catch (error) {
+      console.error('Error verificando suscripción:', error);
+      set({ subscription: null, isActive: false });
+      return false;
+    }
+  },
+
+  // Activar suscripción demo (para pruebas)
+  activateDemoSubscription: async (days = 30) => {
+    try {
+      const now = new Date();
+      const expiresAt = new Date(now);
+      expiresAt.setDate(expiresAt.getDate() + days);
+
+      const subscriptionData = {
+        status: 'active',
+        plan: 'demo',
+        startedAt: now.toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        isDemo: true
+      };
+
+      await db.settings.put({ key: 'subscription', value: subscriptionData });
+      set({ 
+        subscription: subscriptionData,
+        isActive: true 
+      });
+
+      return subscriptionData;
+    } catch (error) {
+      console.error('Error activando suscripción demo:', error);
+      throw error;
+    }
   }
 }));
 
