@@ -8,17 +8,20 @@ import { useEffect, useState } from 'react';
 import useProductsStore from '../stores/useProductsStore';
 import useCartStore from '../stores/useCartStore';
 import useSalesStore from '../stores/useSalesStore';
+import { useToast } from '../context/ToastContext';
 
 function POS() {
   const { products, loadProducts, searchProducts, decreaseStock } = useProductsStore();
   const { cart, addToCart, updateQuantity, removeFromCart, clearCart, getSubtotal, getIVA, getTotal, getItemCount, getCartItems, setCustomerName } = useCartStore();
   const { saveSale } = useSalesStore();
+  const toast = useToast();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [showCart, setShowCart] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
   const [customerName, setLocalCustomerName] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('efectivo');
+  const [isSaving, setIsSaving] = useState(false);
   
   // Cargar productos al montar
   useEffect(() => {
@@ -58,6 +61,8 @@ function POS() {
   const handleCheckout = async () => {
     if (cart.length === 0) return;
     
+    setIsSaving(true);
+    
     try {
       const saleData = {
         date: new Date(),
@@ -84,10 +89,12 @@ function POS() {
       setShowCheckout(false);
       setShowCart(false);
       
-      alert('¡Venta registrada con éxito!');
+      toast.success('¡Venta registrada con éxito!');
     } catch (error) {
       console.error('Error procesando venta:', error);
-      alert('Error al procesar la venta');
+      toast.error('Error al procesar la venta. Intente nuevamente.');
+    } finally {
+      setIsSaving(false);
     }
   };
   
@@ -312,15 +319,28 @@ function POS() {
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => setShowCheckout(false)}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors h-12 font-medium"
+                  disabled={isSaving}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCheckout}
-                  className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors h-12 font-bold"
+                  disabled={isSaving}
+                  className={`flex-1 px-4 py-3 rounded-lg transition-colors h-12 font-bold flex items-center justify-center gap-2 ${
+                    isSaving
+                      ? 'bg-gray-400 cursor-not-allowed text-white'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
+                  }`}
                 >
-                  Confirmar venta
+                  {isSaving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      Procesando...
+                    </>
+                  ) : (
+                    'Confirmar venta'
+                  )}
                 </button>
               </div>
             </div>
