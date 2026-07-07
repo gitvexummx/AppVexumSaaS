@@ -126,7 +126,7 @@ const Dashboard = () => {
             <p className="dashboard-metric-value truncate max-w-[150px]">
               {topProduct ? topProduct.name : 'Sin datos'}
             </p>
-            {topProduct && <p className="text-xs text-gray-500">{topProduct.soldQty} un.</p>}
+            {topProduct && <p className="text-xs text-gray-500 dark:text-gray-400">{topProduct.soldQty} un.</p>}
           </div>
           <div className="dashboard-metric-icon purple">
             <Package size={24} />
@@ -142,7 +142,7 @@ const Dashboard = () => {
           <div className="dashboard-empty-state">
             <AlertCircle size={40} className="mb-2 text-gray-300" />
             <p>No hay ventas registradas hoy.</p>
-            <Link to="/pos" className="mt-2 text-blue-600 font-medium hover:underline">Ir al POS</Link>
+            <Link to="/pos" className="mt-2 text-blue-600 dark:text-blue-400 font-medium hover:underline">Ir al POS</Link>
           </div>
         ) : (
           <div className="dashboard-table-container">
@@ -157,12 +157,12 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {recentSales.map((sale) => (
-                  <tr key={sale.id} className="border-b hover:bg-gray-50">
-                    <td className="px-3 py-3 font-medium">#{sale.id}</td>
-                    <td className="px-3 py-3">
+                  <tr key={sale.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-3 py-3 font-medium text-gray-800 dark:text-white">#{sale.id}</td>
+                    <td className="px-3 py-3 text-gray-800 dark:text-white">
                       {new Date(sale.date).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
                     </td>
-                    <td className="px-3 py-3 font-bold text-gray-700">{formatCurrency(sale.total)}</td>
+                    <td className="px-3 py-3 font-bold text-gray-700 dark:text-gray-300">{formatCurrency(sale.total)}</td>
                     <td className="px-3 py-3 text-right">
                       <span className="dashboard-status-badge">Completada</span>
                     </td>
