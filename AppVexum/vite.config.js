@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
+    tailwindcss({
+      darkMode: 'class', // Habilita modo oscuro con clase .dark en el HTML
+    }),
     babel({ presets: [reactCompilerPreset()] })
   ],
 })
