@@ -1,3 +1,6 @@
+import { NavLink } from 'react-router-dom';
+import '../Elements.css';
+
 /**
  * BottomNav - Barra de navegación responsiva
  * 
@@ -6,8 +9,6 @@
  * - PC (>= 768px): Sidebar lateral fijo
  * Optimizado para touch con h-12 mínimo en botones
  */
-import { NavLink } from 'react-router-dom';
-
 function BottomNav() {
   const navItems = [
     {
@@ -52,57 +53,49 @@ function BottomNav() {
   return (
     <>
       {/* Versión móvil: Barra inferior (visible solo en pantallas < 768px) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-area-bottom z-50">
-        <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
-          {navItems.map((item) => (
+      <nav className="bottom-nav-mobile safe-area-bottom">
+        <div className="bottom-nav-mobile-container">
+          {navItems.map((item, index) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center w-full h-full transition-colors ${
-                  isActive
-                    ? 'text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`
+                `bottom-nav-item-mobile ${isActive ? 'bottom-nav-item-mobile-active' : 'bottom-nav-item-mobile-inactive'}`
               }
             >
-              <div className={({ isActive }) => isActive ? 'text-blue-600' : 'text-gray-500'}>
+              <div className={`bottom-nav-icon-mobile ${index === 0 ? '' : ''}`}>
                 {item.icon}
               </div>
-              <span className="text-xs mt-1 font-medium">{item.label}</span>
+              <span className="bottom-nav-label-mobile">{item.label}</span>
             </NavLink>
           ))}
         </div>
       </nav>
 
       {/* Versión desktop: Sidebar lateral (visible solo en pantallas >= 768px) */}
-      <nav className="hidden md:flex fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-200 z-50 flex-col">
-        <div className="p-6 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-blue-600">Vexum MX</h1>
-          <p className="text-xs text-gray-500 mt-1">Sistema de ventas</p>
+      <nav className="bottom-nav-desktop">
+        <div className="bottom-nav-desktop-header">
+          <h1 className="bottom-nav-desktop-title">Vexum MX</h1>
+          <p className="bottom-nav-desktop-subtitle">Sistema de ventas</p>
         </div>
-        <div className="flex-1 py-4">
+        <div className="bottom-nav-desktop-items">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-6 py-4 transition-colors ${
-                  isActive
-                    ? 'bg-blue-50 text-blue-600 border-r-4 border-blue-600'
-                    : 'text-gray-700 hover:bg-gray-50'
-                }`
+                `bottom-nav-item-desktop ${isActive ? 'bottom-nav-item-desktop-active' : 'bottom-nav-item-desktop-inactive'}`
               }
             >
-              <div className={({ isActive }) => isActive ? 'text-blue-600' : 'text-gray-500'}>
+              <div className="bottom-nav-icon-desktop">
                 {item.icon}
               </div>
-              <span className="font-medium">{item.label}</span>
+              <span className="bottom-nav-label-desktop">{item.label}</span>
             </NavLink>
           ))}
         </div>
-        <div className="p-4 border-t border-gray-200">
-          <p className="text-xs text-gray-400 text-center">© 2024 Vexum MX</p>
+        <div className="bottom-nav-desktop-footer">
+          <p className="bottom-nav-desktop-copyright">© 2024 Vexum MX</p>
         </div>
       </nav>
     </>

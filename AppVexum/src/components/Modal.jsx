@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import '../Elements.css';
 
 /**
  * Modal - Componente reutilizable para ventanas emergentes
@@ -12,15 +13,15 @@ export default function Modal({ isOpen, onClose, title, children, showCloseButto
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-xl">
+    <div className="modal-overlay">
+      <div className="modal-container">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white">{title}</h3>
+        <div className="modal-header">
+          <h3 className="modal-title">{title}</h3>
           {showCloseButton && (
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+              className="modal-close-button"
             >
               <X size={24} />
             </button>
@@ -28,7 +29,7 @@ export default function Modal({ isOpen, onClose, title, children, showCloseButto
         </div>
         
         {/* Content */}
-        <div>{children}</div>
+        <div className="modal-content">{children}</div>
       </div>
     </div>
   );
