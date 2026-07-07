@@ -6,6 +6,55 @@
    ============================================ */
 
 /* ============================================
+   VARIABLES CSS PARA DARK MODE
+   ============================================ */
+
+:root {
+  /* Colores de fondo */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  
+  /* Colores de texto */
+  --text-primary: #1f2937;
+  --text-secondary: #374151;
+  --text-tertiary: #4b5563;
+  --text-muted: #6b7280;
+  --text-light: #9ca3af;
+  --text-inverse: #ffffff;
+  
+  /* Bordes */
+  --border-primary: #e5e7eb;
+  --border-secondary: #f3f4f6;
+  --border-light: #d1d5db;
+  
+  /* Hover backgrounds */
+  --hover-bg: #f9fafb;
+  --hover-bg-dark: #374151;
+}
+
+/* Dark mode overrides */
+.dark {
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --bg-tertiary: #374151;
+  
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-light: #6b7280;
+  --text-inverse: #000000;
+  
+  --border-primary: #374151;
+  --border-secondary: #1f2937;
+  --border-light: #4b5563;
+  
+  --hover-bg: #374151;
+  --hover-bg-dark: #1f2937;
+}
+
+/* ============================================
    LOGIN PAGE
    Modifica: Contenedor principal, tarjeta de login, 
    formulario, inputs y botones del login
@@ -33,7 +82,7 @@
 }
 
 .login-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   padding: 2rem;
@@ -66,11 +115,11 @@
 .login-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .login-subtitle {
-  color: #6b7280;
+  color: var(--text-muted);
   margin-top: 0.5rem;
 }
 
@@ -98,14 +147,14 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .login-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
@@ -146,18 +195,18 @@
 
 .login-info-text {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--text-light);
 }
 
 .login-demo-info {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-primary);
 }
 
 .login-demo-info-text {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -197,21 +246,21 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   margin: -1rem -1rem 1rem;
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .dashboard-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-left: 2rem;
 }
 
 .dashboard-subtitle {
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.875rem;
   margin-left: 2rem;
 }
@@ -230,11 +279,11 @@
 }
 
 .dashboard-metric-card {
-  background: white;
+  background: var(--bg-primary);
   padding: 1.25rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-secondary);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -243,7 +292,7 @@
 .dashboard-metric-info p:first-child {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -251,11 +300,11 @@
 
 .dashboard-metric-info .text-xs {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .dashboard-metric-info .dark\:text-gray-400 {
-  color: #9ca3af;
+  color: var(--text-light);
 }
 
 .dashboard-metric-value.truncate {
@@ -268,7 +317,7 @@
 .dashboard-metric-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-top: 0.25rem;
 }
 
@@ -290,11 +339,11 @@
 }
 
 .dashboard-section {
-  background: white;
+  background: var(--bg-primary);
   padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-secondary);
 }
 
 .dashboard-section.mt-6 {
@@ -304,14 +353,14 @@
 .dashboard-section-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .dashboard-empty-state {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--text-muted);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -322,7 +371,7 @@
 }
 
 .dashboard-empty-state .text-gray-300 {
-  color: #d1d5db;
+  color: var(--border-light);
 }
 
 .dashboard-empty-state .mt-2 {
@@ -357,9 +406,9 @@
 
 .dashboard-table thead {
   font-size: 0.75rem;
-  color: #374151;
+  color: var(--text-secondary);
   text-transform: uppercase;
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
 }
 
 .dashboard-table th {
@@ -396,7 +445,7 @@
 
 .dashboard-table td {
   padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .dashboard-table td.font-medium {
@@ -404,43 +453,43 @@
 }
 
 .dashboard-table td.text-gray-800 {
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .dashboard-table td.text-gray-700 {
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .dashboard-table td.dark\:text-white {
-  color: #ffffff;
+  color: var(--text-inverse);
 }
 
 .dashboard-table td.dark\:text-gray-300 {
-  color: #d1d5db;
+  color: var(--text-tertiary);
 }
 
 .dashboard-table tr.border-b {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .dashboard-table tr.border-gray-100 {
-  border-bottom-color: #f3f4f6;
+  border-bottom-color: var(--border-secondary);
 }
 
 .dashboard-table tr.dark\:border-gray-700 {
-  border-bottom-color: #374151;
+  border-bottom-color: var(--border-light);
 }
 
 .dashboard-table tr.hover\:bg-gray-50:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .dashboard-table tr.dark\:hover\:bg-gray-700:hover {
-  background-color: #374151;
+  background-color: var(--hover-bg-dark);
 }
 
 .dashboard-table tr:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .dashboard-status-badge {
@@ -456,7 +505,7 @@
 /* Skeleton loading states */
 .skeleton-header {
   height: 2rem;
-  background-color: #e5e7eb;
+  background-color: var(--border-light);
   border-radius: 0.25rem;
   width: 33.333333%;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -468,17 +517,17 @@
 }
 
 .skeleton-card {
-  background: white;
+  background: var(--bg-primary);
   padding: 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-secondary);
   height: 8rem;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .skeleton-line {
   height: 1rem;
-  background-color: #e5e7eb;
+  background-color: var(--border-light);
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
 }
@@ -497,7 +546,7 @@
 
 .skeleton-list-item {
   height: 3rem;
-  background-color: #f3f4f6;
+  background-color: var(--bg-tertiary);
   border-radius: 0.25rem;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -539,7 +588,7 @@
 
 .pos-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   padding-bottom: 5rem;
 }
 
@@ -551,8 +600,8 @@
 }
 
 .pos-header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   padding: 1rem;
   position: sticky;
   top: 0;
@@ -569,7 +618,7 @@
 .pos-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .pos-cart-button {
@@ -607,7 +656,7 @@
 .pos-search-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
@@ -636,7 +685,7 @@
 }
 
 .pos-product-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 0.75rem;
@@ -658,7 +707,7 @@
 
 .pos-product-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 0.875rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -669,7 +718,7 @@
 
 .pos-product-stock {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-muted);
   margin-top: 0.25rem;
 }
 
@@ -697,7 +746,7 @@
 }
 
 .pos-modal {
-  background: white;
+  background: var(--bg-primary);
   width: 100%;
   max-width: 28rem;
   border-top-left-radius: 1rem;
@@ -730,7 +779,7 @@
 }
 
 .pos-modal-close {
-  color: #9ca3af;
+  color: var(--text-light);
   font-size: 1.5rem;
   background: none;
   border: none;
@@ -738,12 +787,12 @@
 }
 
 .pos-modal-close:hover {
-  color: #4b5563;
+  color: var(--text-tertiary);
 }
 
 .pos-cart-empty {
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-light);
   padding: 2rem;
 }
 
@@ -758,7 +807,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-secondary);
   padding-bottom: 0.75rem;
 }
 
@@ -768,13 +817,13 @@
 
 .pos-cart-item-name {
   font-weight: 500;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 0.875rem;
 }
 
 .pos-cart-item-price {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .pos-cart-item-controls {
@@ -786,7 +835,7 @@
 .pos-cart-quantity-btn {
   width: 2rem;
   height: 2rem;
-  background-color: #e5e7eb;
+  background-color: var(--border-light);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -798,7 +847,7 @@
 }
 
 .pos-cart-quantity-btn:hover {
-  background-color: #d1d5db;
+  background-color: var(--border-primary);
 }
 
 .pos-cart-quantity {
@@ -821,7 +870,7 @@
 }
 
 .pos-totals {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-primary);
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -835,7 +884,7 @@
 }
 
 .pos-total-label {
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .pos-total-value {
@@ -881,7 +930,7 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
@@ -892,7 +941,7 @@
 .pos-checkout-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
@@ -912,17 +961,17 @@
 .pos-payment-btn {
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   height: 3rem;
   font-weight: 500;
   transition: all 0.2s;
-  background: white;
-  color: #374151;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
 .pos-payment-btn:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .pos-payment-btn.active {
@@ -932,7 +981,7 @@
 }
 
 .pos-summary {
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   border-radius: 0.5rem;
   padding: 1rem;
   display: flex;
@@ -945,7 +994,7 @@
   justify-content: space-between;
   font-size: 1.125rem;
   font-weight: 700;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-primary);
   padding-top: 0.5rem;
 }
 
@@ -962,18 +1011,18 @@
 .pos-cancel-btn {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   border-radius: 0.5rem;
   transition: background-color 0.2s;
   height: 3rem;
   font-weight: 500;
-  background: white;
+  background: var(--bg-primary);
   cursor: pointer;
 }
 
 .pos-cancel-btn:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .pos-cancel-btn:disabled {
@@ -1054,7 +1103,7 @@
 
 .inventario-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   padding-bottom: 5rem;
 }
 
@@ -1066,8 +1115,8 @@
 }
 
 .inventario-header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   padding: 1rem;
   position: sticky;
   top: 0;
@@ -1077,13 +1126,13 @@
 .inventario-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .inventario-search {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
@@ -1101,13 +1150,13 @@
 
 .inventario-loading {
   text-align: center;
-  color: #6b7280;
+  color: var(--text-muted);
   padding: 2rem;
 }
 
 .inventario-empty {
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-light);
   padding: 2rem;
 }
 
@@ -1118,7 +1167,7 @@
 }
 
 .inventario-product-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 1rem;
@@ -1133,17 +1182,17 @@
 
 .inventario-product-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .inventario-product-category {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .inventario-product-stock {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .inventario-product-stock.low {
@@ -1157,7 +1206,7 @@
 
 .inventario-product-price {
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .inventario-actions {
@@ -1247,7 +1296,7 @@
 
 /* Modal container */
 .inventario-modal {
-  background: white;
+  background: var(--bg-primary);
   width: 100%;
   max-width: 28rem;
   border-top-left-radius: 1rem;
@@ -1276,7 +1325,7 @@
 }
 
 .inventario-modal-close {
-  color: #9ca3af;
+  color: var(--text-light);
   font-size: 1.5rem;
   background: none;
   border: none;
@@ -1284,7 +1333,7 @@
 }
 
 .inventario-modal-close:hover {
-  color: #4b5563;
+  color: var(--text-tertiary);
 }
 
 .inventario-form {
@@ -1297,14 +1346,14 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .inventario-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
@@ -1330,18 +1379,18 @@
 .inventario-cancel-btn {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   border-radius: 0.5rem;
   transition: background-color 0.2s;
   height: 3rem;
   font-weight: 500;
-  background: white;
+  background: var(--bg-primary);
   cursor: pointer;
 }
 
 .inventario-cancel-btn:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .inventario-submit-btn {
@@ -1400,7 +1449,7 @@
 
 .ajustes-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   padding-bottom: 6rem;
 }
 
@@ -1412,15 +1461,15 @@
 }
 
 .ajustes-header {
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
   padding: 1rem;
 }
 
 .ajustes-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 
 .ajustes-content {
@@ -1461,7 +1510,7 @@
 .ajustes-suscripcion-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -1505,7 +1554,7 @@
 .ajustes-suscripcion-alert {
   margin-top: 0.75rem;
   padding: 0.75rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
 }
 
@@ -1544,17 +1593,17 @@
 
 /* Datos del negocio section */
 .ajustes-negocio {
-  background: white;
+  background: var(--bg-primary);
   padding: 1rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-secondary);
 }
 
 .ajustes-negocio-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -1582,7 +1631,7 @@
 .ajustes-textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 0.5rem;
   outline: none;
   resize: vertical;
@@ -1595,7 +1644,7 @@
 
 /* Mi cuenta section */
 .ajustes-cuenta {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 1rem;
@@ -1603,7 +1652,7 @@
 
 .ajustes-cuenta-title {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
 }
 
@@ -1620,7 +1669,7 @@
 }
 
 .ajustes-cuenta-label {
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .ajustes-cuenta-value {
@@ -1629,16 +1678,16 @@
 
 /* Apariencia section */
 .ajustes-apariencia {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   padding: 1rem;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-secondary);
 }
 
 .ajustes-apariencia-title {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
@@ -1665,12 +1714,12 @@
 
 .ajustes-apariencia-info p:first-child {
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .ajustes-apariencia-info p:last-child {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-muted);
 }
 
 .ajustes-toggle {
@@ -1740,7 +1789,7 @@
 }
 
 .ajustes-logout-modal-content {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.5rem;
   padding: 1.5rem;
   max-width: 20rem;
@@ -1754,7 +1803,7 @@
 }
 
 .ajustes-logout-modal-text {
-  color: #4b5563;
+  color: var(--text-tertiary);
   margin-bottom: 1.5rem;
 }
 
@@ -1766,18 +1815,18 @@
 .ajustes-logout-cancel {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
   border-radius: 0.5rem;
   transition: background-color 0.2s;
   height: 3rem;
   font-weight: 500;
-  background: white;
+  background: var(--bg-primary);
   cursor: pointer;
 }
 
 .ajustes-logout-cancel:hover {
-  background-color: #f9fafb;
+  background-color: var(--hover-bg);
 }
 
 .ajustes-logout-confirm {

@@ -5,32 +5,19 @@ node_modules/
 # Build artifacts
 dist/
 build/
-*.js.map
-
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# Logs
-*.log
+target/
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py.class
 .Python
 env/
 venv/
 .venv/
+.ENV
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
@@ -43,6 +30,21 @@ coverage.xml
 *.log
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
 
 # Node.js
 npm-debug.log*
@@ -58,16 +60,106 @@ jspm_packages/
 coverage
 .nyc_output/
 coverage/
-lib-cov
-*.lcov
-*.info
-*.raw
-*.json
+htmlcov/
+.coverage*
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+.ENV
+.venv.bak/
+venv.bak/
+.installed.cfg
+lib/
+lib64/
+parts/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/python*/site-packages/easy-install.pth
+.egg-info/
+.eggs/
+pip-delete-this-directory.txt
+share/python-wheels/
+
+# Unit test / coverage reports
+.junit.xml
+.pytest_cache/
+.mypy_cache/
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django
 *.log
-*.tmp
-*.bak
-*.swp
-*.swo
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Sage
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# IDE
+.vscode/
+.idea/
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 ```
