@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
+import '../Pages.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -63,31 +64,31 @@ function Login() {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-800 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div className="login-container">
+      <div className="login-card">
         {/* Logo y título */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="login-logo">
+          <div className="login-logo-icon">
             <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Vexum MX</h1>
-          <p className="text-gray-500 mt-2">
+          <h1 className="login-title">Vexum MX</h1>
+          <p className="login-subtitle">
             Sistema de punto de venta para pequeños negocios
           </p>
         </div>
         
         {/* Formulario */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="login-form">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="login-error">
               {error}
             </div>
           )}
           
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="login-input-group">
+            <label className="login-label">
               Email
             </label>
             <input
@@ -96,12 +97,12 @@ function Login() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="tu@email.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+              className="login-input"
             />
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="login-input-group">
+            <label className="login-label">
               Contraseña
             </label>
             <input
@@ -110,31 +111,29 @@ function Login() {
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               placeholder="••••••••"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+              className="login-input"
             />
           </div>
           
           <button
             type="submit"
             disabled={loading}
-            className={`w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-12 font-semibold ${
-              loading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`login-button ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
         
         {/* Info adicional */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-400">
+        <div className="login-info">
+          <p className="login-info-text">
             ¿Olvidaste tu contraseña? Contacta a soporte
           </p>
         </div>
         
         {/* Demo info */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-xs text-gray-500 text-center">
+        <div className="login-demo-info">
+          <p className="login-demo-info-text">
             Modo demo: cualquier email y contraseña funcionarán
           </p>
         </div>
