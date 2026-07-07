@@ -112,7 +112,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-4 space-y-6 pb-24">
+    <div className="p-4 space-y-6 pb-24 md:pl-72">
       <header>
         <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
         <p className="text-gray-500 text-sm">Resumen de actividad de hoy</p>
