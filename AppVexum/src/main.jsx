@@ -1,17 +1,21 @@
 /**
  * main.jsx - Punto de entrada de la aplicación Vexum MX
- * 
+ *
  * Renderiza el componente App en el DOM
  * Configura modo estricto de React
+ * Incluye ToastProvider para notificaciones globales
  */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { ToastProvider } from './context/ToastContext.jsx'
 
-// Crear root y renderizar la aplicación
+// Crear root y renderizar la aplicación con proveedores globales
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ToastProvider>
+      <App />
+    </ToastProvider>
   </StrictMode>,
 )
