@@ -46,7 +46,19 @@ Thumbs.db
 *.swo
 *.tmp
 
-# Coverage
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+jspm_packages/
+*.js.map
+*.ts.map
+*.tsx.map
+*.jsx.map
+.nyc_output
+coverage
+.nyc_output/
 coverage/
 htmlcov/
 .coverage*
