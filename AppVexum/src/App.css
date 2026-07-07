@@ -182,3 +182,14 @@
     border-right-color: var(--border);
   }
 }
+
+
+
+
+
+.PageContainer {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding-bottom: 5rem;
+  margin: 0 0rem;
+}

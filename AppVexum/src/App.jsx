@@ -20,7 +20,7 @@ function App() {
   
   return (
     <Router>
-      <div className={`min-h-screen bg-gray-50 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="PageContainer">
         <Routes>
           {/* Ruta pública: Login */}
           <Route path="/" element={<Login />} />

@@ -13,11 +13,23 @@
 
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom, #2563eb, #1e40af);
+  background: linear-gradient(to bottom, #2563eb 0%, #551388 70%);
+  background-size: 300% 300%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+
+  animation: gradientAnimation 1s ease infinite alternate;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: -100% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .login-card {
@@ -150,6 +162,19 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================================
    DASHBOARD PAGE
    Modifica: Header, tarjetas de métricas, 
@@ -159,6 +184,7 @@
 .dashboard-container {
   padding: 1rem;
   padding-bottom: 6rem;
+  margin: 0 3rem;
 }
 
 @media (min-width: 768px) {
@@ -360,6 +386,19 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================================
    POS PAGE (Punto de Venta)
    Modifica: Header con buscador, catálogo de productos,
@@ -370,6 +409,7 @@
   min-height: 100vh;
   background-color: #f9fafb;
   padding-bottom: 5rem;
+  margin: 0 3rem;
 }
 
 @media (min-width: 768px) {
@@ -840,6 +880,20 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================================
    INVENTARIO PAGE
    Modifica: Header con buscador, lista de productos,
@@ -850,6 +904,7 @@
   min-height: 100vh;
   background-color: #f9fafb;
   padding-bottom: 5rem;
+  margin: 0 3rem;
 }
 
 @media (min-width: 768px) {
@@ -1168,6 +1223,22 @@
   border-bottom-color: transparent;
   animation: spin 1s linear infinite;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* ============================================
