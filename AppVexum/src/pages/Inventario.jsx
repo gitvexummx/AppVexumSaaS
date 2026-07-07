@@ -6,9 +6,11 @@
  */
 import { useEffect, useState } from 'react';
 import useProductsStore from '../stores/useProductsStore';
+import { useToast } from '../context/ToastContext';
 
 function Inventario() {
   const { products, loading, loadProducts, addProduct, updateProduct, deleteProduct, searchProducts } = useProductsStore();
+  const toast = useToast();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);
@@ -70,13 +72,15 @@ function Inventario() {
     try {
       if (editingProduct) {
         await updateProduct(editingProduct.id, productData);
+        toast.success('Producto actualizado correctamente');
       } else {
         await addProduct(productData);
+        toast.success('Producto guardado correctamente');
       }
       setShowForm(false);
     } catch (error) {
       console.error('Error guardando producto:', error);
-      alert('Error al guardar producto');
+      toast.error('Error al guardar producto. Intente nuevamente.');
     }
   };
   
@@ -86,9 +90,10 @@ function Inventario() {
     
     try {
       await deleteProduct(id);
+      toast.success('Producto eliminado correctamente');
     } catch (error) {
       console.error('Error eliminando producto:', error);
-      alert('Error al eliminar producto');
+      toast.error('Error al eliminar producto. Intente nuevamente.');
     }
   };
   
@@ -263,9 +268,17 @@ function Inventario() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-12 font-medium"
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading}
                 >
-                  {editingProduct ? 'Actualizar' : 'Guardar'}
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      Guardando...
+                    </span>
+                  ) : (
+                    editingProduct ? 'Actualizar' : 'Guardar'
+                  )}
                 </button>
               </div>
             </form>
