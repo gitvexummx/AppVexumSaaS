@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ToastProvider } from './context/ToastContext';
 import BottomNav from './components/BottomNav';
 import ProtectedRoute from './components/ProtectedRoute';
+import SubscriptionGuard from './components/guards/SubscriptionGuard';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import POS from './pages/POS';
@@ -23,7 +24,7 @@ function App() {
             {/* Ruta pública: Login */}
             <Route path="/" element={<Login />} />
             
-            {/* Rutas protegidas con autenticación */}
+            {/* Rutas protegidas con autenticación y suscripción */}
             <Route
               path="/dashboard"
               element={
@@ -36,7 +37,9 @@ function App() {
               path="/pos"
               element={
                 <ProtectedRoute>
-                  <POS />
+                  <SubscriptionGuard>
+                    <POS />
+                  </SubscriptionGuard>
                 </ProtectedRoute>
               }
             />
@@ -44,7 +47,9 @@ function App() {
               path="/inventario"
               element={
                 <ProtectedRoute>
-                  <Inventario />
+                  <SubscriptionGuard>
+                    <Inventario />
+                  </SubscriptionGuard>
                 </ProtectedRoute>
               }
             />
