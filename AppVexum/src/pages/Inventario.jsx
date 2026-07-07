@@ -273,8 +273,8 @@ function Inventario() {
                   disabled={loading}
                 >
                   {loading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <div className="inventario-spinner"></div>
+                    <span className="inventario-submit-loading">
+                      <span className="inventario-spinner"></span>
                       Guardando...
                     </span>
                   ) : (

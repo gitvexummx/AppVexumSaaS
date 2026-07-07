@@ -1022,8 +1022,8 @@
   background-color: #1e40af;
 }
 
-/* Form modal */
-.inventario-modal {
+/* Form modal overlay */
+.inventario-modal-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -1034,12 +1034,13 @@
 }
 
 @media (min-width: 640px) {
-  .inventario-modal {
+  .inventario-modal-overlay {
     align-items: center;
   }
 }
 
-.inventario-modal-content {
+/* Modal container */
+.inventario-modal {
   background: white;
   width: 100%;
   max-width: 28rem;
@@ -1051,7 +1052,7 @@
 }
 
 @media (min-width: 640px) {
-  .inventario-modal-content {
+  .inventario-modal {
     border-radius: 0.5rem;
   }
 }
@@ -1086,12 +1087,7 @@
   gap: 1rem;
 }
 
-.inventario-form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.inventario-form-label {
+.inventario-label {
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
@@ -1099,7 +1095,7 @@
   margin-bottom: 0.25rem;
 }
 
-.inventario-form-input {
+.inventario-input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;
@@ -1108,24 +1104,24 @@
   height: 3rem;
 }
 
-.inventario-form-input:focus {
+.inventario-input:focus {
   --tw-ring-color: #3b82f6;
   border-color: #3b82f6;
 }
 
-.inventario-form-grid {
+.inventario-grid-cols-2 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.inventario-form-actions {
+.inventario-actions {
   display: flex;
   gap: 0.75rem;
   padding-top: 1rem;
 }
 
-.inventario-form-cancel {
+.inventario-cancel-btn {
   flex: 1;
   padding: 0.75rem 1rem;
   border: 1px solid #d1d5db;
@@ -1138,11 +1134,11 @@
   cursor: pointer;
 }
 
-.inventario-form-cancel:hover {
+.inventario-cancel-btn:hover {
   background-color: #f9fafb;
 }
 
-.inventario-form-submit {
+.inventario-submit-btn {
   flex: 1;
   padding: 0.75rem 1rem;
   background-color: #2563eb;
@@ -1155,20 +1151,22 @@
   cursor: pointer;
 }
 
-.inventario-form-submit:hover {
+.inventario-submit-btn:hover {
   background-color: #1d4ed8;
 }
 
-.inventario-form-submit:disabled {
+.inventario-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.inventario-submit-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+.inventario-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid white;
+  border-bottom-color: transparent;
+  animation: spin 1s linear infinite;
 }
 
 
