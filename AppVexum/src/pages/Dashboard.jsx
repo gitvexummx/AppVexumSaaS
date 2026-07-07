@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSalesStore } from '../stores/useSalesStore';
 import { Link } from 'react-router-dom';
 import { TrendingUp, ShoppingCart, Package, DollarSign, AlertCircle } from 'lucide-react';
+import '../Pages.css';
 
 /**
  * Dashboard con Datos Reales
@@ -54,26 +55,26 @@ const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="p-4 space-y-4 pb-24 md:pl-64 pt-16">
+      <div className="dashboard-container">
         {/* Skeleton Header */}
-        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 animate-pulse mb-6"></div>
+        <div className="skeleton-header"></div>
         
         {/* Skeleton Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="dashboard-metrics-grid">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 h-32 animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            <div key={i} className="skeleton-card">
+              <div className="skeleton-line short"></div>
+              <div className="skeleton-line long"></div>
             </div>
           ))}
         </div>
 
         {/* Skeleton List */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 mt-6">
-          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
+        <div className="dashboard-section mt-6">
+          <div className="skeleton-line short mb-4"></div>
           <div className="space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-12 bg-gray-100 dark:bg-gray-700 rounded animate-pulse"></div>
+              <div key={i} className="skeleton-list-item"></div>
             ))}
           </div>
         </div>
@@ -82,71 +83,71 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-4 space-y-6 pb-24 md:pl-64 pt-16">
-      <header className="sticky top-0 z-30 bg-gray-50 dark:bg-gray-900 -mx-4 px-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">Resumen de actividad de hoy</p>
+    <div className="dashboard-container">
+      <header className="dashboard-header">
+        <h1 className="dashboard-title">Dashboard</h1>
+        <p className="dashboard-subtitle">Resumen de actividad de hoy</p>
       </header>
 
       {/* Tarjetas de Métricas */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section className="dashboard-metrics-grid">
         {/* Total Vendido */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1">
+        <div className="dashboard-metric-card">
+          <div className="dashboard-metric-info">
+            <p className="flex items-center gap-1">
               <DollarSign size={16} /> Total Vendido
             </p>
-            <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">{formatCurrency(stats.total)}</p>
+            <p className="dashboard-metric-value">{formatCurrency(stats.total)}</p>
           </div>
-          <div className="bg-green-100 dark:bg-green-900 p-3 rounded-full text-green-600 dark:text-green-400">
+          <div className="dashboard-metric-icon">
             <TrendingUp size={24} />
           </div>
         </div>
 
         {/* Número de Ventas */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1">
+        <div className="dashboard-metric-card">
+          <div className="dashboard-metric-info">
+            <p className="flex items-center gap-1">
               <ShoppingCart size={16} /> Ventas Hoy
             </p>
-            <p className="text-2xl font-bold text-gray-800 dark:text-white mt-1">{stats.count}</p>
+            <p className="dashboard-metric-value">{stats.count}</p>
           </div>
-          <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-full text-blue-600 dark:text-blue-400">
+          <div className="dashboard-metric-icon blue">
             <ShoppingCart size={24} />
           </div>
         </div>
 
         {/* Producto Destacado */}
-        <div className="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-1">
+        <div className="dashboard-metric-card">
+          <div className="dashboard-metric-info">
+            <p className="flex items-center gap-1">
               <Package size={16} /> Más Vendido
             </p>
-            <p className="text-lg font-bold text-gray-800 dark:text-white mt-1 truncate max-w-[150px]">
+            <p className="dashboard-metric-value truncate max-w-[150px]">
               {topProduct ? topProduct.name : 'Sin datos'}
             </p>
             {topProduct && <p className="text-xs text-gray-500 dark:text-gray-400">{topProduct.soldQty} un.</p>}
           </div>
-          <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-full text-purple-600 dark:text-purple-400">
+          <div className="dashboard-metric-icon purple">
             <Package size={24} />
           </div>
         </div>
       </section>
 
       {/* Últimas Ventas */}
-      <section className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Últimas Ventas</h2>
+      <section className="dashboard-section">
+        <h2 className="dashboard-section-title">Últimas Ventas</h2>
         
         {recentSales.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400 flex flex-col items-center">
-            <AlertCircle size={40} className="mb-2 text-gray-300 dark:text-gray-600" />
+          <div className="dashboard-empty-state">
+            <AlertCircle size={40} className="mb-2 text-gray-300" />
             <p>No hay ventas registradas hoy.</p>
             <Link to="/pos" className="mt-2 text-blue-600 dark:text-blue-400 font-medium hover:underline">Ir al POS</Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
+          <div className="dashboard-table-container">
+            <table className="dashboard-table">
+              <thead>
                 <tr>
                   <th className="px-3 py-2">ID</th>
                   <th className="px-3 py-2">Hora</th>
@@ -163,7 +164,7 @@ const Dashboard = () => {
                     </td>
                     <td className="px-3 py-3 font-bold text-gray-700 dark:text-gray-300">{formatCurrency(sale.total)}</td>
                     <td className="px-3 py-3 text-right">
-                      <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 text-xs px-2 py-1 rounded-full">Completada</span>
+                      <span className="dashboard-status-badge">Completada</span>
                     </td>
                   </tr>
                 ))}

@@ -16,6 +16,7 @@ import { Moon, Sun, Store, CreditCard, Calendar, Save, RefreshCw } from 'lucide-
 import Modal from '../components/Modal';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import '../Pages.css';
 
 function Ajustes() {
   const { user, subscription, isActive, logout, activateDemoSubscription } = useAuthStore();
@@ -123,61 +124,61 @@ function Ajustes() {
 
   // Determinar colores y textos según estado de suscripción
   const isExpired = !isActive;
-  const statusColor = isExpired ? 'text-red-600 bg-red-50 border-red-200' : 'text-green-600 bg-green-50 border-green-200';
+  const statusColor = isExpired ? 'vencida' : 'activa';
   const statusText = isExpired ? 'Vencida' : 'Activa';
   const IconStatus = isExpired ? Calendar : CreditCard;
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="ajustes-loading-container">
+        <div className="ajustes-spinner"></div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-24 md:pl-64 pt-16">
+    <div className="ajustes-container">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 p-4 md:pt-4">
-        <h1 className="text-xl font-bold text-gray-800">Ajustes</h1>
+      <header className="ajustes-header">
+        <h1 className="ajustes-title">Ajustes</h1>
       </header>
       
-      <div className="p-4 space-y-6 max-w-2xl mx-auto">
+      <div className="ajustes-content">
         {/* Estado de Suscripción */}
-        <section className={`p-4 rounded-lg border ${statusColor} shadow-sm`}>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
+        <section className={`ajustes-suscripcion ${statusColor}`}>
+          <div className="ajustes-suscripcion-header">
+            <h2 className="ajustes-suscripcion-title flex items-center gap-2">
               <IconStatus size={20} />
               Estado de Suscripción
             </h2>
-            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${isExpired ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}`}>
+            <span className={`ajustes-suscripcion-badge ${statusColor}`}>
               {statusText}
             </span>
           </div>
           
-          <div className="space-y-2 text-sm">
+          <div className="ajustes-suscripcion-info">
             <p>Fecha de vencimiento: <strong>{subscription?.endDate ? formatDate(subscription.endDate) : 'N/A'}</strong></p>
             
             {isExpired ? (
-              <div className="mt-3 p-3 bg-white rounded border border-red-100">
-                <p className="text-red-700 mb-2">Tu suscripción ha vencido. Renueva para seguir usando el sistema.</p>
+              <div className="ajustes-suscripcion-alert vencida">
+                <p className="ajustes-suscripcion-alert-text">Tu suscripción ha vencido. Renueva para seguir usando el sistema.</p>
                 <button
                   onClick={handleRenewSubscription}
-                  className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded transition-colors h-12"
+                  className="ajustes-renovar-btn"
                 >
                   <RefreshCw size={18} />
                   Renovar Suscripción (Demo)
                 </button>
               </div>
             ) : (
-              <p className="text-green-700 mt-2">Tu plan está activo hasta la fecha indicada.</p>
+              <p className="ajustes-suscripcion-alert-text activa">Tu plan está activo hasta la fecha indicada.</p>
             )}
           </div>
         </section>
 
         {/* Formulario de Datos del Negocio */}
-        <section className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <section className="ajustes-negocio">
+          <h2 className="ajustes-negocio-title flex items-center gap-2">
             <Store size={20} />
             Datos del Negocio
           </h2>
@@ -214,7 +215,7 @@ function Ajustes() {
                 onChange={handleChange}
                 placeholder="Calle, Número, Colonia, Ciudad..."
                 rows="3"
-                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                className="ajustes-textarea"
               />
             </div>
 
@@ -226,42 +227,36 @@ function Ajustes() {
         </section>
         
         {/* Información del usuario */}
-        <div className="bg-white rounded-lg shadow p-4">
-          <h2 className="font-semibold text-gray-800 mb-3">Mi cuenta</h2>
-          <div className="space-y-2 text-sm">
+        <div className="ajustes-cuenta">
+          <h2 className="ajustes-cuenta-title">Mi cuenta</h2>
+          <div className="ajustes-cuenta-info">
             <div className="flex justify-between">
-              <span className="text-gray-500">Nombre:</span>
-              <span className="font-medium">{user?.name || 'N/A'}</span>
+              <span className="ajustes-cuenta-label">Nombre:</span>
+              <span className="ajustes-cuenta-value">{user?.name || 'N/A'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Email:</span>
-              <span className="font-medium">{user?.email || 'N/A'}</span>
+              <span className="ajustes-cuenta-label">Email:</span>
+              <span className="ajustes-cuenta-value">{user?.email || 'N/A'}</span>
             </div>
           </div>
         </div>
 
         {/* Modo Oscuro */}
-        <section className="bg-white rounded-lg shadow p-4 border border-gray-100">
-          <h2 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <section className="ajustes-apariencia">
+          <h2 className="ajustes-apariencia-title flex items-center gap-2">
             {isDarkMode ? <Moon size={20} /> : <Sun size={20} />}
             Apariencia
           </h2>
-          <div className="flex items-center justify-between">
+          <div className="ajustes-apariencia-content">
             <div>
-              <p className="font-medium text-gray-700">Modo Oscuro</p>
-              <p className="text-sm text-gray-500">Cambia la apariencia de la aplicación</p>
+              <p className="ajustes-apariencia-text">Modo Oscuro</p>
+              <p className="ajustes-apariencia-subtext">Cambia la apariencia de la aplicación</p>
             </div>
             <button
               onClick={toggleDarkMode}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                isDarkMode ? 'bg-blue-600' : 'bg-gray-300'
-              }`}
+              className={`ajustes-toggle ${isDarkMode ? 'active' : ''}`}
             >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  isDarkMode ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
+              <span className={`ajustes-toggle-knob ${isDarkMode ? 'active' : ''}`} />
             </button>
           </div>
         </section>
@@ -269,7 +264,7 @@ function Ajustes() {
         {/* Cerrar sesión */}
         <button
           onClick={() => setShowLogoutConfirm(true)}
-          className="w-full px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors h-12 font-medium"
+          className="ajustes-logout-btn"
         >
           Cerrar sesión
         </button>
@@ -277,22 +272,22 @@ function Ajustes() {
       
       {/* Modal de confirmación de logout */}
       {showLogoutConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-2">¿Cerrar sesión?</h3>
-            <p className="text-gray-600 mb-6">
+        <div className="ajustes-modal-overlay">
+          <div className="ajustes-modal">
+            <h3 className="ajustes-modal-title">¿Cerrar sesión?</h3>
+            <p className="ajustes-modal-text">
               Podrás volver a iniciar sesión cuando quieras.
             </p>
-            <div className="flex gap-3">
+            <div className="ajustes-modal-actions">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors h-12 font-medium"
+                className="ajustes-modal-cancel-btn"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleLogout}
-                className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors h-12 font-medium"
+                className="ajustes-modal-confirm-btn"
               >
                 Sí, cerrar
               </button>
