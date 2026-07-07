@@ -116,6 +116,32 @@ const useSalesStore = create((set, get) => ({
     }
   },
 
+  // NUEVA: Obtener estadísticas completas de hoy (total y count)
+  getTodayStats: async () => {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const todaySales = await db.sales
+        .filter(sale => {
+          const saleDate = new Date(sale.date);
+          return saleDate >= today && saleDate < tomorrow;
+        })
+        .toArray();
+
+      const total = todaySales.reduce((sum, sale) => sum + sale.total, 0);
+      const count = todaySales.length;
+
+      return { total, count };
+    } catch (error) {
+      console.error('Error obteniendo estadísticas de hoy:', error);
+      return { total: 0, count: 0 };
+    }
+  },
+
   // Obtener últimas N ventas
   getRecentSales: async (limit = 5) => {
     try {
@@ -180,12 +206,17 @@ const useSalesStore = create((set, get) => ({
 
       // Obtener información del producto
       const product = await db.products.get(parseInt(topProductId));
-      return product ? { ...product, totalSold: maxCount } : null;
+      return product ? { ...product, soldQty: maxCount } : null;
 
     } catch (error) {
       console.error('Error obteniendo producto más vendido:', error);
       return null;
     }
+  },
+
+  // Alias para getTopProductToday (para consistencia con el Dashboard)
+  getTopProduct: async () => {
+    return await get().getTopProductToday();
   },
 
   // Eliminar venta (con todos sus items)
