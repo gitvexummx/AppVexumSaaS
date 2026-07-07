@@ -66,7 +66,7 @@ function BottomNav() {
                 }`
               }
             >
-              <div className={`${isActive ? 'text-blue-600' : ''}`}>
+              <div className={({ isActive }) => isActive ? 'text-blue-600' : 'text-gray-500'}>
                 {item.icon}
               </div>
               <span className="text-xs mt-1 font-medium">{item.label}</span>
@@ -94,7 +94,7 @@ function BottomNav() {
                 }`
               }
             >
-              <div className={`${isActive ? 'text-blue-600' : 'text-gray-500'}`}>
+              <div className={({ isActive }) => isActive ? 'text-blue-600' : 'text-gray-500'}>
                 {item.icon}
               </div>
               <span className="font-medium">{item.label}</span>
