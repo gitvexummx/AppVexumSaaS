@@ -112,8 +112,8 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-4 space-y-6 pb-24 md:pl-72">
-      <header>
+    <div className="p-4 space-y-6 pb-24 md:pl-64 pt-20">
+      <header className="sticky top-0 z-30 bg-gray-50 -mx-4 px-4 pb-4 border-b border-gray-200">
         <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
         <p className="text-gray-500 text-sm">Resumen de actividad de hoy</p>
       </header>
