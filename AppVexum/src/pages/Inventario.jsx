@@ -148,7 +148,7 @@ function Inventario() {
                 </div>
                 <div className="inventario-product-actions">
                   <p className="inventario-product-price">{formatMXN(product.price)}</p>
-                  <div className="flex gap-2 mt-2">
+                  <div className="inventario-product-actions-buttons">
                     <button
                       onClick={() => handleOpenForm(product)}
                       className="inventario-edit-btn"

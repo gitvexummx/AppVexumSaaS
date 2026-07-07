@@ -559,6 +559,13 @@
   z-index: 40;
 }
 
+.pos-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
 .pos-title {
   font-size: 1.25rem;
   font-weight: 700;
@@ -718,6 +725,10 @@
   font-weight: 700;
 }
 
+.pos-modal-title-mb {
+  margin-bottom: 1rem;
+}
+
 .pos-modal-close {
   color: #9ca3af;
   font-size: 1.5rem;
@@ -874,6 +885,10 @@
   margin-bottom: 0.25rem;
 }
 
+.pos-checkout-label-mb {
+  margin-bottom: 0.5rem;
+}
+
 .pos-checkout-input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -962,6 +977,11 @@
 }
 
 .pos-cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pos-cancel-btn-disabled:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
