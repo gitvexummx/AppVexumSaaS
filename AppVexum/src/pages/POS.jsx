@@ -9,6 +9,7 @@ import useProductsStore from '../stores/useProductsStore';
 import useCartStore from '../stores/useCartStore';
 import useSalesStore from '../stores/useSalesStore';
 import { useToast } from '../context/ToastContext';
+import '../Pages.css';
 
 function POS() {
   const { products, loadProducts, searchProducts, decreaseStock } = useProductsStore();
@@ -99,18 +100,18 @@ function POS() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pl-64 pt-16">
+    <div className="pos-container">
       {/* Header con buscador */}
-      <header className="bg-white border-b border-gray-200 p-4 sticky top-0 z-40 md:pt-4">
+      <header className="pos-header">
         <div className="flex justify-between items-center mb-3">
-          <h1 className="text-xl font-bold text-gray-800">Punto de Venta</h1>
+          <h1 className="pos-title">Punto de Venta</h1>
           <button
             onClick={() => setShowCart(true)}
-            className="relative px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-12"
+            className="pos-cart-button"
           >
             🛒 Carrito
             {getItemCount() > 0 && (
-              <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+              <span className="pos-cart-badge">
                 {getItemCount()}
               </span>
             )}
@@ -122,32 +123,30 @@ function POS() {
           placeholder="Buscar producto..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+          className="pos-search-input"
         />
       </header>
       
       {/* Catálogo de productos */}
-      <div className="p-4">
+      <div className="pos-catalog">
         {filteredProducts.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">
+          <div className="pos-catalog-empty">
             {searchQuery ? 'No se encontraron productos' : 'No hay productos en el inventario'}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="pos-products-grid">
             {filteredProducts.map((product) => (
               <button
                 key={product.id}
                 onClick={() => handleAddToCart(product)}
                 disabled={product.stock <= 0}
-                className={`bg-white rounded-lg shadow p-3 text-left active:scale-95 transition-transform ${
-                  product.stock <= 0 ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                className={`pos-product-card ${product.stock <= 0 ? 'disabled' : ''}`}
               >
-                <h3 className="font-semibold text-gray-800 text-sm line-clamp-2">{product.name}</h3>
-                <p className="text-xs text-gray-500 mt-1">
+                <h3 className="pos-product-name">{product.name}</h3>
+                <p className="pos-product-stock">
                   Stock: {product.stock}
                 </p>
-                <p className="font-bold text-blue-600 mt-2">
+                <p className="pos-product-price">
                   {formatMXN(product.price)}
                 </p>
               </button>
@@ -158,49 +157,49 @@ function POS() {
       
       {/* Modal del carrito */}
       {showCart && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-t-lg sm:rounded-lg p-6 max-h-[85vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Carrito ({getItemCount()} items)</h2>
+        <div className="pos-modal-overlay">
+          <div className="pos-modal">
+            <div className="pos-modal-header">
+              <h2 className="pos-modal-title">Carrito ({getItemCount()} items)</h2>
               <button
                 onClick={() => setShowCart(false)}
-                className="text-gray-400 hover:text-gray-600 text-2xl"
+                className="pos-modal-close"
               >
                 ×
               </button>
             </div>
             
             {cart.length === 0 ? (
-              <div className="text-center text-gray-400 py-8">
+              <div className="pos-cart-empty">
                 El carrito está vacío
               </div>
             ) : (
               <>
                 {/* Lista de items */}
-                <div className="space-y-3 mb-4">
+                <div className="pos-cart-items">
                   {cart.map((item) => (
-                    <div key={item.id} className="flex justify-between items-center border-b border-gray-100 pb-3">
-                      <div className="flex-1">
-                        <p className="font-medium text-gray-800 text-sm">{item.name}</p>
-                        <p className="text-xs text-gray-500">{formatMXN(item.price)} c/u</p>
+                    <div key={item.id} className="pos-cart-item">
+                      <div className="pos-cart-item-info">
+                        <p className="pos-cart-item-name">{item.name}</p>
+                        <p className="pos-cart-item-price">{formatMXN(item.price)} c/u</p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="pos-cart-item-controls">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-lg font-bold hover:bg-gray-300"
+                          className="pos-cart-quantity-btn"
                         >
                           −
                         </button>
-                        <span className="w-8 text-center font-medium">{item.quantity}</span>
+                        <span className="pos-cart-quantity">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-lg font-bold hover:bg-gray-300"
+                          className="pos-cart-quantity-btn"
                         >
                           +
                         </button>
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="ml-2 text-red-500 hover:text-red-700 text-xl"
+                          className="pos-cart-remove-btn"
                         >
                           ×
                         </button>
@@ -210,18 +209,18 @@ function POS() {
                 </div>
                 
                 {/* Totales */}
-                <div className="border-t border-gray-200 pt-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Subtotal:</span>
-                    <span className="font-medium">{formatMXN(getSubtotal())}</span>
+                <div className="pos-totals">
+                  <div className="pos-total-row">
+                    <span className="pos-total-label">Subtotal:</span>
+                    <span className="pos-total-value">{formatMXN(getSubtotal())}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">IVA (16%):</span>
-                    <span className="font-medium">{formatMXN(getIVA())}</span>
+                  <div className="pos-total-row">
+                    <span className="pos-total-label">IVA (16%):</span>
+                    <span className="pos-total-value">{formatMXN(getIVA())}</span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold">
+                  <div className="pos-total-row pos-total-final">
                     <span>Total:</span>
-                    <span className="text-blue-600">{formatMXN(getTotal())}</span>
+                    <span className="pos-total-value">{formatMXN(getTotal())}</span>
                   </div>
                 </div>
                 
@@ -231,7 +230,7 @@ function POS() {
                     setShowCart(false);
                     setShowCheckout(true);
                   }}
-                  className="w-full mt-4 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors h-12 font-bold text-lg"
+                  className="pos-checkout-button"
                 >
                   Cobrar
                 </button>
@@ -243,13 +242,13 @@ function POS() {
       
       {/* Modal de checkout */}
       {showCheckout && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-t-lg sm:rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-4">Finalizar venta</h2>
+        <div className="pos-modal-overlay">
+          <div className="pos-modal">
+            <h2 className="pos-modal-title mb-4">Finalizar venta</h2>
             
-            <div className="space-y-4">
+            <div className="pos-checkout-form">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="pos-checkout-label">
                   Nombre del cliente (opcional)
                 </label>
                 <input
@@ -257,42 +256,30 @@ function POS() {
                   value={customerName}
                   onChange={(e) => setLocalCustomerName(e.target.value)}
                   placeholder="Cliente"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                  className="pos-checkout-input"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="pos-checkout-label mb-2">
                   Método de pago
                 </label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="pos-payment-methods">
                   <button
                     onClick={() => setPaymentMethod('efectivo')}
-                    className={`px-4 py-3 rounded-lg border h-12 font-medium transition-colors ${
-                      paymentMethod === 'efectivo'
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                    }`}
+                    className={`pos-payment-btn ${paymentMethod === 'efectivo' ? 'active' : ''}`}
                   >
                     Efectivo
                   </button>
                   <button
                     onClick={() => setPaymentMethod('tarjeta')}
-                    className={`px-4 py-3 rounded-lg border h-12 font-medium transition-colors ${
-                      paymentMethod === 'tarjeta'
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                    }`}
+                    className={`pos-payment-btn ${paymentMethod === 'tarjeta' ? 'active' : ''}`}
                   >
                     Tarjeta
                   </button>
                   <button
                     onClick={() => setPaymentMethod('transferencia')}
-                    className={`px-4 py-3 rounded-lg border h-12 font-medium transition-colors ${
-                      paymentMethod === 'transferencia'
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                    }`}
+                    className={`pos-payment-btn ${paymentMethod === 'transferencia' ? 'active' : ''}`}
                   >
                     Transferencia
                   </button>
@@ -300,42 +287,38 @@ function POS() {
               </div>
               
               {/* Resumen */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Subtotal:</span>
+              <div className="pos-summary">
+                <div className="pos-total-row">
+                  <span className="pos-total-label">Subtotal:</span>
                   <span>{formatMXN(getSubtotal())}</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">IVA:</span>
+                <div className="pos-total-row">
+                  <span className="pos-total-label">IVA:</span>
                   <span>{formatMXN(getIVA())}</span>
                 </div>
-                <div className="flex justify-between text-lg font-bold border-t border-gray-200 pt-2">
+                <div className="pos-summary-total">
                   <span>Total a pagar:</span>
-                  <span className="text-green-600">{formatMXN(getTotal())}</span>
+                  <span className="pos-total-value">{formatMXN(getTotal())}</span>
                 </div>
               </div>
               
               {/* Acciones */}
-              <div className="flex gap-3 pt-4">
+              <div className="pos-actions">
                 <button
                   onClick={() => setShowCheckout(false)}
                   disabled={isSaving}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="pos-cancel-btn disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCheckout}
                   disabled={isSaving}
-                  className={`flex-1 px-4 py-3 rounded-lg transition-colors h-12 font-bold flex items-center justify-center gap-2 ${
-                    isSaving
-                      ? 'bg-gray-400 cursor-not-allowed text-white'
-                      : 'bg-green-600 hover:bg-green-700 text-white'
-                  }`}
+                  className={`pos-confirm-btn ${isSaving ? 'disabled' : 'enabled'}`}
                 >
                   {isSaving ? (
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <div className="pos-spinner"></div>
                       Procesando...
                     </>
                   ) : (

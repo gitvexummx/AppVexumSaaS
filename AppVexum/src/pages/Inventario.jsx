@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react';
 import useProductsStore from '../stores/useProductsStore';
 import { useToast } from '../context/ToastContext';
+import '../Pages.css';
 
 function Inventario() {
   const { products, loading, loadProducts, addProduct, updateProduct, deleteProduct, searchProducts } = useProductsStore();
@@ -106,10 +107,10 @@ function Inventario() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 md:pl-64 pt-16">
+    <div className="inventario-container">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 p-4 sticky top-0 z-40 md:pt-4">
-        <h1 className="text-xl font-bold text-gray-800">Inventario</h1>
+      <header className="inventario-header">
+        <h1 className="inventario-title">Inventario</h1>
         
         {/* Buscador */}
         <input
@@ -117,46 +118,46 @@ function Inventario() {
           placeholder="Buscar producto..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="mt-3 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+          className="inventario-search"
         />
       </header>
       
       {/* Lista de productos */}
-      <div className="p-4">
+      <div className="inventario-list">
         {loading ? (
-          <div className="text-center text-gray-500 py-8">Cargando...</div>
+          <div className="inventario-loading">Cargando...</div>
         ) : filteredProducts.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">
+          <div className="inventario-empty">
             {searchQuery ? 'No se encontraron productos' : 'No hay productos registrados'}
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="inventario-products">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow p-4 flex justify-between items-center"
+                className="inventario-product-card"
               >
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800">{product.name}</h3>
-                  <p className="text-sm text-gray-500">
+                <div className="inventario-product-info">
+                  <h3 className="inventario-product-name">{product.name}</h3>
+                  <p className="inventario-product-category">
                     {product.category || 'Sin categoría'}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Stock: <span className={product.stock <= 5 ? 'text-red-500 font-medium' : ''}>{product.stock}</span>
+                  <p className="inventario-product-stock">
+                    Stock: <span className={product.stock <= 5 ? 'low' : ''}>{product.stock}</span>
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-gray-800">{formatMXN(product.price)}</p>
+                <div className="inventario-product-actions">
+                  <p className="inventario-product-price">{formatMXN(product.price)}</p>
                   <div className="flex gap-2 mt-2">
                     <button
                       onClick={() => handleOpenForm(product)}
-                      className="px-3 py-1 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors h-10"
+                      className="inventario-edit-btn"
                     >
                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(product.id, product.name)}
-                      className="px-3 py-1 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors h-10"
+                      className="inventario-delete-btn"
                     >
                       Eliminar
                     </button>
@@ -171,30 +172,30 @@ function Inventario() {
       {/* Botón flotante para agregar */}
       <button
         onClick={() => handleOpenForm()}
-        className="fixed bottom-20 right-4 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center text-3xl font-bold hover:bg-blue-700 active:bg-blue-800 transition-colors z-40"
+        className="inventario-fab"
       >
         +
       </button>
       
       {/* Modal de formulario */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-t-lg sm:rounded-lg p-6 max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">
+        <div className="inventario-modal-overlay">
+          <div className="inventario-modal">
+            <div className="inventario-modal-header">
+              <h2 className="inventario-modal-title">
                 {editingProduct ? 'Editar producto' : 'Nuevo producto'}
               </h2>
               <button
                 onClick={() => setShowForm(false)}
-                className="text-gray-400 hover:text-gray-600 text-2xl"
+                className="inventario-modal-close"
               >
                 ×
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="inventario-form">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="inventario-label">
                   Nombre *
                 </label>
                 <input
@@ -202,13 +203,13 @@ function Inventario() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                  className="inventario-input"
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="inventario-grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="inventario-label">
                     Precio *
                   </label>
                   <input
@@ -217,11 +218,11 @@ function Inventario() {
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                    className="inventario-input"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="inventario-label">
                     Stock *
                   </label>
                   <input
@@ -229,51 +230,51 @@ function Inventario() {
                     required
                     value={formData.stock}
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                    className="inventario-input"
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="inventario-label">
                   Categoría
                 </label>
                 <input
                   type="text"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                  className="inventario-input"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="inventario-label">
                   Código de barras
                 </label>
                 <input
                   type="text"
                   value={formData.barcode}
                   onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-12"
+                  className="inventario-input"
                 />
               </div>
               
-              <div className="flex gap-3 pt-4">
+              <div className="inventario-actions">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors h-12 font-medium"
+                  className="inventario-cancel-btn"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inventario-submit-btn"
                   disabled={loading}
                 >
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <div className="inventario-spinner"></div>
                       Guardando...
                     </span>
                   ) : (
