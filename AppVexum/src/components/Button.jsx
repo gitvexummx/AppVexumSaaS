@@ -1,3 +1,5 @@
+import '../Elements.css';
+
 /**
  * Button - Componente reutilizable para botones
  * @param {string} children - Contenido del botón (texto o iconos)
@@ -18,26 +20,17 @@ export default function Button({
   className = '',
   ...props 
 }) {
-  const baseStyles = 'w-full flex items-center justify-center gap-2 py-3 px-4 rounded font-medium transition-all h-12';
-  
-  const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg disabled:bg-blue-400',
-    secondary: 'bg-gray-600 hover:bg-gray-700 text-white shadow-md disabled:bg-gray-400',
-    danger: 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg disabled:bg-red-400',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-gray-700 disabled:border-gray-400 disabled:text-gray-400'
-  };
-
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
+      className={`btn-base btn-${variant} ${className}`}
       {...props}
     >
       {isLoading ? (
         <>
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+          <div className="btn-spinner"></div>
           Cargando...
         </>
       ) : (

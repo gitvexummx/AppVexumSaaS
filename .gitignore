@@ -5,7 +5,6 @@ node_modules/
 # Build artifacts
 dist/
 build/
-*.js
 
 # Environment
 .env
@@ -31,26 +30,114 @@ Thumbs.db
 
 # Temporary files
 *.tmp
-*.temp
-*.bak
+*.swp
+*.swo
 
 # Coverage reports
 coverage/
 htmlcov/
 .coverage
 
-# Testing
-.pytest_cache/
+# MyPy cache
 .mypy_cache/
 
-# Compiled files
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
+# Pytest cache
+.pytest_cache/
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Sage
+*.sage.py
+
+# Environments
+.venv/
+venv/
+ENV/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# IDE
+.vscode/
+.idea/
+
+# Browsers
+hs_err_pid*
 
 # Compressed files
 *.zip
@@ -75,4 +162,122 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+
+# Julia
+.julia/
+
+# Zig
+zig-cache/
+zig-out/
+
+# Rust
+target/
+
+# Go
+*.out
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.so
+
+# C/C++
+*.o
+*.a
+*.obj
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+*.out
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ruby
+*.gem
+*.rbc
+.bundle/
+config.ru
+
+# PHP
+*.phar
+
+# Scala
+*.class
+*.log
+.libs/
+.depend
+.DS_Store
+.sbt/
+
+# Web
+.sass-cache/
+connect.lock
+.yarn-integrity
+.yardoc/
+.yarn/
+node_modules/
+
+# Android
+*.apk
+*.ap_
+*.aab
+
+# iOS
+*.ipa
+
+# Graphics
+*.blend
+*.dds
+
+# Adobe
+*.swp
+*.swo
+
+# Backup files
+*~
+*.bak
+*.orig
+*.rej
+
+# Compiled template
+*.template.go
+
+# Coverage
+coverage.xml
+coverage/
+
+# Test results
+test-results/
+
+# Gradle
+.gradle/
+build/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.manifest
+install_manifest.txt
+compile_commands.json
+CMakeScripts/
+EMSCRIPTEN/
 ```

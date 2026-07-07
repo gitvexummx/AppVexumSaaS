@@ -1,3 +1,5 @@
+import '../Elements.css';
+
 /**
  * Input - Componente reutilizable para campos de entrada
  * @param {string} label - Etiqueta del input
@@ -21,10 +23,10 @@ export default function Input({
   ...props 
 }) {
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className={`input-container ${className}`}>
       {label && (
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-          {label} {required && <span className="text-red-500">*</span>}
+        <label className="input-label">
+          {label} {required && <span className="input-required">*</span>}
         </label>
       )}
       <input
@@ -33,18 +35,11 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`w-full p-3 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all h-12
-          ${error 
-            ? 'border-red-500 focus:ring-red-500 focus:border-red-500' 
-            : 'border-gray-300 dark:border-gray-600'
-          }
-          bg-white dark:bg-gray-700 
-          text-gray-800 dark:text-white
-          placeholder-gray-400 dark:placeholder-gray-500`}
+        className={`input-field ${error ? 'input-field-error' : ''}`}
         {...props}
       />
       {error && (
-        <p className="text-sm text-red-500">{error}</p>
+        <p className="input-error-message">{error}</p>
       )}
     </div>
   );
