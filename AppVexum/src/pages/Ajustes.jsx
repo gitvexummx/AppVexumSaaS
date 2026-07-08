@@ -185,7 +185,7 @@ function Ajustes() {
           <form onSubmit={handleSaveBusiness} className="space-y-4">
 
             <Input
-              label="Nombre del Negocio *"
+              label="Nombre del Negocio"
               type="text"
               id="name"
               name="name"
@@ -207,7 +207,7 @@ function Ajustes() {
             />
 
             <div className="space-y-1">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 dark-text-gray-300">Dirección Fiscal</label>
+              <label htmlFor="address" className="address-label">Dirección Fiscal</label>
               <textarea
                 id="address"
                 name="address"
@@ -215,7 +215,7 @@ function Ajustes() {
                 onChange={handleChange}
                 placeholder="Calle, Número, Colonia, Ciudad..."
                 rows="3"
-                className="ajustes-textarea"
+                className="input-field ajustes-textarea"
               />
             </div>
 
