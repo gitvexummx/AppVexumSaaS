@@ -272,7 +272,7 @@ function Ajustes() {
       
       {/* Modal de confirmación de logout */}
       {showLogoutConfirm && (
-        <div className="ajustes-modal-overlay">
+        <div className="modal-overlay ajustes-modal-overlay">
           <div className="ajustes-modal">
             <h3 className="ajustes-modal-title">¿Cerrar sesión?</h3>
             <p className="ajustes-modal-text">
@@ -280,16 +280,16 @@ function Ajustes() {
             </p>
             <div className="ajustes-modal-actions">
               <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="ajustes-modal-cancel-btn"
-              >
-                Cancelar
-              </button>
-              <button
                 onClick={handleLogout}
                 className="ajustes-modal-confirm-btn"
               >
                 Sí, cerrar
+              </button>
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="ajustes-modal-cancel-btn"
+              >
+                Cancelar
               </button>
             </div>
           </div>

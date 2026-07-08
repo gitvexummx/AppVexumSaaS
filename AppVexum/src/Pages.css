@@ -56,6 +56,10 @@
   --inventory-delete-btn: #fef2f2;
   --inventory-delete-btn-hover: #fecdcd;
   --inventory-delete-btn-txt: #ef4444;
+  
+  --neutral-btn: #ededed;
+  --neutral-btn-hover: #cecece;
+  --neutral-btn-txt: #555555;
 
   --dashboard-green-icon-color: #16a34a;
   --dashboard-green-icon-bg: #dcfce7;
@@ -110,6 +114,10 @@
   --inventory-delete-btn: #532121;
   --inventory-delete-btn-hover: #853636;
   --inventory-delete-btn-txt: #f76b6b;
+
+  --neutral-btn: #4f4f4f9f;
+  --neutral-btn-hover: #8e8e8e8b;
+  --neutral-btn-txt: #e9e9e9;
 
   --dashboard-green-icon-color: #dcfce7;
   --dashboard-green-icon-bg: #16a34a;
@@ -305,19 +313,19 @@
 
 @media (min-width: 768px) {
   .dashboard-container {
-    padding-left: 16rem;
+    margin-left: 12%;
     padding-top: 5rem;
   }
 }
 
 .dashboard-header {
-  position: sticky;
+  position: absolute;
   top: 0;
   z-index: 30;
-  background-color: var(--bg-secondary);
-  margin: -1rem -1rem 1rem;
-  padding: 1rem;
+  background-color: var(--bg-primary);
+  padding: 1rem 0;
   border-bottom: 1px solid var(--border-primary);
+  min-width: 100%;
 }
 
 .dashboard-title {
@@ -338,6 +346,7 @@
   grid-template-columns: 1fr;
   gap: 1rem;
   margin: 0 1rem;
+  margin-top: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -566,9 +575,10 @@
 }
 
 .dashboard-status-badge {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: var(--dashboard-green-icon-bg);
+  color: var(--dashboard-green-icon-color);
   font-size: 0.75rem;
+  font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 9999px;
   text-align: right;
@@ -667,18 +677,21 @@
 
 @media (min-width: 768px) {
   .pos-container {
-    padding-left: 16rem;
-    padding-top: 4rem;
+    margin-left: 13%;
   }
 }
 
 .pos-header {
-  background: var(--bg-primary);
   border-bottom: 1px solid var(--border-primary);
   padding: 1rem;
-  position: sticky;
+  position: absolute;
   top: 0;
-  z-index: 40;
+  z-index: 30;
+  width: 87%;
+  background-color: var(--bg-primary);
+  margin: -1rem -1rem 1rem;
+  padding-top: 1.8rem;
+  margin-left: 0;
 }
 
 .pos-header-top {
@@ -847,6 +860,7 @@
 .pos-modal-title {
   font-size: 1.25rem;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .pos-modal-title-mb {
@@ -902,14 +916,14 @@
 }
 
 .pos-cart-item-controls {
-  display: flex;
+  display: contents;
   align-items: center;
   gap: 0.5rem;
 }
 
 .pos-cart-quantity-btn {
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   background-color: var(--border-light);
   border-radius: 9999px;
   display: flex;
@@ -929,6 +943,8 @@
   width: 2rem;
   text-align: center;
   font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-secondary);
 }
 
 .pos-cart-remove-btn {
@@ -956,6 +972,8 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 520;
 }
 
 .pos-total-label {
@@ -1020,6 +1038,7 @@
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
+  color: var(--text-secondary);
 }
 
 .pos-checkout-input:focus {
@@ -1043,6 +1062,8 @@
   background: var(--bg-primary);
   color: var(--text-secondary);
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
 .pos-payment-btn:hover {
@@ -1071,10 +1092,12 @@
   font-weight: 700;
   border-top: 1px solid var(--border-primary);
   padding-top: 0.5rem;
+  color: var(--text-primary);
 }
 
 .pos-summary-total .pos-total-value {
   color: #16a34a;
+  font-weight: 600;
 }
 
 .pos-actions {
@@ -1184,8 +1207,7 @@
 
 @media (min-width: 768px) {
   .inventario-container {
-    padding-left: 16rem;
-    padding-top: 4rem;
+    margin-left: 13%;
   }
 }
 
@@ -1537,8 +1559,7 @@
 
 @media (min-width: 768px) {
   .ajustes-container {
-    padding-left: 16rem;
-    padding-top: 4rem;
+    margin-left: 13%;
   }
 }
 

@@ -185,11 +185,8 @@
 
 
 
-
-
 .PageContainer {
   min-height: 100vh;
-  background-color: #f9fafb;
-  padding-bottom: 5rem;
-  margin: 0 0rem;
+  background-color: var(--bg-primary);
+  margin: 0;
 }
