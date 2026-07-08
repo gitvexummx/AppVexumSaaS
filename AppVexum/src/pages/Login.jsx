@@ -39,7 +39,7 @@ function Login() {
         id: '1',
         name: 'Usuario Demo',
         email: formData.email,
-        businessName: 'Mi Tiendita'
+        businessName: 'Mi Negocio'
       };
       
       // Simular suscripción activa por defecto

@@ -256,8 +256,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
-  border-top: 1px solid #e5e7eb;
+  background-color: var(--bg-primary);
+  border-top: 1px var(--border-primary);
   z-index: 50;
   display: flex;
 }
@@ -338,8 +338,8 @@
   top: 0;
   bottom: 0;
   width: 16rem;
-  background-color: white;
-  border-right: 1px solid #e5e7eb;
+  background-color: var(--bg-primary);
+  border-right: 1px var(--border-primary);
   z-index: 50;
   display: none;
   flex-direction: column;
@@ -353,7 +353,7 @@
 
 .bottom-nav-desktop-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px var(--border-primary);
 }
 
 .bottom-nav-desktop-title {
@@ -394,11 +394,11 @@
 }
 
 .bottom-nav-item-desktop-inactive:hover {
-  background-color: #f9fafb;
+  background-color: var(--bg-tertiary);
 }
 
 .bottom-nav-item-desktop-active {
-  background-color: #eff6ff;
+  background-color: var(--bg-tertiary);
   color: #2563eb;
   border-right: 4px solid #2563eb;
 }
@@ -408,7 +408,7 @@
 }
 
 .bottom-nav-icon-desktop-inactive {
-  color: #6b7280;
+  color: white;
 }
 
 .bottom-nav-icon-desktop-active {
@@ -417,6 +417,7 @@
 
 .bottom-nav-label-desktop {
   font-weight: 500;
+  color: var(--text-secondary)
 }
 
 .bottom-nav-desktop-footer {
@@ -426,7 +427,7 @@
 
 .bottom-nav-desktop-copyright {
   font-size: 0.75rem;
-  color: #d1d5db;
+  color: var(--text-muted);
   text-align: center;
   margin: 0;
 }

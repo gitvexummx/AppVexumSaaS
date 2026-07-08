@@ -49,6 +49,21 @@
 
   --theme-knob-position: -0.8rem;
   --theme-toggle-btn: white;
+
+  --inventory-edit-btn: #eff6ff;
+  --inventory-edit-btn-hover: #d2e5ff;
+  --inventory-edit-btn-txt: #2563eb;
+  --inventory-delete-btn: #fef2f2;
+  --inventory-delete-btn-hover: #fecdcd;
+  --inventory-delete-btn-txt: #ef4444;
+
+  --dashboard-green-icon-color: #16a34a;
+  --dashboard-green-icon-bg: #dcfce7;
+  --dashboard-blue-icon-color: #2563eb;
+  --dashboard-blue-icon-bg: #dbeafe;
+  --dashboard-purple-icon-color: #9333ea;
+  --dashboard-purple-icon-bg: #f3e8ff;
+
 }
 
 /* Dark mode overrides */
@@ -88,6 +103,20 @@
 
   --theme-knob-position: 0.8rem;
   --theme-toggle-btn: #2563eb;
+
+  --inventory-edit-btn: #213a5d;
+  --inventory-edit-btn-hover: #33578a;
+  --inventory-edit-btn-txt: #5d8df5;
+  --inventory-delete-btn: #532121;
+  --inventory-delete-btn-hover: #853636;
+  --inventory-delete-btn-txt: #f76b6b;
+
+  --dashboard-green-icon-color: #dcfce7;
+  --dashboard-green-icon-bg: #16a34a;
+  --dashboard-blue-icon-color: #dbeafe;
+  --dashboard-blue-icon-bg: #2563eb;
+  --dashboard-purple-icon-color: #f3e8ff;
+  --dashboard-purple-icon-bg: #9333ea;
 }
 
 /* ============================================
@@ -194,6 +223,7 @@
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
+  color: var(--text-tertiary);
 }
 
 .login-input:focus {
@@ -359,21 +389,25 @@
   margin-top: 0.25rem;
 }
 
-.dashboard-metric-icon {
-  background-color: #dcfce7;
+.dashboard-metric-icon-green {
+  background-color: var(--dashboard-green-icon-bg);
+  color: var(--dashboard-green-icon-color);
   padding: 0.75rem;
   border-radius: 9999px;
-  color: #16a34a;
 }
 
 .dashboard-metric-icon.blue {
-  background-color: #dbeafe;
-  color: #2563eb;
+  background-color: var(--dashboard-blue-icon-bg);
+  color: var(--dashboard-blue-icon-color);
+  padding: 0.75rem;
+  border-radius: 9999px;
 }
 
 .dashboard-metric-icon.purple {
-  background-color: #f3e8ff;
-  color: #9333ea;
+  background-color: var(--dashboard-purple-icon-bg);
+  color: var(--dashboard-purple-icon-color);
+  padding: 0.75rem;
+  border-radius: 9999px;
 }
 
 .dashboard-section {
@@ -1250,6 +1284,8 @@
 .inventario-product-price {
   font-weight: 700;
   color: var(--text-primary);
+  margin-bottom: 0.65rem;
+  margin-right: 0.2rem;
 }
 
 .inventario-actions {
@@ -1261,33 +1297,34 @@
 .inventario-edit-btn {
   padding: 0.25rem 0.75rem;
   font-size: 0.875rem;
-  background-color: #eff6ff;
-  color: #2563eb;
-  border-radius: 0.25rem;
+  background-color: var(--inventory-edit-btn);
+  color: var(--inventory-edit-btn-txt);
+  border-radius: 0.5rem;
   transition: background-color 0.2s;
-  height: 2.5rem;
+  height: 2rem;
   border: none;
   cursor: pointer;
+  margin-right: 0.75rem;
 }
 
 .inventario-edit-btn:hover {
-  background-color: #dbeafe;
+  background-color: var(--inventory-edit-btn-hover);
 }
 
 .inventario-delete-btn {
   padding: 0.25rem 0.75rem;
   font-size: 0.875rem;
-  background-color: #fef2f2;
-  color: #ef4444;
-  border-radius: 0.25rem;
+  background-color: var(--inventory-delete-btn);
+  color: var(--inventory-delete-btn-txt);
+  border-radius: 0.5rem;
   transition: background-color 0.2s;
-  height: 2.5rem;
+  height: 2rem;
   border: none;
   cursor: pointer;
 }
 
 .inventario-delete-btn:hover {
-  background-color: #fee2e2;
+  background-color: var(--inventory-delete-btn-hover);
 }
 
 /* Floating action button */
@@ -1365,6 +1402,7 @@
 .inventario-modal-title {
   font-size: 1.25rem;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 .inventario-modal-close {
@@ -1400,6 +1438,7 @@
   border-radius: 0.5rem;
   outline: none;
   height: 3rem;
+  color: var(--text-secondary);
 }
 
 .inventario-input:focus {
@@ -1675,14 +1714,8 @@
   display: block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-light);
   margin: 0.25rem 0;
-}
-
-@media (prefers-color-scheme: dark) {
-  .address-label {
-    color: #d1d5db;
-  }
 }
 
 .ajustes-textarea {
@@ -1733,6 +1766,7 @@
 
 .ajustes-cuenta-value {
   font-weight: 500;
+  color: var(--text-muted);
 }
 
 /* Apariencia section */
@@ -1769,6 +1803,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.ajustes-apariencia-text {
+  color: var(--text-tertiary)
+}
+
+.ajustes-apariencia-subtext {
+  color: var(--text-light)
 }
 
 .ajustes-apariencia-info p:first-child {

@@ -214,7 +214,7 @@ function Inventario() {
                   </label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="1.00"
                     required
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}

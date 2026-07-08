@@ -99,7 +99,7 @@ const Dashboard = () => {
             </p>
             <p className="dashboard-metric-value">{formatCurrency(stats.total)}</p>
           </div>
-          <div className="dashboard-metric-icon">
+          <div className="dashboard-metric-icon-green">
             <TrendingUp size={24} />
           </div>
         </div>

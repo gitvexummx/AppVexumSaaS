@@ -95,7 +95,7 @@ function BottomNav() {
           ))}
         </div>
         <div className="bottom-nav-desktop-footer">
-          <p className="bottom-nav-desktop-copyright">© 2024 Vexum MX</p>
+          <p className="bottom-nav-desktop-copyright">© 2026 Vexum MX</p>
         </div>
       </nav>
     </>
