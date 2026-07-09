@@ -1,49 +1,65 @@
-# Compiled and build artifacts
-*.pyc
+```
+# Documentation files that were deleted but might be regenerated
+AI-Instructions/
+
+# Common Python artifacts (if this is a Python project)
 __pycache__/
-*.o
-*.obj
-*.class
-*.exe
-*.dll
-*.so
-*.a
-*.out
+*.pyc
+*.pyo
+*.pyd
+*.py~
+*.py.class
+*.py.obj
+*.py.out
+*.py.exe
+*.py.dll
+*.py.so
+*.py.a
+*.py.obj
+*.py.out
 
-# Dependencies
-.venv/
-venv/
-node_modules/
-dist/
+# Build and distribution directories
 build/
-target/
-.mypy_cache/
-.pytest_cache/
-.gradle/
+dist/
+*.egg-info/
 
-# Logs and temp files
-*.log
-*.tmp
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# IDE specific files
+.vscode/
+.idea/
 *.swp
 *.swo
 
-# Environment
-.env
-.env.local
-*.env.*
+# Log files
+*.log
 
-# Editors
-.vscode/
-.idea/
-
-# System files
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Coverage
+# Coverage reports
 coverage/
 htmlcov/
 .coverage
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+
+# Environment variables
+.env*
+!.env.example
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
 
 # Compressed files
 *.zip
@@ -68,3 +84,4 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+```
