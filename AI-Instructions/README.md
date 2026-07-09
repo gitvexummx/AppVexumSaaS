@@ -84,14 +84,37 @@ Esta carpeta contiene la documentación detallada por fases para implementar las
 
 ## 🔄 Orden Sugerido de Implementación
 
-```
 BLOQUE 1 → BLOQUE 2 → BLOQUE 3 → BLOQUE 4 → BLOQUE 5 → BLOQUE 6 → BLOQUE 7 → BLOQUE 8
 
-IMPLEMENTAR EN ORDEN
-```
+**IMPLEMENTAR EN ORDEN**
 
 ### Justificación del orden:
-1. 
+1. El modelo de datos y migraciones debe ser lo primero porque define la estructura fundamental sobre la cual se construye todo lo demás; sin una base de datos bien diseñada, nada funciona.
+2. La gestión multi-sucursal, roles y usuarios sigue inmediatamente porque define quién puede hacer qué y en qué contexto operativo, estableciendo las reglas de acceso antes de implementar funcionalidades de negocio.
+3. La API backend de ventas y pagos se implementa temprano para tener los endpoints básicos listos antes de construir el frontend del POS, siguiendo una arquitectura backend-first que facilita el desarrollo paralelo.
+4. El frontend del POS es el corazón operativo del sistema y debe desarrollarse después de tener la API lista para poder consumir los endpoints desde el primer día de desarrollo frontend.
+5. La gestión de cajas y turnos debe preceder al sistema de tickets porque cada ticket necesita estar asociado a una caja y turno específicos; sin este contexto, los tickets carecen de trazabilidad operativa.
+6. El sistema de emisión de tickets viene después de cajas y turnos porque requiere ese contexto ya definido para generar comprobantes válidos con la información correcta de quién vendió, cuándo y en qué caja.
+7. El dashboard operativo básico se incluye en el bloque 2 para dar visibilidad inmediata de las operaciones diarias una vez que el POS está funcionando, permitiendo monitoreo temprano.
+8. La configuración y preferencias del sistema se coloca al inicio del bloque 3 para permitir personalización del comportamiento del sistema antes de avanzar a módulos más complejos.
+9. La internacionalización (i18n) se mueve del bloque 7 al bloque 3 porque es mucho más fácil implementar un sistema de traducciones cuando la interfaz está en desarrollo que cuando ya está completa con textos hardcodeados en todas partes.
+10. Las variantes de productos son la base del inventario avanzado y deben implementarse primero porque otros módulos (alertas, unidades de medida, multi-almacén) necesitan entender cómo se estructuran los productos.
+11. Las alertas de stock siguen a las variantes porque necesitas tener definida la estructura del inventario para poder monitorear niveles y disparar notificaciones apropiadas.
+12. Las unidades de medida y conversión se implementan después porque añaden complejidad al manejo de inventario que requiere que la estructura básica (variantes, alertas) ya esté funcionando.
+13. La importación/exportación masiva viene después de tener toda la estructura de inventario definida (variantes, unidades, almacenes) para que los archivos CSV/Excel tengan todas las columnas necesarias.
+14. El multi-almacén y transferencias es lo último del inventario porque es la capa más compleja que requiere que todo lo anterior (variantes, unidades, alertas) funcione correctamente en un solo almacén antes de multiplicar la complejidad.
+15. La rentabilidad y márgenes es la primera fase de inteligencia de negocio porque requiere datos de costos y precios de venta que ya están definidos en los módulos anteriores de inventario y ventas.
+16. El ranking de productos vendidos sigue naturalmente porque usa datos de ventas acumuladas que ya existen después de implementar el POS y el seguimiento de inventario.
+17. El control de gastos operativos se añade después porque introduce datos externos (gastos no relacionados directamente con ventas) que complementan el panorama financiero para cálculos de rentabilidad real.
+18. El dashboard visual con gráficas es lo último de inteligencia de negocio porque consolida todos los datos anteriores (rentabilidad, ranking, gastos) en visualizaciones comprensibles para la toma de decisiones.
+19. El ID fiscal dinámico por país inicia el bloque de fiscalidad porque define cómo se identifican legalmente las transacciones, algo que debe estar claro antes de definir métodos de pago o separar tablas.
+20. Los métodos de pago estandarizados siguen al ID fiscal porque diferentes regulaciones fiscales requieren diferentes formas de registrar pagos, y esto depende de la configuración fiscal del país.
+21. La separación entre ventas y facturas es lo último de fiscalidad porque requiere tener claros tanto los IDs fiscales como los métodos de pago para crear dos estructuras de datos paralelas pero relacionadas correctamente.
+22. La integración con WhatsApp es una característica complementaria que no afecta el núcleo del sistema, por lo que se deja para después de tener toda la funcionalidad principal estable.
+23. El escáner con cámara es otra característica opcional que mejora la experiencia de usuario pero no es crítica para el funcionamiento básico del POS, justificando su posición tardía.
+24. El onboarding guiado debe ser lo último de las características complementarias porque necesita que todas las funcionalidades del sistema ya estén disponibles para poder guiar adecuadamente al usuario nuevo.
+25. Las pruebas integrales E2E deben ser un bloque final separado porque solo tienen sentido cuando TODO el sistema está implementado; hacer pruebas completas antes implica retrabajo constante.
+26. La documentación completa también debe ir al final porque documentar funcionalidades que aún cambiarán o no existen genera documentación obsoleta y pérdida de tiempo.
 
 ---
 

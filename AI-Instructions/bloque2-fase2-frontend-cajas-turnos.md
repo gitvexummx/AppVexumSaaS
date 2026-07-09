@@ -1,4 +1,4 @@
-# 📋 BLOQUE 2, FASE 3: Frontend - Gestión de Cajas y Turnos
+# 📋 BLOQUE 2, FASE 2: Frontend - Gestión de Cajas y Turnos
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 4** del proyecto Vexum MX.
