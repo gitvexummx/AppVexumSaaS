@@ -59,11 +59,11 @@ Implementar un sistema proactivo de monitoreo de inventario que detecte niveles 
 - [ ] Lógica POS: Warning visual si stock baja de mínimo tras una venta.
 - [ ] Job/Tarea programada para resumen diario.
 
-## 🎨 UX/UI
+## 💡 Notas Adicionales
+
+### UX/UI
 - Usar iconos intuitivos (⚠️ para poco, 🛑 para sin stock).
 - Las notificaciones no deben ser intrusivas (toasts), sino acumulativas en la campana.
-
-## 💡 NOTAS DE IMPLEMENTACIÓN
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Crear migraciones y modelos para `stock_alerts` y `notification_preferences`

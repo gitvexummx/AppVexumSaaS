@@ -210,7 +210,7 @@ Tabla intermedia que relaciona países con sus métodos de pago oficiales:
 - [ ] Estados de carga al cargar catálogo
 - [ ] Manejo de errores si catálogo no carga
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Investigar estándares de códigos de pago locales e internacionales (ISO 20022, CATálogos de SAT, etc.)

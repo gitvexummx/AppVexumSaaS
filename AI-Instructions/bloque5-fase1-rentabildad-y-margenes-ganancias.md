@@ -146,23 +146,7 @@ Implementar el sistema de cálculo de rentabilidad que permita al dueño entende
 - Símbolo de moneda configurable ($, MXN, etc.)
 - Porcentajes con 2 decimales (ej: 45.67%)
 
-## ✅ CHECKLIST DE VERIFICACIÓN FINAL
-
-- [ ] El costo se guarda correctamente al momento de la venta
-- [ ] Los reportes usan costo histórico, no costo actual
-- [ ] No se usan promedios en los cálculos
-- [ ] % Margen y % Markup se calculan correctamente
-- [ ] Productos sin costo generan alerta pero no rompen el reporte
-- [ ] Exportación a PDF funciona con formato correcto
-- [ ] Exportación a Excel funciona con fórmulas/valores correctos
-- [ ] Dashboard muestra KPI de ganancia bruta actualizado
-- [ ] Comparativas con periodo anterior funcionan
-- [ ] Permisos de usuario están implementados correctamente
-- [ ] Modo claro/oscuro se aplica a todos los elementos
-- [ ] Tests unitarios pasan exitosamente
-- [ ] No hay regresiones en funcionalidades existentes de ventas
-
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir fórmulas exactas de cálculo (margen bruto, margen neto, ROI, markup)
@@ -186,7 +170,7 @@ Implementar el sistema de cálculo de rentabilidad que permita al dueño entende
 - Tooltips explicativos definiendo cada métrica para usuarios no financieros
 
 ### Dependencias con Otras Fases
-- Requiere módulo de compras completado (para tener costos reales de adquisición)
+- Requiere módulo de compras completada (para tener costos reales de adquisición)
 - Depende de sistema de gastos operativos (si existe en fase posterior)
 - Integrará con dashboard ejecutivo (Bloque 8)
 
@@ -200,4 +184,8 @@ Implementar el sistema de cálculo de rentabilidad que permita al dueño entende
 - Productos vendidos en promoción con margen negativo estratégico
 - Kits/bundles: ¿cómo asignar costo y precio a cada componente?
 - Devoluciones: ajustar márgenes históricos cuando se devuelve producto
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
 - Multi-moneda: convertir todo a moneda base antes de calcular márgenes

@@ -117,7 +117,7 @@ Implementar un tour interactivo guiado usando `driver.js` para nuevos usuarios, 
 - [ ] (Opcional) Endpoint para registrar métricas de completion del tour
 - [ ] (Opcional) Endpoint para obtener pasos del tour dinámicos (si no es JSON estático)
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir journey de onboarding: pasos críticos que todo usuario nuevo debe completar

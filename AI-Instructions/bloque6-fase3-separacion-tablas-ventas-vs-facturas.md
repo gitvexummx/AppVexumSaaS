@@ -299,7 +299,7 @@ Si una factura puede cubrir solo una parte de los items de una venta:
 - [ ] Notificaciones/toasts para acciones de facturación
 - [ ] Responsive design
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Analizar estructura actual de tabla `sales` y identificar campos específicos de factura

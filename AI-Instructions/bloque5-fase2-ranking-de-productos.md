@@ -136,7 +136,7 @@ Para cada producto hueso:
 - [ ] Manejo de errores y mensajes vacíos ("No hay datos")
 - [ ] Responsive design para móvil
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir métricas de ranking (ventas unidades, ventas $, margen, rotación, combinación)

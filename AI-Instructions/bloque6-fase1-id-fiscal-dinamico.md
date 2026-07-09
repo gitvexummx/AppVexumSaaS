@@ -206,7 +206,7 @@ Relación 1:1 entre cuenta/negocio y país seleccionado:
 - [ ] Adaptación de reportes según país
 - [ ] Estados de carga y manejo de errores
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Investigar requisitos fiscales locales (RFC, NIT, CUIT, RUC, DNI según país)

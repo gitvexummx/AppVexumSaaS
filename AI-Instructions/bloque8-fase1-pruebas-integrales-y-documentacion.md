@@ -1,4 +1,4 @@
-# 📋 BLOQUE 3, FASE 2: Pruebas y Documentación
+# 📋 BLOQUE 8, FASE 1: Pruebas y Documentación
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 8** del proyecto Vexum MX.

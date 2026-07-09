@@ -121,7 +121,7 @@ Implementar la funcionalidad para enviar tickets de venta a los clientes directa
 - [ ] Adaptación a móvil (abrir app) y escritorio (web)
 - [ ] Tests de integración del flujo
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Elegir proveedor de API de WhatsApp Business (Meta oficial, Twilio, MessageBird, 360dialog)

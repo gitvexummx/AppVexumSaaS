@@ -60,11 +60,11 @@ Eliminar el concepto fijo de "Piezas". Implementar unidades de medida flexibles 
 - [ ] Ticket: Formato de cantidad adaptable (mostrar decimales si aplica).
 - [ ] Validaciones: No permitir decimales en productos discretos.
 
-## 🧮 Lógica Crítica
+## 💡 Notas Adicionales
+
+### 🧮 Lógica Crítica
 - **Fórmula Caja:** `PrecioCaja = (PrecioPieza * Contenido) unless Overridden`.
 - **Stock Unificado:** Todo se guarda en la unidad más pequeña (Pieza/Kilo) para facilitar conteo, la UI presenta la conversión.
-
-## 💡 NOTAS DE IMPLEMENTACIÓN
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Investigar y definir lista base de unidades de medida estándar (SI, imperiales, locales)
