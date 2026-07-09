@@ -13,6 +13,7 @@ Esta carpeta contiene la documentación detallada por fases para implementar las
 2. Seguir **ESTRICTAMENTE** todas las reglas, convenciones y patrones establecidos
 3. Mantener consistencia con el código existente
 4. Usar el stack tecnológico definido en AIContext.md
+5. **NUNCA INSTALAR DEPENDENCIAS**
 
 ### AL INICIAR CADA FASE:
 
@@ -166,33 +167,6 @@ El stack debe incluir:
 5. Implementar siguiendo especificaciones
 6. Verificar checklist antes de entregar
 7. Documentar desviaciones o decisiones técnicas
-
----
-
-## ⚡ Comandos Útiles (por definir según stack)
-
-```bash
-# Instalación
-npm install
-
-# Migraciones
-npm run migrate
-npm run migrate:rollback
-
-# Seeds
-npm run seed
-
-# Desarrollo
-npm run dev
-
-# Tests
-npm run test
-npm run test:coverage
-npm run test:e2e
-
-# Build
-npm run build
-```
 
 ---
 
