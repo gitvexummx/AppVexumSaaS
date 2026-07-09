@@ -1,7 +1,7 @@
 # 📚 Instrucciones para IA - Vexum MX POS
 
 ## 🎯 Descripción
-Esta carpeta contiene la documentación detallada por fases para implementar las mejoras del sistema Vexum MX POS. Cada archivo está diseñado para ser leído por una IA y guiar la implementación de cada fase del proyecto.
+Esta carpeta contiene la documentación detallada por fases para implementar las mejoras del sistema Vexum MX POS. Cada archivo está diseñado para ser leído por una IA y guiar la implementación de cada fase del proyecto. Está dividida en bloques con fases cada uno.
 
 ---
 
@@ -17,40 +17,77 @@ Esta carpeta contiene la documentación detallada por fases para implementar las
 
 ### AL INICIAR CADA FASE:
 
-5. **LEER** el archivo de la fase correspondiente (ej: `fase-1-modelo-datos-migraciones.md`)
-6. **HACER TODAS LAS PREGUNTAS** listadas en la sección "PREGUNTAS OBLIGATORIAS"
-7. **ESPERAR RESPUESTAS** antes de escribir cualquier código
-8. **VERIFICAR** que las fases prerequisites estén completas
+1. **LEER** el archivo de la fase correspondiente (ej: `fase-1-modelo-datos-migraciones.md`)
+2. **HACER TODAS LAS PREGUNTAS** listadas en la sección "PREGUNTAS OBLIGATORIAS"
+3. **ESPERAR RESPUESTAS** antes de escribir cualquier código
+4. **VERIFICAR** que las fases prerequisites estén completas
 
 ---
 
 ## 📁 Fases Disponibles
 
-| Fase | Archivo | Descripción | Prerrequisitos |
+|Bloque|   Fase  | Descripción | Prerrequisitos |
 |------|---------|-------------|----------------|
-| 1 | `fase-1-modelo-datos-migraciones.md` | Creación de tablas para ventas, pagos, cajas, turnos y cortes | Ninguno |
-| 2 | `fase-2-backend-api-ventas-pagos.md` | Endpoints API para gestión de ventas, pagos, cajas y dashboard | Fase 1 completa |
-| 3 | `fase-3-frontend-pos-mejorado.md` | POS con scanner, pagos mixtos, carrito mejorado | Fases 1-2 completas |
-| 4 | `fase-4-frontend-cajas-turnos.md` | Interfaz para gestión de cajas, turnos y cortes | Fases 1-2 completas |
-| 5 | `fase-5-sistema-tickets.md` | Generación e impresión de tickets | Fases 1-2 completas |
-| 6 | `fase-6-dashboard-redisenado.md` | Dashboard actualizado con métricas de turno/caja | Fases 1-3 preferentemente |
-| 7 | `fase-7-configuracion-preferencias.md` | Panel de configuración del sistema | Fases avanzadas |
-| 8 | `fase-8-pruebas-documentacion.md` | Tests, documentación y optimización | Fases 1-7 completas |
-| 9 | `fase-9-usuarios-sucursales-multirol.md` | Creación de usuarios hijos por sucursal
-| 10 | `fase-10-inventario-avanzado-variantes` | Implementación de variantes de productos avanzados, personalizadas y dinámicas
-| 11 | `fase-11-stock-alertas-notificaciones` | Alertas de bajo stock y sin stock de algún producto
-| 12 | `fase-12-importacion-exportacion-masiva` | Importación y exportación masiva de productos y características desde csv o .xlsx
-| 13 | `fase-13-multi-almacen-transferencias` | Implementación de sistema de transferencias de mercancía entre almacenes
-| 14 | `fase-14-unidades-medida-conversion` | Conversión de unidades de medida. p.ej: caja=12pz
+|  1   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  1   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  1   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  2   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  2   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  2   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  2   |    4    |           |                 |
+|------|---------|-------------|----------------|
+|  3   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  3   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  4   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  4   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  4   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  4   |    4    |           |                 |
+|------|---------|-------------|----------------|
+|  4   |    5    |           |                 |
+|------|---------|-------------|----------------|
+|  5   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  5   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  5   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  5   |    4    |           |                 |
+|------|---------|-------------|----------------|
+|  6   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  6   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  6   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  7   |    1    |           |                 |
+|------|---------|-------------|----------------|
+|  7   |    2    |           |                 |
+|------|---------|-------------|----------------|
+|  7   |    3    |           |                 |
+|------|---------|-------------|----------------|
+|  7   |    4    |           |                 |
+|------|---------|-------------|----------------|
+
 
 ---
 
 ## 🔄 Orden Sugerido de Implementación
 
 ```
-FASE 1 → FASE 2 → FASE 3 → FASE 5 → FASE 4 → FASE 6 → FASE 7 → FASE 8
-                    ↓
-              (Fase 4 y 5 pueden ser en paralelo)
+BLOQUE 1 → BLOQUE 2 → BLOQUE 3 → BLOQUE 4 → BLOQUE 5 → BLOQUE 6 → BLOQUE 7 → BLOQUE 8
+
+IMPLEMENTAR EN ORDEN
 ```
 
 ### Justificación del orden:

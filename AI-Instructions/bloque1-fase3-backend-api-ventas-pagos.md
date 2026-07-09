@@ -1,4 +1,4 @@
-# 📋 FASE 2: Backend - API de Ventas y Pagos
+# 📋 BLOQUE 1, FASE 3: Backend - API de Ventas y Pagos
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 2** del proyecto Vexum MX.

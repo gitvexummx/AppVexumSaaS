@@ -1,4 +1,4 @@
-# Fase 20: Códigos de Pago Estandarizados por País
+# BLOQUE 6, FASE 2: Códigos de Pago Estandarizados por País
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

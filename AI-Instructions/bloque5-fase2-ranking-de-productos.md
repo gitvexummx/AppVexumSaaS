@@ -1,4 +1,4 @@
-# Fase 16: Ranking de Productos (Top 10, Productos Hueso, Filtros Avanzados)
+# BLOQUE 5, FASE 2: Ranking de Productos (Top 10, Productos Hueso, Filtros Avanzados)
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

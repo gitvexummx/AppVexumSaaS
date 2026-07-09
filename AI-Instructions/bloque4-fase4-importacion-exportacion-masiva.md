@@ -1,4 +1,4 @@
-# Fase 12: Importación y Exportación Masiva (Excel/CSV)
+# BLOQUE 4, FASE 4: Importación y Exportación Masiva (Excel/CSV)
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Leer estrictamente `AIContext.md`.

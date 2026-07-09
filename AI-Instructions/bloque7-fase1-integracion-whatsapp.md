@@ -1,4 +1,4 @@
-# Fase 22: Integración con WhatsApp para Envío de Tickets
+# BLOQUE 7, FASE 1: Integración con WhatsApp para Envío de Tickets
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

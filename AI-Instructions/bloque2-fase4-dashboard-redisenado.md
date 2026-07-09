@@ -1,4 +1,4 @@
-# 📋 FASE 6: Dashboard Rediseñado
+# 📋 BLOQUE 2, FASE 4: Dashboard Rediseñado
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 6** del proyecto Vexum MX.

@@ -1,4 +1,4 @@
-# Fase 9: Gestión Multi-Sucursal, Roles y Usuarios
+# BLOQUE 1, FASE 2: Gestión Multi-Sucursal, Roles y Usuarios
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Debes leer y entender estrictamente el archivo `AIContext.md` en la raíz del proyecto. Todas las reglas de estilo, stack tecnológico y patrones de código ahí definidos son obligatorios.

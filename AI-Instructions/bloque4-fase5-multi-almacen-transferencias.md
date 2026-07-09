@@ -1,4 +1,4 @@
-# Fase 13: Multi-Almacén y Transferencias Internas
+# BLOQUE 4, FASE 5: Multi-Almacén y Transferencias Internas
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Leer estrictamente `AIContext.md`.

@@ -1,4 +1,4 @@
-# Fase 15: Rentabilidad y Márgenes (Costo, Ganancia Bruta, %Margen, %Markup)
+# BLOQUE 5, FASE 1: Rentabilidad y Márgenes (Costo, Ganancia Bruta, %Margen, %Markup)
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

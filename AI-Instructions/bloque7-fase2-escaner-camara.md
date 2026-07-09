@@ -1,4 +1,4 @@
-# Fase 23: Escáner de Código de Barras y QR con Cámara
+# BLOQUE 7, FASE 2: Escáner de Código de Barras y QR con Cámara
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

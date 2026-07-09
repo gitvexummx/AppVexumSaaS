@@ -1,4 +1,4 @@
-# Fase 11: Alertas de Stock y Notificaciones Internas
+# BLOQUE 4, FASE 2: Alertas de Stock y Notificaciones Internas
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Leer estrictamente `AIContext.md`.

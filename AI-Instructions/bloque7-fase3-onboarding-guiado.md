@@ -1,4 +1,4 @@
-# Fase 24: Onboarding Guiado y Tour Interactivo
+# BLOQUE 7, FASE 3: Onboarding Guiado y Tour Interactivo
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

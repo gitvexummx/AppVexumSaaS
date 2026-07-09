@@ -1,4 +1,4 @@
-# Fase 21: Separación de Tablas Ventas vs Facturas
+# BLOQUE 6, FASE 3: Separación de Tablas Ventas vs Facturas
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

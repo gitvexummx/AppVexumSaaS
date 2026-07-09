@@ -1,4 +1,4 @@
-# Fase 18: Control de Gastos Operativos (Registro, Recurrentes, Ganancia Neta)
+# BLOQUE 5, FASE 3: Control de Gastos Operativos (Registro, Recurrentes, Ganancia Neta)
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

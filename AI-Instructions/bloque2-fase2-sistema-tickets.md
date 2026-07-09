@@ -1,4 +1,4 @@
-# 📋 FASE 5: Sistema de Tickets
+# 📋 BLOQUE 2, FASE 2: Sistema de Tickets
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 5** del proyecto Vexum MX.

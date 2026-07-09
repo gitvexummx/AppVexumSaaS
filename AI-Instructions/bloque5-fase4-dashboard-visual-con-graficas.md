@@ -1,4 +1,4 @@
-# Fase 17: Dashboard Visual con Gráficas Interactivas
+# BLOQUE 5, FASE 4: Dashboard Visual con Gráficas Interactivas
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

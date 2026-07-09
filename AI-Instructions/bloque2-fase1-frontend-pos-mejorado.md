@@ -1,4 +1,4 @@
-# 📋 FASE 3: Frontend - POS Mejorado
+# 📋 BLOQUE 2, FASE 1: Frontend - POS Mejorado
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 3** del proyecto Vexum MX.

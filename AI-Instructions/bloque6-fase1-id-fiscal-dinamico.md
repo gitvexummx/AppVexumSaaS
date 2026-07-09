@@ -1,4 +1,4 @@
-# Fase 19: ID Fiscal Dinámico y Configuración por País
+# BLOQUE 6, FASE 1: ID Fiscal Dinámico y Configuración por País
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 

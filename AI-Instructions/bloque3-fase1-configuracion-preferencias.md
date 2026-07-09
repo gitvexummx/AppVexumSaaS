@@ -1,4 +1,4 @@
-# 📋 FASE 7: Configuración y Preferencias
+# 📋 BLOQUE 3, FASE 1: Configuración y Preferencias
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 7** del proyecto Vexum MX.

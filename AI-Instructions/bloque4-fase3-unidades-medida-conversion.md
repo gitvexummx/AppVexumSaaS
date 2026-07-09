@@ -1,4 +1,4 @@
-# Fase 14: Unidades de Medida y Conversión (Pieza, Kilo, Caja)
+# BLOQUE 4, FASE 3: Unidades de Medida y Conversión (Pieza, Kilo, Caja)
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Leer estrictamente `AIContext.md`.

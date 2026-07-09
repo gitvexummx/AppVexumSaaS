@@ -1,4 +1,4 @@
-# Fase 10: Inventario Avanzado - Variantes, Atributos y Precios
+# BLOQUE 4, FASE 1: Inventario Avanzado - Variantes, Atributos y Precios
 
 ## ⚠️ INSTRUCCIONES CRÍTICAS PARA LA IA
 1. **LEER PRIMERO:** Debes leer y entender estrictamente el archivo `AIContext.md` en la raíz del proyecto.

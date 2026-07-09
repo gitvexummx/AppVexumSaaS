@@ -1,4 +1,4 @@
-# 📋 FASE 1: Modelo de Datos y Migraciones
+# 📋 BLOQUE 1, FASE 1: Modelo de Datos y Migraciones
 
 ## 🎯 Contexto para la IA
 Este documento contiene las instrucciones para implementar la **Fase 1** del proyecto Vexum MX. 
