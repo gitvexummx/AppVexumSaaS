@@ -1,4 +1,4 @@
-# BLOQUE 7, FASE 4: Revisión de Lenguaje e Internacionalización (Español LATAM)
+# BLOQUE 3, FASE 2: Revisión de Lenguaje e Internacionalización (Español LATAM)
 
 ## ⚠️ REGLAS CRÍTICAS - LEER PRIMERO
 
@@ -98,7 +98,7 @@ Estandarizar el lenguaje de la aplicación para que sea accesible, claro y regio
 - El frontend mapea esas claves a mensajes traducidos.
 - Excepción: Mensajes críticos de validación fiscal (ID, país) que puedan venir hardcodeados, se traducirán en frontend.
 
-### ❓ PREGUNTAS OBLIGATORIAS (DEBES RESPONDER ANTES DE CODIFICAR)
+## ❓ PREGUNTAS OBLIGATORIAS (DEBES RESPONDER ANTES DE CODIFICAR)
 - ¿Qué librería de i18n es la estándar para el framework frontend usado?
 - ¿Existe ya alguna estructura de carpetas locales o lang?
 - ¿Cuántos textos hardcodeados estimamos que hay (orden de magnitud)?
@@ -120,7 +120,7 @@ Estandarizar el lenguaje de la aplicación para que sea accesible, claro y regio
 - ¿Hay tests automatizados que rompan al cambiar textos de la UI?
 - ¿Se debe considerar accesibilidad (lectores de pantalla) con los nuevos textos?
 
-### 🛠️ ENTREGABLES ESPERADOS
+## 🛠️ ENTREGABLES ESPERADOS
 **Frontend**
 Instalar librería de i18n (vue-i18n, react-i18next, etc.)
 Crear estructura de carpetas src/locales/
@@ -142,7 +142,7 @@ Cambiar mensajes de error para devolver claves en vez de texto (ej: error.stock_
 Asegurar que endpoints de configuración devuelvan el país correcto
 (Opcional) Endpoint para actualizar diccionario de términos personalizados (futuro)
 
-### 🔒 CONSIDERACIONES TÉCNICAS
+## 🔒 CONSIDERACIONES TÉCNICAS
 **Consistencia**
 - Usar siempre las claves de traducción, nunca concatenar strings dinámicamente si hay una clave.
 - Mantener nomenclatura de claves consistente (seccion.subseccion.concepto).
@@ -165,7 +165,13 @@ Asegurar que endpoints de configuración devuelvan el país correcto
 - Variables no proporcionadas en interpolación: manejar gracefulmente.
 - Cambios de país en caliente: recargar idioma sin requerir logout.
 
-### ✅ CHECKLIST DE VERIFICACIÓN FINAL
+## 💡 Notas Adicionales
+
+*(Esta sección puede ser utilizada para agregar notas de implementación, recomendaciones adicionales, dependencias con otras fases, o advertencias comunes relacionadas con la internacionalización y adaptación de lenguaje.)*
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
 - [ ] Librería i18n instalada y configurada
 - [ ] Archivo base es-LATAM.json creado y completo
 - [ ] Archivos de override por país funcionando

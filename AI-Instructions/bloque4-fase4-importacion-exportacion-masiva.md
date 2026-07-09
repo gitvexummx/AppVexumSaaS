@@ -63,11 +63,11 @@ Permitir la carga y descarga masiva de inventario mediante archivos Excel/CSV, f
 - [ ] Plantilla de Excel ejemplo descargable.
 - [ ] Bitácora de movimientos de stock generada por importación.
 
-## ⚙️ Performance
+## 💡 Notas Adicionales
+
+### ⚙️ Performance
 - Para archivos >500 filas, usar Jobs/Colas en backend para no timeoutear la petición HTTP.
 - Barra de progreso en frontend si es posible (via Websockets o polling).
-
-## 💡 NOTAS DE IMPLEMENTACIÓN
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir formatos soportados (CSV, Excel XLSX, JSON) y estructuras de plantillas

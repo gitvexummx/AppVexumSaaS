@@ -126,7 +126,7 @@ Permitir escanear códigos de barras y QR usando la cámara del dispositivo (mó
 - [ ] Pruebas en iOS y Android (Safari/Chrome)
 - [ ] Documentación de uso para el usuario final
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Investigar librerías de escaneo de códigos de barras/QR para el stack tecnológico usado

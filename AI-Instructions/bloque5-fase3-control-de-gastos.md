@@ -212,7 +212,7 @@ Crear tabla `gastos` con campos:
 - [ ] Estados de carga y error
 - [ ] Notificación/toast al guardar/eliminar éxito
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir categorías de gastos fijas (alquiler, servicios, nómina, marketing, etc.) y permitir customización

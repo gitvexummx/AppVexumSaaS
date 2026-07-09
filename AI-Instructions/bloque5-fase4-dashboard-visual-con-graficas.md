@@ -172,7 +172,7 @@ Transformar el dashboard actual de solo mostrar números a proporcionar insights
 - [ ] Responsive design (móvil, tablet, desktop)
 - [ ] Guardar preferencia de tiempo en localStorage (opcional)
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Definir KPIs principales a mostrar (ventas, margen, tickets promedio, productos top, etc.)

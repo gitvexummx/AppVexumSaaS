@@ -56,11 +56,11 @@ Transformar el inventario plano actual a un sistema relacional avanzado que sopo
 - [ ] UI de Inventario: Vista agrupada por padre con expansión de variantes.
 - [ ] Adaptación del POS para mostrar nombre completo de variante al escanear.
 
-## 💡 Notas de Implementación
+## 💡 Notas Adicionales
+
+### Notas de Implementación
 - La UX de creación de productos será el punto crítico. Usar un enfoque de "Wizard" (Pasos) es recomendado.
 - Considerar performance: Si un producto tiene 50 tallas x 10 colores = 500 variantes, la carga debe ser eficiente (paginación o virtual scroll).
-
-## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance
 - Índices obligatorios en: `product_variants(sku)`, `product_variants(product_id)`, `inventory_levels(variant_id, warehouse_id)`

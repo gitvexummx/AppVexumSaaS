@@ -68,7 +68,7 @@ Implementar una arquitectura jerárquica de **Negocio → Sucursales → Cajas/U
 - Los passwords deben estar hasheados (bcrypt/argon2).
 - Logs de auditoría: Quién creó/modificó usuarios y cambios de rol.
 
-## 💡 NOTAS DE IMPLEMENTACIÓN
+## 💡 Notas Adicionales
 
 ### Orden Sugerido de Desarrollo
 1. **Primero:** Crear migraciones para tablas `branches` (sucursales), `user_branches` (relación muchos-a-muchos), `roles`, `permissions`

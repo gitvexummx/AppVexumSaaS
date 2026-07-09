@@ -55,11 +55,11 @@ Gestionar inventario distribuido en múltiples ubicaciones (Tienda Física, Bode
 - [ ] POS: Selector de "Descontar de:" (Default: Sucursal actual).
 - [ ] Reportes: Movimientos de inventario filtrables por almacén.
 
-## 💡 Nota de Diseño
+## 💡 Notas Adicionales
+
+### Nota de Diseño
 - Mantener la simplicidad: No complicar con estados "Pendiente de recepción". Todo es atómico e inmediato.
 - La integridad del stock es crítica: Usar transacciones de BD en las transferencias (Restar A, Sumar B, Registrar Movimiento).
-
-## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance
 - Índices obligatorios en: `warehouses(code, is_active)`, `inventory_levels(warehouse_id, product_id, variant_id)`, `transfer_requests(status, created_at)`
