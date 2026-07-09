@@ -36,6 +36,12 @@ Esta carpeta contiene la documentación detallada por fases para implementar las
 | 6 | `fase-6-dashboard-redisenado.md` | Dashboard actualizado con métricas de turno/caja | Fases 1-3 preferentemente |
 | 7 | `fase-7-configuracion-preferencias.md` | Panel de configuración del sistema | Fases avanzadas |
 | 8 | `fase-8-pruebas-documentacion.md` | Tests, documentación y optimización | Fases 1-7 completas |
+| 9 | `fase-9-usuarios-sucursales-multirol.md` | Creación de usuarios hijos por sucursal
+| 10 | `fase-10-inventario-avanzado-variantes` | Implementación de variantes de productos avanzados, personalizadas y dinámicas
+| 11 | `fase-11-stock-alertas-notificaciones` | Alertas de bajo stock y sin stock de algún producto
+| 12 | `fase-12-importacion-exportacion-masiva` | Importación y exportación masiva de productos y características desde csv o .xlsx
+| 13 | `fase-13-multi-almacen-transferencias` | Implementación de sistema de transferencias de mercancía entre almacenes
+| 14 | `fase-14-unidades-medida-conversion` | Conversión de unidades de medida. p.ej: caja=12pz
 
 ---
 
@@ -48,14 +54,7 @@ FASE 1 → FASE 2 → FASE 3 → FASE 5 → FASE 4 → FASE 6 → FASE 7 → FAS
 ```
 
 ### Justificación del orden:
-1. **Fase 1**: Sin modelo de datos no hay nada más que hacer
-2. **Fase 2**: El backend debe estar listo para que el frontend consuma
-3. **Fase 3**: El POS es el core del sistema - priorizar
-4. **Fase 5**: Los tickets dependen de ventas pero son independientes de cajas/turnos
-5. **Fase 4**: Gestión administrativa puede hacerse en paralelo con tickets
-6. **Fase 6**: El dashboard necesita datos reales de las fases anteriores
-7. **Fase 7**: Configuración puede hacerse cuando ya se conoce el sistema
-8. **Fase 8**: Testing y documentación siempre al final (o incrementalmente)
+1. 
 
 ---
 
@@ -136,16 +135,47 @@ CANCELADA → Revertida (con autorización)
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 📊 Performance y Escalabilidad
 
-**Ver AIContext.md para detalles específicos**
+- Índices en campos de búsqueda frecuente (código_barras, folio, sku)
+- Paginación en listados grandes
+- Caché de configuraciones y datos estáticos
+- Queries optimizadas para dashboard
+- Considerar múltiples cajas simultáneas
+- Soporte para crecimiento de inventario (10k+ productos)
 
-El stack debe incluir:
-- Frontend framework (React/Vue/Angular)
-- Backend framework (Node.js/Express/NestJS)
-- Base de datos relacional (MySQL/PostgreSQL)
-- ORM (Sequelize/Prisma/TypeORM)
-- Librería de testing (Jest/Cypress/Playwright)
+---
+
+## 🔐 Consideraciones de Seguridad
+
+- Passwords de superior must be hashed (bcrypt/argon2)
+- Solo usuarios autorizados pueden realizar acciones críticas
+- Logs de auditoría para: aperturas/cierres de caja, cancelaciones, re-aperturas
+- Validación de permisos por rol en cada endpoint
+- Sanitización de inputs en importaciones masivas
+
+---
+
+## 🛠️ Stack Tecnológico (Referencia Rápida)
+
+Consultar documentos del proyecto para detalles completos. Resúmen:
+
+- **Frontend:** Vue.js 3, Composition API, TailwindCSS
+- **Backend:** Laravel 10+, PHP 8.2+
+- **Base de Datos:** MySQL 8+ / PostgreSQL
+- **PWA:** Service Workers, Offline-first
+- **Librerías Clave:** (ver AIContext.md para lista completa)
+
+---
+
+## 🧪 Testing Strategy
+Cada fase debe incluir:
+- Tests unitarios para lógica de negocio
+- Tests de integración para APIs
+- Tests E2E para flujos críticos (venta completa, corte de caja, etc.)
+- Pruebas manuales con hardware real (escáneres, impresoras)
+- Pruebas de carga para importaciones masivas
+- **NO INSTALAR DEPENDENCIAS**
 
 ---
 
@@ -159,14 +189,18 @@ El stack debe incluir:
 5. Probar en entorno local
 6. Dar feedback para ajustes
 
-### Para la IA:
-1. Leer AIContext.md primero
-2. Leer el documento de fase asignado
-3. Hacer TODAS las preguntas de clarificación
-4. Esperar respuestas completas
-5. Implementar siguiendo especificaciones
-6. Verificar checklist antes de entregar
-7. Documentar desviaciones o decisiones técnicas
+## 📝 Para la IA: Flujo de Trabajo para Cada Fase
+1. **Leer** `AIContext.md` para entender contexto general
+2. **Leer** el archivo de la fase específica
+3. **Revisar** el código existente relacionado
+4. **Hacer** todas las preguntas de clarificación listadas
+5. **Esperar** respuestas del equipo
+6. **Planear** la implementación con base en respuestas
+7. **Implementar** siguiendo patrones existentes
+8. **Probar** exhaustivamente
+9. **Verificar** checklist de entregables
+10. **Documentar** cambios realizados
+11. **Entregar** para revisión
 
 ---
 
@@ -197,17 +231,32 @@ Si eres la IA asignada a este proyecto:
 
 ---
 
-## 📞 Contacto y Soporte
+## 📞 Soporte y Dudas
 
-Para dudas sobre los requerimientos del negocio, consultar directamente con el usuario/product owner.
+Si tienes dudas durante la implementación:
 
-Para dudas técnicas, revisar:
-- AIContext.md (reglas del proyecto)
-- Documentación existente en `/docs` (si existe)
-- Código existente como referencia de patrones
+1. Revisa si la respuesta está en `AIContext.md`
+2. Revisa el archivo de la fase actual
+3. **PREGUNTA** al equipo antes de asumir
+4. Documenta cualquier decisión tomada durante la implementación
 
 ---
 
-**Última actualización:** Enero 2025  
+## ✅ Checklist General de Entrega
+Para cada fase completada:
+- [ ] Código implementado siguiendo patrones existentes
+- [ ] Migraciones creadas y probadas (si aplica)
+- [ ] Tests escritos y pasando
+- [ ] Documentación actualizada
+- [ ] No hay regresiones en funcionalidades existentes
+- [ ] Performance considerado (índices, queries optimizados)
+- [ ] Seguridad implementada (validaciones, permisos)
+- [ ] UX/UI consistente con el resto del sistema
+- [ ] Commit messages descriptivos
+- [ ] PR listo para review
+
+---
+
+**Última actualización:** Julio 2026 
 **Versión del plan:** 1.0  
-**Proyecto:** Vexum MX POS System
+**Proyecto:** Vexum MX App
