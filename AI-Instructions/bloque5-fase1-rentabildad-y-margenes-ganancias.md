@@ -161,3 +161,43 @@ Implementar el sistema de cálculo de rentabilidad que permita al dueño entende
 - [ ] Modo claro/oscuro se aplica a todos los elementos
 - [ ] Tests unitarios pasan exitosamente
 - [ ] No hay regresiones en funcionalidades existentes de ventas
+
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir fórmulas exactas de cálculo (margen bruto, margen neto, ROI, markup)
+2. **Segundo:** Crear migraciones para tablas de costos operativos y gastos asignables
+3. **Tercero:** Implementar service layer para cálculos de rentabilidad por producto/categoría/venta
+4. **Cuarto:** Agregar campos calculados o vistas materializadas para performance
+5. **Quinto:** Crear endpoints de reporting con filtros por fecha, categoría, sucursal
+6. **Sexto:** Dashboard visual con gráficas de márgenes y ranking de productos más/menos rentables
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Diferenciar claramente entre **MARGEN** (`(precio - costo) / precio * 100`) y **MARKUP** (`(precio - costo) / costo * 100`)
+- ⚠️ Los costos deben incluir TODOS los componentes: costo producto + flete + impuestos no recuperables + handling
+- ⚠️ Considerar costos variables vs fijos en el cálculo de rentabilidad neta
+- ⚠️ Precisión decimal: mínimo 4 decimales en cálculos intermedios, 2 decimales en visualización
+
+### Recomendaciones de UX
+- Mostrar ambos valores: margen absoluto ($) y margen porcentual (%)
+- Indicadores visuales de color: verde (>30%), amarillo (15-30%), rojo (<15%)
+- Permitir drill-down: de vista general → categoría → producto → venta específica
+- Incluir comparativa temporal: margen actual vs mes anterior vs mismo mes año pasado
+- Tooltips explicativos definiendo cada métrica para usuarios no financieros
+
+### Dependencias con Otras Fases
+- Requiere módulo de compras completado (para tener costos reales de adquisición)
+- Depende de sistema de gastos operativos (si existe en fase posterior)
+- Integrará con dashboard ejecutivo (Bloque 8)
+
+### Advertencias Comunes
+- ❌ No usar precio de lista; usar precio real de venta (con descuentos aplicados)
+- ❌ No olvidar proratear gastos indirectos (luz, alquiler, personal) si se calcula margen neto
+- ❌ Evitar mostrar márgenes negativos sin explicación clara (¿por qué se vendió bajo costo?)
+- ❌ No calcular en tiempo real si hay grandes volúmenes; usar caché o vistas materializadas refresh diarias
+
+### Casos Especiales a Considerar
+- Productos vendidos en promoción con margen negativo estratégico
+- Kits/bundles: ¿cómo asignar costo y precio a cada componente?
+- Devoluciones: ajustar márgenes históricos cuando se devuelve producto
+- Multi-moneda: convertir todo a moneda base antes de calcular márgenes

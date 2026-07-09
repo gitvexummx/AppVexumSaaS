@@ -126,6 +126,78 @@ Permitir escanear códigos de barras y QR usando la cámara del dispositivo (mó
 - [ ] Pruebas en iOS y Android (Safari/Chrome)
 - [ ] Documentación de uso para el usuario final
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Investigar librerías de escaneo de códigos de barras/QR para el stack tecnológico usado
+2. **Segundo:** Implementar componente de cámara con permisos y manejo de errores
+3. **Tercero:** Integrar motor de decodificación (ZXing, QuaggaJS, html5-qrcode, etc.)
+4. **Cuarto:** Validar códigos escaneados contra base de datos de productos
+5. **Quinto:** UI de feedback visual/sonoro al escanear exitosamente
+6. **Sexto:** Historial de escaneos y modo continuo para inventario rápido
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Manejar permisos de cámara correctamente; pedir permiso explícito con explicación clara
+- ⚠️ Soporte multi-formato: EAN-13, EAN-8, UPC-A, UPC-E, Code 128, Code 39, QR, DataMatrix
+- ⚠️ Performance: escaneo debe ser rápido (<1 segundo) incluso en dispositivos gama media
+- ⚠️ Funcionamiento offline: caché local de productos para escanear sin conexión (PWA/service worker)
+
+### Recomendaciones de UX
+- Feedback inmediato: beep/vibración + highlight verde cuando escanea exitosamente
+- Preview del producto escaneado antes de confirmar (imagen, nombre, precio)
+- Modo "inventario rápido": escaneo continuo sin confirmación individual, contador en pantalla
+- Linterna/flash toggle para ambientes oscuros
+- Ajuste automático de enfoque y exposición
+- Instrucciones visuales: "Acérquese al código", "Más luz", "Código no reconocido"
+
+### Dependencias con Otras Fases
+- Requiere módulo de productos completado (para buscar por SKU/código de barras)
+- Integrará con inventario (Bloque 4) para conteos físicos
+- Puede usarse en POS (Bloque 2) para agregar productos al carrito rápidamente
+
+### Advertencias Comunes
+- ❌ No asumir que todos los dispositivos tienen cámara trasera con autofocus
+- ❌ No olvidar manejar caso donde usuario deniega permisos de cámara (fallback a input manual)
+- ❌ Evitar escaneo en bucle infinito; implementar cooldown de 1-2 segundos entre escaneos
+- ❌ No confiar ciegamente en código escaneado; validar formato y existencia en BD
+
+### Librerías Recomendadas por Plataforma
+
+**Web (JavaScript/TypeScript):**
+- `html5-qrcode`: Ligera, soporta múltiples formatos, fácil integración
+- `QuaggaJS`: Especializada en códigos de barras 1D, muy rápida
+- `ZXing-js/library`: Port de ZXing (Java), soporta QR y barras
+
+**React Native:**
+- `react-native-camera`: Camera completa con barcode scanning
+- `react-native-vision-camera`: Más moderna, mejor performance
+- `@react-native-community/camera`: Mantenida por comunidad
+
+**Flutter:**
+- `mobile_scanner`: Basada en ML Kit, muy rápida
+- `qr_code_scanner`: Especializada en QR
+- `flutter_barcode_scanner`: Simple y efectiva
+
+**Android Nativo:**
+- Google ML Kit Barcode Scanning (recomendado)
+- ZXing Android Embedded
+
+**iOS Nativo:**
+- AVFoundation + Vision Framework (nativo Apple)
+- ZXingObjC
+
+### Casos Especiales
+- Códigos dañados o parcialmente visibles (intentar lectura múltiple)
+- Múltiples códigos en mismo encuadre (seleccionar el más grande/centrado)
+- Productos sin código de barras (generar e imprimir etiquetas QR internas)
+- Escaneo desde galería (subir imagen con código en lugar de cámara en vivo)
+
+### Optimizaciones de Performance
+- Usar resolución de cámara media (no máxima) para procesar más rápido
+- Limitar framerate de escaneo a 15-20 fps (suficiente para capturar códigos)
+- Web Workers para decodificación en hilo separado (no bloquear UI)
+- Caché de resultados: si mismo código escaneado 2 veces en 5 segundos, usar resultado previo
+
 ### 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Privacidad y Seguridad

@@ -206,6 +206,54 @@ Relación 1:1 entre cuenta/negocio y país seleccionado:
 - [ ] Adaptación de reportes según país
 - [ ] Estados de carga y manejo de errores
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Investigar requisitos fiscales locales (RFC, NIT, CUIT, RUC, DNI según país)
+2. **Segundo:** Crear migraciones para agregar campos fiscales a clientes/proveedores
+3. **Tercero:** Implementar validadores específicos por tipo de ID fiscal (algoritmos de verificación)
+4. **Cuarto:** Endpoint de validación en tiempo real contra API gubernamental (si existe)
+5. **Quinto:** UI de registro de clientes con validación automática y autocompletado
+6. **Sexto:** Generación de documentos fiscales (facturas, tickets) con IDs validados
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Cada país tiene formato y algoritmo de validación diferente; investigar exhaustivamente
+- ⚠️ El ID fiscal debe ser único por tipo de documento (no puede haber dos RFC iguales)
+- ⚠️ Validar tanto formato (regex) como dígito verificador (algoritmo modular 10/11)
+- ⚠️ Soportar múltiples tipos de documento por cliente (DNI, RFC, Pasaporte, Extranjero)
+
+### Recomendaciones de UX
+- Autocompletado desde API gubernamental (ej: SAT en México, SUNAT en Perú, AFIP en Argentina)
+- Validación en tiempo real mientras usuario escribe (checkmark verde/rojo)
+- Mensajes de error específicos ("El RFC tiene formato inválido", "El dígito verificador no coincide")
+- Selector de tipo de documento que cambia dinámicamente el formato esperado
+- Historial de IDs fiscales usados por cliente (para detectar duplicados accidentales)
+
+### Dependencias con Otras Fases
+- Requiere módulo de clientes completado (Bloque 6 base)
+- Integrará con facturación electrónica (fase siguiente o posterior)
+- Necesario para reportes fiscales obligatorios
+
+### Advertencias Comunes
+- ❌ No confiar solo en validación de frontend; siempre validar en backend también
+- ❌ No almacenar IDs fiscales sin normalizar (quitar guiones, espacios, mayúsculas)
+- ❌ Evitar hardcodear reglas de un solo país; diseñar sistema extensible multi-país
+- ❌ No olvidar caso de clientes extranjeros sin ID fiscal local (usar pasaporte o "genérico")
+
+### Ejemplos de Validadores por País
+- **México (RFC):** 12-13 caracteres, algoritmo modular 11 para dígito verificador
+- **Argentina (CUIT/CUIL):** 11 dígitos, fórmula de módulo 11
+- **Colombia (NIT):** Número + dígito de verificación separado por guión
+- **España (NIF/NIE):** 8-9 caracteres con letra de control calculada
+- **Perú (RUC):** 11 dígitos, validación por algoritmo específico
+
+### APIs Gubernamentales Útiles (si disponibles)
+- México: SAT Validación de RFC
+- Argentina: AFIP Consulta de CUIT
+- Colombia: DIAN Validación de NIT
+- España: AEAT Validación de NIF
+- Chile: SII Validación de RUT
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Seguridad

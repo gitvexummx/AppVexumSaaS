@@ -62,3 +62,93 @@ Implementar un sistema proactivo de monitoreo de inventario que detecte niveles 
 ## 🎨 UX/UI
 - Usar iconos intuitivos (⚠️ para poco, 🛑 para sin stock).
 - Las notificaciones no deben ser intrusivas (toasts), sino acumulativas en la campana.
+
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Crear migraciones y modelos para `stock_alerts` y `notification_preferences`
+2. **Segundo:** Implementar lógica de verificación de stock (service layer)
+3. **Tercero:** Configurar jobs/schedulers para verificación periódica
+4. **Cuarto:** Implementar sistema de notificaciones (email, push, in-app)
+5. **Quinto:** Crear UI para configuración de alertas por usuario/producto
+6. **Sexto:** Dashboard de alertas activas y histórico
+
+### Puntos Críticos
+- ⚠️ **Importante:** La verificación de stock NO debe correr en cada request; usar jobs programados (cada 15-30 min) o triggers en eventos de cambio de stock
+- ⚠️ Evitar notificaciones duplicadas: implementar cooldown de 24h por alerta/producto/usuario
+- ⚠️ Considerar zonas horarias de usuarios al enviar notificaciones programadas
+
+### Recomendaciones de UX
+- Permitir configuración granular: cada usuario define qué alertas quiere recibir y por qué canales
+- Mostrar preview de cómo se verá la notificación antes de guardar configuración
+- Incluir acción rápida en notificaciones (ej: "Reponer stock" que lleve directo al formulario de compra)
+- Agrupar alertas relacionadas en resumen diario opcional
+
+### Dependencias con Otras Fases
+- Requiere fase de multi-almacén completada para alertas por ubicación
+- Depende de sistema de notificaciones central (verificar si existe en bloque anterior)
+- Integrará con módulo de compras para sugerir órdenes de reposición automáticas
+
+### Advertencias Comunes
+- ❌ No hardcodear thresholds de stock; deben ser configurables por producto/categoría/usuario
+- ❌ No enviar notificaciones fuera de horario laboral configurable
+- ❌ No olvidar caso de productos descontinuados (no alertar)
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
+
+### Backend
+- [ ] Migración para tabla `stock_alerts` (id, product_id, variant_id, threshold, type, is_active, created_by)
+- [ ] Migración para tabla `notification_preferences` (user_id, channel, alert_type, is_enabled)
+- [ ] Migración para tabla `alert_history` (registro de alertas enviadas)
+- [ ] Modelo StockAlert con scopes (low_stock, out_of_stock, over_stocked)
+- [ ] Service para verificación de stock contra thresholds
+- [ ] Job/Scheduler para ejecución periódica de verificación
+- [ ] Sistema de notificaciones multi-canal (email, push, in-app)
+- [ ] Endpoints para CRUD de alertas por usuario
+- [ ] Endpoint para obtener alertas activas del usuario
+- [ ] Endpoint para marcar alerta como leída/resuelta
+- [ ] Tests unitarios para lógica de thresholds
+- [ ] Tests de integración para flujo completo de alerta
+
+### Frontend
+- [ ] Página de configuración de alertas por usuario
+- [ ] Componente para definir threshold por producto/variante
+- [ ] Toggle switches para activar/desactivar tipos de alerta
+- [ ] Selector de canales de notificación preferidos
+- [ ] Dashboard de alertas activas con filtros
+- [ ] Vista detallada de alerta con acciones rápidas
+- [ ] Historial de alertas con paginación
+- [ ] Badges/contadores de alertas no leídas en navbar
+- [ ] Notificaciones in-app en tiempo real (WebSocket/polling)
+- [ ] Responsive design en todos los dispositivos
+- [ ] Tests de integración para flujos de configuración
+
+### UX/UI
+- [ ] Diseños de emails de alerta (HTML responsive)
+- [ ] Templates de notificaciones push
+- [ ] Iconografía clara para tipos de alerta (warning, danger, info)
+- [ ] Colores semánticos (amarillo=stock bajo, rojo=agotado)
+- [ ] Animaciones sutiles para nuevas alertas
+- [ ] Accesibilidad (aria-labels, contraste de colores)
+
+### Performance & Security
+- [ ] Job de verificación optimizado (batch processing, no N+1)
+- [ ] Índices en `stock_alerts(product_id, is_active)` y `alert_history(user_id, created_at)`
+- [ ] Rate limiting en envío de notificaciones
+- [ ] Validación de permisos (usuarios solo ven sus alertas)
+- [ ] Logs de envío de notificaciones para debugging
+
+### Casos Especiales
+- [ ] Manejo de productos con variantes múltiples (alerta por variante vs producto general)
+- [ ] Alertas diferenciadas por almacén/sucursal
+- [ ] Respetar horarios laborales configurados
+- [ ] No alertar productos marcados como "descontinuado" o "sin reposición"
+- [ ] Cooldown configurado para evitar spam
+
+### Documentación
+- [ ] Guía de configuración de alertas para usuarios finales
+- [ ] Documentación técnica de jobs y schedulers
+- [ ] Ejemplos de payloads de notificaciones
+- [ ] Runbook para troubleshooting de alertas no enviadas

@@ -212,6 +212,46 @@ Crear tabla `gastos` con campos:
 - [ ] Estados de carga y error
 - [ ] Notificación/toast al guardar/eliminar éxito
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir categorías de gastos fijas (alquiler, servicios, nómina, marketing, etc.) y permitir customización
+2. **Segundo:** Crear migraciones para `expense_categories`, `expenses`, `expense_recurring`
+3. **Tercero:** Implementar CRUD de gastos con subida de comprobantes (PDF/imágenes)
+4. **Cuarto:** Sistema de aprobación de gastos (workflow: pendiente → aprobado → pagado)
+5. **Quinto:** Integración con cuentas bancarias y cajas para conciliación
+6. **Sexto:** Reportes de gastos por categoría, período, centro de costo, proyecto
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Diferenciar gastos operativos vs costos de mercancía vendida (COGS)
+- ⚠️ Los gastos recurrentes deben generarse automáticamente cada período (jobs programados)
+- ⚠️ Validar que cada gasto tenga: concepto claro, monto, fecha, categoría, comprobante, responsable
+- ⚠️ Control de presupuestos: alertar cuando gastos de categoría superan presupuesto mensual
+
+### Recomendaciones de UX
+- Upload drag-and-drop de comprobantes con OCR opcional (extraer monto/fecha automáticamente)
+- Workflow visual de aprobación con notificaciones a aprobadores
+- Presupuestos visuales: barra de progreso "gastado vs presupuestado" por categoría
+- Calendar view para ver distribución de gastos en el tiempo
+- Búsqueda inteligente de gastos (por concepto, proveedor, monto, fecha)
+
+### Dependencias con Otras Fases
+- Requiere módulo de usuarios/sucursales (Bloque 1.2) para asignar responsables
+- Integrará con contabilidad formal (Bloque 7) para asientos automáticos
+- Depende de sistema de notificaciones para aprobaciones pendientes
+
+### Advertencias Comunes
+- ❌ No permitir gastos sin categoría asignada (imposible reportear)
+- ❌ No olvidar control de IVA/deducibles en gastos (campo específico para impuestos)
+- ❌ Evitar duplicación de gastos recurrentes al regenerar automáticamente
+- ❌ No hardcodear categorías; hacerlas configurables por empresa/sucursal
+
+### Casos Especiales
+- Gastos compartidos entre múltiples sucursales/proyectos (prorateo automático)
+- Gastos en moneda extranjera (convertir a moneda base con tipo de cambio del día)
+- Reembolsos a empleados (flujo especial con aprobación y pago)
+- Gastos capitalizables vs gastos del período (marcador para contabilidad)
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance

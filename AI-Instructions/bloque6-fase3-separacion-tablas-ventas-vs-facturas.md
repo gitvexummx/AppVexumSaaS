@@ -299,6 +299,77 @@ Si una factura puede cubrir solo una parte de los items de una venta:
 - [ ] Notificaciones/toasts para acciones de facturación
 - [ ] Responsive design
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Analizar estructura actual de tabla `sales` y identificar campos específicos de factura
+2. **Segundo:** Diseñar nuevo schema: `sales` (operación comercial) vs `invoices` (documento fiscal)
+3. **Tercero:** Crear migraciones para nueva tabla `invoices` con campos fiscales específicos
+4. **Cuarto:** Implementar relación one-to-many: una venta puede generar múltiples facturas (parcialidades)
+5. **Quinto:** Refactorizar código existente para separar lógica de venta vs lógica de facturación
+6. **Sexto:** Migrar datos históricos (crear invoices desde sales existentes)
+7. **Séptimo:** Testing exhaustivo para asegurar que refactor no rompa funcionalidad existente
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Una venta NO es igual a una factura; pueden existir ventas sin facturar y facturas que agrupan múltiples ventas
+- ⚠️ La numeración de facturas es consecutiva y obligatoria por punto de emisión; no puede haber gaps
+- ⚠️ Campos exclusivos de factura: folio fiscal, serie, fecha timbrado, UUID fiscal, sello digital, cadena original
+- ⚠️ Mantener integridad referencial: no eliminar venta con facturas asociadas
+
+### Recomendaciones de UX
+- Flujo claro: "Venta realizada" → botón "Facturar" → genera factura
+- Permitir facturación parcial: vender 100 → facturar 50 ahora, 50 después
+- Permitir agrupar múltiples ventas en una sola factura (mismo cliente, misma fecha)
+- Vista de "Estado de facturación" en cada venta: Pendiente, Parcialmente Facturado, Completamente Facturado
+- Historial de facturas asociadas a cada venta visible en detalle de venta
+
+### Dependencias con Otras Fases
+- Requiere IDs fiscales de clientes completados (Bloque 6.1)
+- Requiere códigos de pago estandarizados (Bloque 6.2)
+- Prerrequisito para facturación electrónica (timbrado, envío a autoridad fiscal)
+
+### Advertencias Comunes
+- ❌ No mezclar campos de venta (productos, precios) con campos fiscales (UUID, sellos)
+- ❌ No permitir edición de factura una vez emitida (solo notas de crédito para cancelar)
+- ❌ Evitar numeración manual de folios; usar secuencias automáticas controladas
+- ❌ No olvidar que facturas canceladas deben mantenerse en BD con status "cancelada" (nunca borrar)
+
+### Estrategias de Migración de Datos
+**Opción A - Big Bang (recomendada si ventana de mantenimiento posible):**
+1. Backup completo de BD
+2. Ejecutar migraciones en modo mantenimiento
+3. Script de migración: crear invoice por cada sale histórico
+4. Validar integridad de datos migrados
+5. Switch a nueva versión
+
+**Opción B - Dual Write (para sistemas 24/7 sin downtime):**
+1. Nueva tabla `invoices` coexiste con `sales` antiguo
+2. Nuevas ventas escriben en ambas tablas temporalmente
+3. Script background migra ventas antiguas gradualmente
+4. Cuando migración completa, eliminar writes duales
+5. Refactorizar código para leer solo de nuevas tablas
+
+### Schema Sugerido
+
+**Tabla `sales` (operación comercial):**
+{
+  id, date, customer_id, subtotal, discount, tax_total, total, payment_method_id, 
+  status (completed, cancelled, refunded), created_by, branch_id
+}
+**Tabla `invoices` (documento fiscal):**
+{
+  id, sale_id (FK), invoice_type (ingreso, egreso, traslado), series, folio, 
+  fiscal_uuid, fiscal_stamp_date, digital_seal, original_chain, tax_certificate, 
+  status (active, cancelled), cancellation_date, cancellation_reason,
+  exported_at (fecha envío a autoridad), pdf_path, xml_path
+}
+
+### Consideraciones Legales
+- Facturas deben conservarse mínimo 5 años (varía por país)
+- Cancelación de facturas requiere motivo específico establecido por ley
+- Secuencia de folios no puede interrumpirse; si hay error, usar folios "de prueba" o nota técnica
+- Backups diarios obligatorios para evitar pérdida de información fiscal
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Integridad de Datos

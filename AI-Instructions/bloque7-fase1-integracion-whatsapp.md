@@ -121,6 +121,60 @@ Implementar la funcionalidad para enviar tickets de venta a los clientes directa
 - [ ] Adaptación a móvil (abrir app) y escritorio (web)
 - [ ] Tests de integración del flujo
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Elegir proveedor de API de WhatsApp Business (Meta oficial, Twilio, MessageBird, 360dialog)
+2. **Segundo:** Configurar cuenta de WhatsApp Business API y obtener credenciales
+3. **Tercero:** Crear migraciones para `whatsapp_templates`, `whatsapp_messages`, `whatsapp_contacts`
+4. **Cuarto:** Implementar service layer para envío de mensajes (texto, plantillas, multimedia)
+5. **Quinto:** Webhook handler para recibir respuestas y actualizaciones de estado (entregado, leído)
+6. **Sexto:** UI para envío manual de mensajes, vista de conversaciones, estadísticas
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** WhatsApp Business API tiene reglas estrictas; mensajes proactivos solo con plantillas aprobadas
+- ⚠️ Las plantillas deben ser pre-aprobadas por Meta antes de usarse (proceso de 24-72 horas)
+- ⚠️ Rate limiting: WhatsApp impone límites de mensajes por segundo/minuto según nivel de negocio
+- ⚠️ Costos: WhatsApp cobra por conversación (ventana de 24h), no por mensaje individual
+
+### Recomendaciones de UX
+- Constructor visual de plantillas con preview de cómo se verá en WhatsApp
+- Variables dinámicas en plantillas: `{{1}}` = nombre_cliente, `{{2}}` = número_pedido
+- Cola de mensajes con reintentos automáticos si falla envío
+- Indicadores de estado: enviado ✅, entregado ✓✓, leído (azul)
+- Bandeja de entrada unificada para respuestas de clientes
+- Etiquetas/tags para organizar contactos y conversaciones
+
+### Dependencias con Otras Fases
+- Requiere módulo de clientes completado (para vincular teléfonos a clientes)
+- Integrará con notificaciones (Bloque 4.2) para enviar alertas por WhatsApp
+- Puede dispararse desde ventas, recordatorios de pago, seguimiento post-venta
+
+### Advertencias Comunas
+- ❌ No enviar spam; WhatsApp bloquea números que reportan abuso masivamente
+- ❌ No almacenar mensajes en texto plano; encriptar datos sensibles
+- ❌ Evitar enviar mensajes fuera de horario permitido (8am-8pm hora local del cliente)
+- ❌ No olvidar manejar opt-out: clientes deben poder darse de baja fácilmente
+
+### Proveedores Recomendados
+- **Meta WhatsApp Cloud API:** Oficial, más económico, hosting propio requerido
+- **Twilio:** Fácil integración, buena documentación, pricing transparente
+- **MessageBird:** Omnicanal (WhatsApp + SMS + email), enterprise-ready
+- **360dialog:** Partner oficial Meta, infraestructura gestionada incluida
+
+### Casos de Uso Típicos
+- Confirmación de pedidos automáticos
+- Recordatorios de citas/reservas
+- Notificaciones de envío/entrega
+- Encuestas de satisfacción post-compra
+- Alertas de promociones personalizadas (solo a clientes que opt-in)
+- Soporte al cliente vía chat
+
+### Webhooks a Implementar
+- `message_status`: actualiza estado de mensaje enviado (sent, delivered, read, failed)
+- `incoming_message`: recibe respuesta de cliente y crea hilo de conversación
+- `template_status`: notifica cuando plantilla es aprobada/rechazada por Meta
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Privacidad y Seguridad

@@ -67,3 +67,119 @@ Implementar una arquitectura jerárquica de **Negocio → Sucursales → Cajas/U
 - Validar siempre que el usuario pertenezca a la sucursal que está consultando (evitar IDOR).
 - Los passwords deben estar hasheados (bcrypt/argon2).
 - Logs de auditoría: Quién creó/modificó usuarios y cambios de rol.
+
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Crear migraciones para tablas `branches` (sucursales), `user_branches` (relación muchos-a-muchos), `roles`, `permissions`
+2. **Segundo:** Implementar modelos con relaciones y scopes
+3. **Tercero:** Middleware de autorización por sucursal y rol
+4. **Cuarto:** Endpoints de asignación de usuarios a sucursales y roles
+5. **Quinto:** UI de gestión de usuarios, sucursales y asignación de roles
+6. **Sexto:** Testing exhaustivo de permisos cruzados
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Un usuario puede tener roles DIFERENTES en sucursales distintas (ej: admin en sucursal A, vendedor en sucursal B)
+- ⚠️ El contexto de sucursal activa debe estar siempre presente en requests (vía header, query param, o sesión)
+- ⚠️ Usuarios "super admin" pueden acceder a todas las sucursales sin restricción
+
+### Recomendaciones de UX
+- Selector de sucursal visible en header/navbar cuando usuario tiene acceso a múltiples
+- Mostrar claramente en qué sucursal se está operando (breadcrumb o badge)
+- Listar roles por sucursal en perfil de usuario (tabla: Sucursal | Rol | Permisos)
+- Permitir cambio rápido de sucursal sin re-login
+
+### Dependencias con Otras Fases
+- Esta fase es PREREQUISITO para todas las fases posteriores que involucren permisos
+- Bloque 2 (POS) dependerá de sucursal activa para filtrar productos/cajas
+- Bloque 3 (configuración) permitirá configuraciones por sucursal
+
+### Advertencias Comunes
+- ❌ No asumir que usuario tiene un solo rol fijo; siempre verificar rol EN EL CONTEXTO de la sucursal actual
+- ❌ No olvidar validar permisos en cada endpoint, no solo en frontend
+- ❌ No hardcodear IDs de roles o sucursales; usar constantes o lookup por nombre/código
+- ❌ Evitar queries que filtren por sucursal sin índices apropiados
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
+
+### Backend
+- [ ] Migración para tabla `branches` (id, name, code, address, phone, email, is_active, settings)
+- [ ] Migración para tabla `roles` (id, name, slug, description, is_system_role)
+- [ ] Migración para tabla `permissions` (id, name, slug, resource, action)
+- [ ] Migración para tabla `role_permissions` (role_id, permission_id)
+- [ ] Migración para tabla `user_branches` (user_id, branch_id, role_id, is_primary)
+- [ ] Modelo Branch con relaciones a Users, Roles
+- [ ] Modelo Role con relaciones a Permissions, Users (via user_branches)
+- [ ] Modelo Permission con scopes por recurso y acción
+- [ ] Modelo User actualizado con relación many-to-many a Branches through user_branches
+- [ ] Middleware `SetCurrentBranch` para establecer contexto de sucursal
+- [ ] Middleware `CheckPermission` para validar permisos por rol+ sucursal
+- [ ] Scope global en modelos para filtrar por sucursal activa (soft delete pattern)
+- [ ] Endpoints CRUD para branches (solo super admin)
+- [ ] Endpoints CRUD para roles y permisos (solo super admin)
+- [ ] Endpoint para asignar usuario a sucursal con rol específico
+- [ ] Endpoint para cambiar rol de usuario en sucursal específica
+- [ ] Endpoint para listar sucursales de usuario actual
+- [ ] Endpoint para cambiar sucursal activa (sesión)
+- [ ] Seeder con roles predefinidos (Super Admin, Admin, Manager, Seller, Viewer)
+- [ ] Seeder con permisos básicos por recurso (usuarios, productos, ventas, reportes)
+- [ ] Tests unitarios para modelos y relaciones
+- [ ] Tests de integración para flujos de autorización
+- [ ] Tests de seguridad (usuarios no acceden a datos de sucursales no asignadas)
+
+### Frontend
+- [ ] Selector de sucursal en header/navbar (dropdown con lista de sucursales del usuario)
+- [ ] Badge indicador de sucursal activa
+- [ ] Página de gestión de sucursales (lista, crear, editar, desactivar)
+- [ ] Página de gestión de roles y permisos (matriz de permisos editable)
+- [ ] Página de gestión de usuarios con pestaña de "Sucursales y Roles"
+- [ ] Componente para asignar/quitar sucursales a usuario con selector de rol
+- [ ] Formulario de creación/edición de usuario con selección de sucursal primaria
+- [ ] Vista de perfil de usuario mostrando roles por sucursal
+- [ ] Redirect automático a dashboard de sucursal al cambiar contexto
+- [ ] Manejo de errores 403 (permiso denegado) con mensaje claro
+- [ ] Ocultar UI elements (botones, menús) según permisos del rol en sucursal activa
+- [ ] Directivas/custom hooks para validación de permisos en templates/componentes
+- [ ] Estado global (Vuex/Pinia/Redux) con: usuario actual, sucursal activa, roles, permisos
+- [ ] Persistencia de sucursal activa en localStorage/sessionStorage
+- [ ] Responsive en móvil y tablet
+- [ ] Tests de integración para flujos de cambio de sucursal y validación de permisos
+
+### UX/UI
+- [ ] Diseño claro de matriz de permisos (checkboxes por recurso/acción)
+- [ ] Tooltips explicativos en permisos complejos
+- [ ] Confirmación antes de remover usuario de sucursal o cambiar rol
+- [ ] Notificación toast al cambiar sucursal exitosamente
+- [ ] Loading states mientras se cargan permisos/sucursales
+- [ ] Mensaje informativo cuando usuario no tiene acceso a ninguna sucursal (contactar admin)
+- [ ] Accesibilidad (ARIA labels, focus management en modales)
+
+### Performance & Security
+- [ ] Caché de permisos por usuario+sucursal (invalidar al cambiar rol)
+- [ ] Índices en `user_branches(user_id, branch_id)`, `role_permissions(role_id, permission_id)`
+- [ ] Eager loading de relaciones para evitar N+1 queries
+- [ ] Validación de permisos en backend (nunca confiar solo en frontend)
+- [ ] Logs de auditoría: cambios de rol, asignación de sucursales, intentos de acceso denegado
+- [ ] Rate limiting en endpoints de gestión de usuarios
+- [ ] Sanitización de inputs en formularios de creación/edición
+
+### Casos Especiales
+- [ ] Usuario "super admin" salta validaciones de sucursal (acceso global)
+- [ ] Sucursal "matriz" o "headquarters" con permisos especiales
+- [ ] Herencia de permisos: rol base + permisos adicionales por sucursal
+- [ ] Temporalidad de roles: usuario con rol válido solo por período determinado (opcional avanzado)
+- [ ] Multi-empresa: si el sistema soporta múltiples organizaciones, aislar sucursales por empresa
+
+### Migración de Datos
+- [ ] Script para migrar usuarios existentes a sucursal por defecto
+- [ ] Script para asignar rol "Admin" a usuarios actuales (backward compatibility)
+- [ ] Plan de rollback en caso de errores en asignación de permisos
+
+### Documentación
+- [ ] Diagrama de relaciones entre usuarios, sucursales, roles y permisos
+- [ ] Guía de administración de usuarios y sucursales
+- [ ] Lista completa de permisos disponibles con descripciones
+- [ ] FAQ sobre problemas comunes de permisos
+- [ ] API documentation para endpoints de autorización

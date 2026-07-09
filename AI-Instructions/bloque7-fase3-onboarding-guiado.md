@@ -117,6 +117,80 @@ Implementar un tour interactivo guiado usando `driver.js` para nuevos usuarios, 
 - [ ] (Opcional) Endpoint para registrar métricas de completion del tour
 - [ ] (Opcional) Endpoint para obtener pasos del tour dinámicos (si no es JSON estático)
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir journey de onboarding: pasos críticos que todo usuario nuevo debe completar
+2. **Segundo:** Crear migración para tabla `user_onboarding_progress` (trackear progreso por usuario)
+3. **Tercero:** Implementar sistema de tours guiados (librería: Intro.js, Shepherd.js, Driver.js)
+4. **Cuarto:** Crear componentes de tooltips, modales explicativos y checkpoints
+5. **Quinto:** Lógica condicional: mostrar u ocultar pasos según rol, industria, configuración
+6. **Sexto:** Dashboard de progreso de onboarding con checklist visual y recompensas/gamificación
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Onboarding debe ser opcional y saltabe; nunca forzar al usuario a completarlo
+- ⚠️ Persistir progreso: si usuario cierra sesión a mitad, debe retomar donde dejó
+- ⚠️ Personalización: onboarding diferente para Admin vs Vendedor vs Contador
+- ⚠️ Performance: tours no deben ralentizar carga de página; lazy load de assets
+
+### Recomendaciones de UX
+- Progress bar visible: "Paso 3 de 8: Configurando tu primer producto"
+- Botones claros: "Anterior", "Siguiente", "Saltar tour", "Ver más tarde"
+- Screenshots/anotaciones visuales en cada paso (no solo texto)
+- Video tutorials embebidos opcionales para pasos complejos
+- Checklist lateral siempre visible durante onboarding
+- Celebración al completar onboarding (confetti, badge, mensaje motivacional)
+- Encuesta post-onboarding: "¿Qué tan útil fue este tutorial?" (1-5 estrellas)
+
+### Dependencias con Otras Fases
+- Requiere sistema de usuarios/roles completado (Bloque 1.2)
+- Se activa después de creación de cuenta primera vez
+- Puede integrarse con sistema de notificaciones para recordatorios de pasos pendientes
+
+### Advertencias Comunes
+- ❌ No hacer onboarding demasiado largo (máximo 8-10 pasos; dividir en módulos si es más)
+- ❌ No usar jerga técnica; lenguaje claro y orientado a beneficios
+- ❌ Evitar tours genéricos; adaptar según industria/tipo de negocio detectado
+- ❌ No olvidar versión móvil; tours deben funcionar en pantallas pequeñas
+
+### Elementos Clave del Onboarding
+
+**Fase 1 - Configuración Inicial:**
+1. Completar perfil de empresa (nombre, logo, dirección, datos fiscales)
+2. Configurar sucursal principal
+3. Establecer moneda, zona horaria, idioma
+4. Invitar primeros usuarios/equipo
+
+**Fase 2 - Catálogo Básico:**
+5. Crear primera categoría de productos
+6. Agregar primer producto con precio y stock
+7. Configurar método de pago predeterminado
+
+**Fase 3 - Primera Venta:**
+8. Realizar venta de prueba (modo sandbox/tutorial)
+9. Generar primer reporte básico
+10. Explorar dashboard principal
+
+### Métricas de Éxito del Onboarding
+- **Completion Rate:** % de usuarios que completan onboarding
+- **Time to Complete:** Tiempo promedio desde inicio hasta finalización
+- **Drop-off Points:** En qué pasos abandonan más los usuarios
+- **Activation Rate:** % de usuarios que realizan acción clave (primera venta) dentro de 7 días
+- **NPS Post-Onboarding:** Satisfacción con el proceso
+
+### Librerías Recomendadas
+- **Intro.js:** Muy popular, fácil implementación, temas personalizables
+- **Shepherd.js:** Moderna, accesible, sin dependencias
+- **Driver.js:** Ligera, sin dependencias, focus mode
+- **React Joyride:** Especial para React, muy flexible
+- **Vue Tour / Vue Shepherd:** Para proyectos Vue.js
+
+### Gamificación Opcional
+- Badges: "Primer Producto Creado", "Primera Venta", "Perfil Completo"
+- Progress bar con porcentaje completado
+- Recompensas simbólicas: avatar especial, tema premium temporal
+- Leaderboard interno (si es equipo multi-usuario)
+
 ### 🔒 CONSIDERACIONES TÉCNICAS
 **UX/UI**
 - No bloquear completamente la app, permitir exploración.

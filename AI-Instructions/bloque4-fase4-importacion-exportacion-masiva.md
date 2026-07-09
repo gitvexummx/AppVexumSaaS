@@ -66,3 +66,115 @@ Permitir la carga y descarga masiva de inventario mediante archivos Excel/CSV, f
 ## ⚙️ Performance
 - Para archivos >500 filas, usar Jobs/Colas en backend para no timeoutear la petición HTTP.
 - Barra de progreso en frontend si es posible (via Websockets o polling).
+
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir formatos soportados (CSV, Excel XLSX, JSON) y estructuras de plantillas
+2. **Segundo:** Crear endpoints de upload con validación de archivos
+3. **Tercero:** Implementar parser y validador de datos (schema validation)
+4. **Cuarto:** Sistema de colas/jobs para procesamiento asíncrono de imports grandes
+5. **Quinto:** UI de seguimiento de progreso en tiempo real
+6. **Sexto:** Generador de exports con filtros y columnas personalizables
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Los imports masivos NO deben bloquear el servidor; usar background jobs con progreso reportable
+- ⚠️ Timeout: configurar timeouts largos (5-10 min) para jobs de importación
+- ⚠️ Memoria: procesar archivos grandes en chunks/streaming para no saturar RAM
+- ⚠️ Atomicidad: cada fila debe ser transaccional individualmente; fallo en una no debe cancelar todo el batch
+
+### Recomendaciones de UX
+- Proveer plantillas descargables con datos de ejemplo
+- Validación previa del archivo antes de procesar (preview de primeras 10 filas)
+- Reporte detallado de errores post-import: qué filas fallaron y por qué
+- Permitir reintentar solo filas fallidas sin reprocesar todo
+- Barra de progreso en tiempo real con estimación de tiempo restante
+
+### Dependencias con Otras Fases
+- Requiere módulos de productos, inventario, proveedores ya implementados
+- Exportará datos de todas las fases anteriores
+- Necesita sistema de notificaciones para avisar cuando job termina
+
+### Advertencias Comunes
+- ❌ No confiar en encoding del archivo; detectar y convertir a UTF-8
+- ❌ No permitir imports sin validación de schema
+- ❌ No olvidar sanitizar datos importados (prevenir XSS/SQL injection desde CSV)
+- ❌ Evitar imports cíclicos o duplicados (detectar por SKU/ID externo)
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
+
+### Backend
+- [ ] Endpoint POST `/api/import/{entity}` con upload de archivo
+- [ ] Endpoint GET `/api/import-jobs/{id}` para verificar progreso
+- [ ] Endpoint GET `/api/export/{entity}` con filtros query params
+- [ ] Parser para CSV (detect delimiter automáticamente: comma, semicolon, tab)
+- [ ] Parser para Excel (.xlsx, .xls) usando librería robusta (ej: SheetJS, phpSpreadsheet)
+- [ ] Parser para JSON (validar schema contra definición)
+- [ ] Validador de schema por entidad (productos, clientes, proveedores, etc.)
+- [ ] Job/Worker para procesamiento asíncrono de imports
+- [ ] Sistema de colas (Redis, RabbitMQ, database-backed) para jobs
+- [ ] Modelo ImportJob con campos: status, progress, total_rows, processed_rows, errors_count, started_at, completed_at
+- [ ] Modelo ImportErrorLog para registrar filas fallidas con razón del error
+- [ ] Transaccionalidad por fila (rollback individual si falla)
+- [ ] Detección de duplicados por SKU/ID externo/email
+- [ ] Opción de "update if exists, create if not" vs "skip duplicates" vs "fail on duplicate"
+- [ ] Generator para exports con columnas personalizables
+- [ ] Compresión automática de exports grandes (>10MB) a ZIP
+- [ ] Tests unitarios para parsers y validadores
+- [ ] Tests de integración para flujo completo import→process→report
+- [ ] Tests de stress con archivos de 10k+ filas
+
+### Frontend
+- [ ] Componente FileUploader con drag-and-drop
+- [ ] Validación de tipo de archivo y tamaño máximo (ej: 50MB)
+- [ ] Preview de primeras 10 filas antes de confirmar import
+- [ ] Mapeo de columnas: UI para matchear columnas del archivo con campos del sistema
+- [ ] Selección de estrategia para duplicados (crear/actualizar/omitir)
+- [ ] Dashboard de jobs de import/export con lista y estados
+- [ ] Vista de detalle de job con barra de progreso en tiempo real
+- [ ] Tabla de errores con filtrado y opción de reintentar seleccionados
+- [ ] Descarga de reporte de errores en CSV/Excel
+- [ ] Configuración de export: seleccionar columnas, aplicar filtros, formato
+- [ ] Notificación push/email cuando job completa
+- [ ] Historial de imports/exports realizados por usuario
+- [ ] Responsive en móvil y tablet
+
+### UX/UI
+- [ ] Plantillas descargables con ejemplos prellenados
+- [ ] Guías visuales paso-a-paso para importar
+- [ ] Mensajes de error claros y accionables ("Fila 47: Email inválido")
+- [ ] Iconos de estado para jobs (pending, processing, completed, failed)
+- [ ] Colores semánticos para progreso (verde=éxito, amarillo=procesando, rojo=error)
+- [ ] Tooltips explicativos en opciones avanzadas
+- [ ] Confirmación antes de iniciar import grande (>1000 filas)
+
+### Performance & Security
+- [ ] Streaming de archivos grandes (no cargar todo en memoria)
+- [ ] Chunk processing (lotes de 100-500 filas por transacción)
+- [ ] Rate limiting en uploads (max 5 imports simultáneos por usuario)
+- [ ] Validación de MIME type real (no confiar en extensión del archivo)
+- [ ] Sanitización de todos los datos importados
+- [ ] Escaneo de archivos en busca de scripts maliciosos
+- [ ] Logs de auditoría: quién importó qué, cuándo, cuántas filas
+- [ ] Cleanup automático de archivos temporales después de procesar
+- [ ] Índices en `import_jobs(user_id, status, created_at)`
+
+### Casos Especiales
+- [ ] Manejo de encoding (UTF-8, ISO-8859-1, Windows-1252)
+- [ ] Imports con relaciones (ej: producto con categorías y proveedores; resolver IDs)
+- [ ] Campos opcionales vs requeridos manejados correctamente
+- [ ] Valores nulos/vacíos tratados según configuración
+- [ ] Formatos de fecha múltiples detectados automáticamente
+- [ ] Números con separadores decimales/miles regionales
+- [ ] Imports parciales (solo ciertas columnas)
+- [ ] Rollback manual de import completo si se detectan errores masivos
+
+### Documentación
+- [ ] Guía de usuario para importar/exportar
+- [ ] Documentación de formatos soportados con ejemplos
+- [ ] Lista de campos requeridos por entidad
+- [ ] FAQ de errores comunes y soluciones
+- [ ] API documentation para endpoints de import/export
+- [ ] Runbook para troubleshooting de jobs fallidos

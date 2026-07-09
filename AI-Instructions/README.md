@@ -1,5 +1,5 @@
 # 📚 Instrucciones para IA - Vexum MX POS
-
+	
 ## 🎯 Descripción
 Esta carpeta contiene la documentación detallada por fases para implementar las mejoras del sistema Vexum MX POS. Cada archivo está diseñado para ser leído por una IA y guiar la implementación de cada fase del proyecto. Está dividida en bloques con fases cada uno.
 
@@ -82,7 +82,9 @@ Esta carpeta contiene la documentación detallada por fases para implementar las
 
 ---
 
+
 ## 🔄 Orden Sugerido de Implementación
+
 
 BLOQUE 1 → BLOQUE 2 → BLOQUE 3 → BLOQUE 4 → BLOQUE 5 → BLOQUE 6 → BLOQUE 7 → BLOQUE 8
 
@@ -115,13 +117,12 @@ BLOQUE 1 → BLOQUE 2 → BLOQUE 3 → BLOQUE 4 → BLOQUE 5 → BLOQUE 6 → BL
 24. El onboarding guiado debe ser lo último de las características complementarias porque necesita que todas las funcionalidades del sistema ya estén disponibles para poder guiar adecuadamente al usuario nuevo.
 25. Las pruebas integrales E2E deben ser un bloque final separado porque solo tienen sentido cuando TODO el sistema está implementado; hacer pruebas completas antes implica retrabajo constante.
 26. La documentación completa también debe ir al final porque documentar funcionalidades que aún cambiarán o no existen genera documentación obsoleta y pérdida de tiempo.
-
+	
 ---
-
+	
 ## 📋 Estructura de Cada Documento de Fase
-
+	
 Cada archivo de fase contiene:
-
 1. **Contexto para la IA** - Recordatorio de reglas críticas
 2. **Objetivo de la Fase** - Qué se debe lograr
 3. **Preguntas Obligatorias** - Lista de preguntas que la IA DEBE hacer antes de codificar
@@ -130,16 +131,16 @@ Cada archivo de fase contiene:
 6. **Consideraciones Técnicas** - Patrones, validaciones, performance, seguridad
 7. **Notas Adicionales** - Consejos y advertencias importantes
 8. **Checklist de Verificación** - Para confirmar que todo está completo
-
+	
 ---
 
 ## 🎯 Requerimientos Principales del Proyecto
-
+	
 ### 1. Atajos de Escáner
 - Listener permanente en POS que detecte códigos de barras
 - Soporte para escáneres tipo "pistola" que emiten teclado + enter
 - Tecla modificadora para consulta rápida de precio (sin agregar al carrito)
-
+	
 ### 2. Pagos Mixtos
 - Permitir combinar efectivo + tarjeta + transferencia en una sola venta
 - Validar que suma de pagos = total de venta
@@ -150,13 +151,13 @@ Cada archivo de fase contiene:
 - Apertura/cierre de caja con saldos
 - Cortes de caja con resumen de ventas del periodo
 - Reapertura de cortes con validación de supervisor (password)
-
+	
 ### 4. Generación de Tickets
 - Tickets HTML/CSS imprimibles
 - Numeración consecutiva automática
 - Incluir: logo, RFC, items, totales, métodos de pago, folio, fecha
 - Opción de vista previa y descarga PDF
-
+	
 ---
 
 ## 🔑 Conceptos Clave
@@ -172,7 +173,6 @@ Cada archivo de fase contiene:
 │ CORTE DE CAJA = Resumen de N turnos     │
 └─────────────────────────────────────────┘
 ```
-
 ### Flujo de Venta
 ```
 1. Abrir caja (saldo inicial)
@@ -185,7 +185,7 @@ Cada archivo de fase contiene:
 8. Generar corte (múltiples turnos)
 9. Cerrar caja (cuadre final)
 ```
-
+	
 ### Estados de Venta
 ```
 PENDIENTE → En proceso de pago
@@ -213,13 +213,12 @@ CANCELADA → Revertida (con autorización)
 - Logs de auditoría para: aperturas/cierres de caja, cancelaciones, re-aperturas
 - Validación de permisos por rol en cada endpoint
 - Sanitización de inputs en importaciones masivas
-
+	
 ---
-
+	
 ## 🛠️ Stack Tecnológico (Referencia Rápida)
-
+	
 Consultar documentos del proyecto para detalles completos. Resúmen:
-
 - **Frontend:** Vue.js 3, Composition API, TailwindCSS
 - **Backend:** Laravel 10+, PHP 8.2+
 - **Base de Datos:** MySQL 8+ / PostgreSQL
@@ -229,6 +228,7 @@ Consultar documentos del proyecto para detalles completos. Resúmen:
 ---
 
 ## 🧪 Testing Strategy
+
 Cada fase debe incluir:
 - Tests unitarios para lógica de negocio
 - Tests de integración para APIs
@@ -236,11 +236,11 @@ Cada fase debe incluir:
 - Pruebas manuales con hardware real (escáneres, impresoras)
 - Pruebas de carga para importaciones masivas
 - **NO INSTALAR DEPENDENCIAS**
-
+	
 ---
 
 ## 📞 Flujo de Trabajo con IA
-
+	
 ### Para el Usuario Humano:
 1. Asignar una fase específica a la IA
 2. Proporcionar contexto adicional si es necesario
@@ -261,9 +261,9 @@ Cada fase debe incluir:
 9. **Verificar** checklist de entregables
 10. **Documentar** cambios realizados
 11. **Entregar** para revisión
-
+	
 ---
-
+	
 ## 📝 Notas Importantes
 
 1. **Cada fase debe ser independiente y probada** antes de continuar a la siguiente
@@ -279,7 +279,6 @@ Cada fase debe incluir:
 ## 🚀 Para Comenzar
 
 Si eres la IA asignada a este proyecto:
-
 1. **Primero:** Lee `/workspace/AIContext.md` completamente
 2. **Segundo:** Identifica qué fase te fue asignada
 3. **Tercero:** Abre el archivo de esa fase (ej: `fase-1-modelo-datos-migraciones.md`)
@@ -290,16 +289,15 @@ Si eres la IA asignada a este proyecto:
 8. **Octavo:** Entrega el trabajo con commit descriptivo
 
 ---
-
+	
 ## 📞 Soporte y Dudas
-
+	
 Si tienes dudas durante la implementación:
-
 1. Revisa si la respuesta está en `AIContext.md`
 2. Revisa el archivo de la fase actual
 3. **PREGUNTA** al equipo antes de asumir
 4. Documenta cualquier decisión tomada durante la implementación
-
+	
 ---
 
 ## ✅ Checklist General de Entrega
@@ -314,7 +312,7 @@ Para cada fase completada:
 - [ ] UX/UI consistente con el resto del sistema
 - [ ] Commit messages descriptivos
 - [ ] PR listo para review
-
+	
 ---
 
 **Última actualización:** Julio 2026 

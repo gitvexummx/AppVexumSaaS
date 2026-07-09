@@ -59,3 +59,83 @@ Transformar el inventario plano actual a un sistema relacional avanzado que sopo
 ## 💡 Notas de Implementación
 - La UX de creación de productos será el punto crítico. Usar un enfoque de "Wizard" (Pasos) es recomendado.
 - Considerar performance: Si un producto tiene 50 tallas x 10 colores = 500 variantes, la carga debe ser eficiente (paginación o virtual scroll).
+
+## 🔒 CONSIDERACIONES TÉCNICAS
+
+### Performance
+- Índices obligatorios en: `product_variants(sku)`, `product_variants(product_id)`, `inventory_levels(variant_id, warehouse_id)`
+- Implementar caché de 5 minutos para consultas de stock por variante
+- Paginación server-side para listados de variantes (>50 registros por página)
+- Lazy loading para imágenes de variantes en frontend
+
+### Seguridad
+- Validar que solo usuarios con permiso `inventory.manage_variants` puedan crear/editar variantes
+- Sanitizar todos los inputs de SKU (solo alfanumérico, guiones y puntos permitidos)
+- Prevenir race conditions en actualizaciones de stock con transacciones database-level
+
+### UX/UI
+- Mostrar claramente la variante seleccionada con highlight visual
+- Feedback inmediato al cambiar entre variantes (precio, stock, imagen)
+- Permitir búsqueda/filtrado por atributos de variante (talla, color, etc.)
+- Indicador visual de stock bajo (<10 unidades) en cada variante
+
+### Edge Cases
+- Manejar caso cuando una variante queda sin stock pero otras sí tienen
+- Prevenir eliminación de variantes con movimientos de inventario históricos
+- Validar que no existan SKUs duplicados (case-insensitive)
+- Manejar productos con 0 variantes activas (mostrar mensaje adecuado)
+
+### Consistencia de Datos
+- Usar transacciones al crear producto + variantes simultáneamente
+- Auditoría de cambios en atributos de variantes (quién, cuándo, qué cambió)
+- Mantener integridad referencial al eliminar productos (cascade o restrict según corresponda)
+
+---
+
+## ✅ CHECKLIST DE VERIFICACIÓN FINAL
+
+### Backend
+- [ ] Migración para tabla `product_variants` con todos los campos requeridos
+- [ ] Migración para tabla `variant_attributes` (atributos dinámicos)
+- [ ] Modelo ProductVariant con relaciones a Product, Attribute, InventoryLevel
+- [ ] Controller con CRUD completo de variantes (create, read, update, delete, bulk_update)
+- [ ] Endpoint para obtener todas las variantes de un producto
+- [ ] Endpoint para actualizar stock de una variante específica
+- [ ] Validación de unicidad de SKU (case-insensitive)
+- [ ] Tests unitarios para modelo Variant (validaciones, scopes, métodos)
+- [ ] Tests de integración para endpoints de variantes
+- [ ] Seeders con datos de ejemplo de variantes
+
+### Frontend
+- [ ] Componente VariantSelector reutilizable
+- [ ] Componente VariantList con tabla/pagination
+- [ ] Formulario de creación/edición de variante con validación en tiempo real
+- [ ] Integración con estado global (Vuex/Pinia/Redux) para variantes
+- [ ] Switcher de imágenes al cambiar variante seleccionada
+- [ ] Indicadores visuales de stock (disponible, bajo, agotado)
+- [ ] Filtros por atributos de variante (talla, color, material, etc.)
+- [ ] Búsqueda de variantes por SKU o nombre
+- [ ] Responsive design en móvil y tablet
+- [ ] Manejo de estados de carga y error
+- [ ] Tests de integración para flujo completo de gestión de variantes
+
+### UX/UI
+- [ ] Diseño consistente con sistema de diseño del proyecto
+- [ ] Compatible con modo claro/oscuro
+- [ ] Tooltips explicativos en campos complejos
+- [ ] Mensajes de error claros y accionables
+- [ ] Confirmación antes de eliminar variantes
+- [ ] Notificación toast al guardar/actualizar exitosamente
+
+### Performance & Security
+- [ ] Queries optimizadas con índices apropiados
+- [ ] Caché implementado para consultas frecuentes
+- [ ] Validación de permisos en todos los endpoints
+- [ ] Sanitización de inputs verificada
+- [ ] No hay N+1 queries en listados de variantes
+- [ ] Tiempo de carga < 2 segundos para 100 variantes
+
+### Documentación
+- [ ] Swagger/OpenAPI actualizado con endpoints de variantes
+- [ ] README del módulo actualizado con ejemplos de uso
+- [ ] Comentarios en código para lógica compleja

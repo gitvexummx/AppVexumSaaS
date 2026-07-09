@@ -136,6 +136,46 @@ Para cada producto hueso:
 - [ ] Manejo de errores y mensajes vacíos ("No hay datos")
 - [ ] Responsive design para móvil
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir métricas de ranking (ventas unidades, ventas $, margen, rotación, combinación)
+2. **Segundo:** Crear vistas materializadas o tablas de agregación para performance
+3. **Tercero:** Implementar algoritmos de scoring ponderado (ej: 40% ventas + 30% margen + 30% rotación)
+4. **Cuarto:** Endpoints de ranking con filtros múltiples (fecha, categoría, sucursal, proveedor)
+5. **Quinto:** UI de tablas clasificatorias con paginación y exportación
+6. **Sexto:** Gráficas comparativas y evolución temporal del ranking
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** El ranking debe ser configurable: usuario puede cambiar pesos de cada métrica
+- ⚠️ Considerar estacionalidad: comparar contra período equivalente (no mes anterior si es producto estacional)
+- ⚠️ Normalizar datos: productos nuevos no pueden competir con productos de años en ranking crudo
+- ⚠️ Segmentar rankings por categoría (no mezclar productos de diferentes gamas/tipos)
+
+### Recomendaciones de UX
+- Múltiples vistas de ranking: Top 10, Bottom 10, Más Rentables, Mayor Rotación, Tendencias
+- Badges visuales: "🔥 Trending", "📈 Subiendo", "📉 Bajando", "⭐ Nuevo en top"
+- Permitir guardar rankings personalizados como favoritos
+- Exportar ranking a PDF/Excel con un clic
+- Vista de "ficha de producto" desde el ranking con un click
+
+### Dependencias con Otras Fases
+- Requiere datos históricos de ventas (mínimo 3 meses para rankings significativos)
+- Depende de fase de rentabilidad (bloque 5.1) para ranking por margen
+- Integrará con alertas inteligentes (Bloque 8) para notificar cambios drásticos en ranking
+
+### Advertencias Comunes
+- ❌ No usar rankings con menos de 30 días de datos históricos (poco representativo)
+- ❌ No olvidar excluir productos descontinuados o sin stock
+- ❌ Evitar rankings estáticos; deben recalcularse periódicamente (diario/semanal)
+- ❌ No mostrar rankings sin contexto (incluir métricas raw junto al ranking)
+
+### Algoritmos Sugeridos
+- **Score ABC:** Clasificación Pareto (A=top 20% productos que generan 80% ventas)
+- **Score de Rotación:** `(ventas_últimos_30_días / stock_promedio)` 
+- **Score Compuesto:** `0.4 * normalizar(ventas) + 0.3 * normalizar(margen) + 0.3 * normalizar(rotación)`
+- **Tendencia:** Comparar posición actual vs posición hace 30/60/90 días
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance

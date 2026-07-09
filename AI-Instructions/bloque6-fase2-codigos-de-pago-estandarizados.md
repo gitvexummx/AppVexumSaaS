@@ -210,6 +210,73 @@ Tabla intermedia que relaciona países con sus métodos de pago oficiales:
 - [ ] Estados de carga al cargar catálogo
 - [ ] Manejo de errores si catálogo no carga
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Investigar estándares de códigos de pago locales e internacionales (ISO 20022, CATálogos de SAT, etc.)
+2. **Segundo:** Crear migración para tabla `payment_codes` o `payment_methods` estandarizada
+3. **Tercero:** Seeder con catálogo oficial de códigos de pago vigentes
+4. **Cuarto:** Actualizar modelo de ventas/pagos para usar código estandarizado en lugar de texto libre
+5. **Quinto:** UI de selección de método de pago con búsqueda por código/descripción
+6. **Sexto:** Reportes fiscales usando códigos estandarizados obligatorios
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Los códigos de pago son obligatorios para facturación electrónica en muchos países
+- ⚠️ El catálogo oficial puede cambiar; diseñar sistema versionado o con actualización periódica
+- ⚠️ Cada código tiene descripción oficial que no debe modificarse (solo agregar descripciones internas opcionales)
+- ⚠️ Validar que cada venta tenga método de pago asignado antes de cerrar/facturar
+
+### Recomendaciones de UX
+- Selector con búsqueda: escribir "tarjeta" o "01" y encontrar "Tarjeta de crédito/débito"
+- Mostrar código y descripción juntos: "01 - Efectivo", "03 - Transferencia electrónica"
+- Iconos visuales para métodos comunes (billete para efectivo, tarjeta para crédito, etc.)
+- Métodos frecuentes marcados como favoritos para acceso rápido
+- Deshabilitar métodos no aplicables según configuración de la sucursal
+
+### Dependencias con Otras Fases
+- Requiere módulo de ventas completado
+- Obligatorio para facturación electrónica (Bloque 6 fases siguientes)
+- Necesario para conciliación bancaria automatizada
+
+### Advertencias Comunes
+- ❌ No permitir texto libre para método de pago; siempre seleccionar del catálogo oficial
+- ❌ No hardcodear códigos; cargar desde base de datos (pueden cambiar por actualización legal)
+- ❌ Evitar eliminar métodos de pago usados históricamente (soft delete o flag is_active)
+- ❌ No olvidar mapeo entre métodos internos y códigos fiscales (puede haber diferencia)
+
+### Catálogos Oficiales por País
+- **México (SAT):** c_MetodoPago (CATÁLOGO 2.0) - 78 códigos vigentes
+- **Argentina (AFIP):** Concepto - Formas de pago
+- **Colombia (DIAN):** Formas de pago
+- **España:** Formas de pago según normativa AEAT
+- **Internacional:** ISO 20022 Payment Method codes
+
+### Ejemplo de Códigos Comunes (México)
+- `01` - Efectivo
+- `02` - Cheque nominativo
+- `03` - Transferencia electrónica de fondos
+- `04` - Tarjeta de crédito
+- `05` - Monedero electrónico
+- `06` - Dinero electrónico
+- `08` - Vales de despensa
+- `12` - Dación en pago
+- `13` - Pago por subrogación
+- `14` - Pago por consignación
+- `15` - Condono
+- `17` - Compensación
+- `23` - Novación
+- `24` - Confusión
+- `25` - Remisión de deuda
+- `26` - Prescripción o caducidad
+- `27` - A satisfacción del acreedor
+- `28` - Tarjeta de débito
+- `29` - Tarjeta comercial
+- `30` - Aplicación de anticipos
+- `31` - Intermediario pagos
+- `32` - Pago en parcialidades
+- `33` - Pago diferido
+- `99` - Por definir
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance

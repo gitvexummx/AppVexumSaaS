@@ -172,6 +172,55 @@ Transformar el dashboard actual de solo mostrar números a proporcionar insights
 - [ ] Responsive design (móvil, tablet, desktop)
 - [ ] Guardar preferencia de tiempo en localStorage (opcional)
 
+## 💡 NOTAS DE IMPLEMENTACIÓN
+
+### Orden Sugerido de Desarrollo
+1. **Primero:** Definir KPIs principales a mostrar (ventas, margen, tickets promedio, productos top, etc.)
+2. **Segundo:** Crear endpoints optimizados para dashboard (consultas agregadas, caché)
+3. **Tercero:** Seleccionar librería de gráficas (Chart.js, ApexCharts, Recharts, D3 según stack)
+4. **Cuarto:** Implementar componentes de gráficas reutilizables con props configurables
+5. **Quinto:** Sistema de widgets personalizables (usuario puede agregar/quitar/reordenar)
+6. **Sexto:** Filtros globales de dashboard (rango de fechas, sucursal, categoría)
+
+### Puntos Críticos
+- ⚠️ **CRÍTICO:** Performance es prioritario; dashboard no debe tardar más de 2 segundos en cargar
+- ⚠️ Usar caché agresivo: KPIs pueden tener caché de 5-15 minutos dependiendo volumen
+- ⚠️ Las gráficas deben ser responsive y verse bien en móvil, tablet y desktop
+- ⚠️ Accesibilidad: colores con contraste suficiente, labels claros, soporte screen readers
+
+### Recomendaciones de UX
+- Widgets arrastrables y redimensionables (grid layout tipo dashboard moderno)
+- Perfiles de dashboard preconfigurados: "Ventas", "Finanzas", "Inventario", "Personalizado"
+- Exportar dashboard completo a PDF o imagen
+- Drill-down en gráficas: click en barra/sector → ver detalle de ese dato
+- Comparativas temporales automáticas: "vs período anterior", "vs mismo período año pasado"
+- Modo presentación: pantalla completa sin menús laterales
+
+### Dependencias con Otras Fases
+- Consumirá datos de TODOS los módulos anteriores (ventas, inventario, gastos, rentabilidad)
+- Requiere sistema de permisos (diferentes dashboards por rol)
+- Integrará con alertas inteligentes (mostrar alertas activas en dashboard)
+
+### Advertencias Comunes
+- ❌ No sobrecargar dashboard con demasiados KPIs; máximo 8-12 widgets visibles simultáneamente
+- ❌ Evitar consultas complejas en tiempo real; usar vistas materializadas o caché
+- ❌ No usar colores engañosos en gráficas (ej: rojo para valores positivos)
+- ❌ No olvidar estado de carga skeleton mientras se fetchean datos
+
+### Librerías Recomendadas por Stack
+- **React:** Recharts, Chart.js con react-chartjs-2, Nivo, Victory
+- **Vue:** Vue-ApexCharts, Chart.js con vue-chartjs, Vuetify charts
+- **Angular:** ng2-charts, Angular Charts, PrimeNG charts
+- **Vanilla JS:** Chart.js, ApexCharts, D3.js (más complejo pero más flexible)
+
+### Tipos de Gráficas Sugeridas
+- **KPI Cards:** Ventas totales, ticket promedio, margen %, crecimiento %
+- **Line Chart:** Evolución de ventas diarias/semanales/mensuales
+- **Bar Chart:** Ventas por categoría/producto/sucursal
+- **Pie/Donut Chart:** Distribución de ventas por categoría o método de pago
+- **Heat Map:** Ventas por hora del día / día de la semana
+- **Table:** Top 10 productos, últimas ventas, alertas activas
+
 ## 🔒 CONSIDERACIONES TÉCNICAS
 
 ### Performance
