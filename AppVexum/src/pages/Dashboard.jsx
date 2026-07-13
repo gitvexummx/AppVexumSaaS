@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSalesStore } from '../stores/useSalesStore';
+import useSalesStore from '../stores/useSalesStore.js';
 import { Link } from 'react-router-dom';
 import { TrendingUp, ShoppingCart, Package, DollarSign, AlertCircle } from 'lucide-react';
 import '../Pages.css';
