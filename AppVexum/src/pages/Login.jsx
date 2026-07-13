@@ -1,65 +1,115 @@
 /**
- * Login - Página de inicio de sesión
+ * Login - Página de inicio de sesión con Magic Link
  * 
- * Formulario simple para autenticación
- * Simula login offline-first (sin backend)
+ * Permite autenticación mediante código mágico enviado al email
+ * Usa Supabase Auth para gestión segura de sesiones
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
 import '../Pages.css';
 
 function Login() {
   const navigate = useNavigate();
-  const { setUser, setSubscription, isAuthenticated, isActive } = useAuthStore();
+  const { 
+    isAuthenticated, 
+    isActive, 
+    sendMagicLink, 
+    checkSession,
+    loading, 
+    magicLinkSent, 
+    error 
+  } = useAuthStore();
   
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [businessName, setBusinessName] = useState('');
+  const [step, setStep] = useState('email'); // 'email' | 'business' | 'sent'
+  
+  // Verificar sesión al cargar
+  useEffect(() => {
+    checkSession();
+  }, []);
   
   // Si ya está autenticado y activo, redirigir
-  if (isAuthenticated && isActive) {
-    navigate('/dashboard');
-    return null;
-  }
-  
-  // Manejar envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Simulación de login offline-first
-      // En producción esto validaría contra un backend
-      const userData = {
-        id: '1',
-        name: 'Usuario Demo',
-        email: formData.email,
-        businessName: 'Mi Negocio'
-      };
-      
-      // Simular suscripción activa por defecto
-      const subscriptionData = {
-        plan: 'Básico',
-        status: 'active',
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 días
-      };
-      
-      // Guardar en stores
-      await setUser(userData);
-      await setSubscription(subscriptionData);
-      
+  useEffect(() => {
+    if (isAuthenticated && isActive) {
       navigate('/dashboard');
-    } catch (error) {
-      console.error('Error en login:', error);
-      setError('Error al iniciar sesión. Inténtalo de nuevo.');
-    } finally {
-      setLoading(false);
+    }
+  }, [isAuthenticated, isActive, navigate]);
+  
+  // Manejar envío del email
+  const handleSendMagicLink = async (e) => {
+    e.preventDefault();
+    
+    if (!email) return;
+    
+    const result = await sendMagicLink(email);
+    
+    if (result.success) {
+      setStep('sent');
+    }
+  };
+  
+  // Renderizar paso actual
+  const renderStep = () => {
+    switch (step) {
+      case 'sent':
+        return (
+          <div className="login-message login-message-success">
+            <div className="login-message-icon">
+              <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 className="login-message-title">¡Revisa tu email!</h2>
+            <p className="login-message-text">
+              Hemos enviado un código mágico a <strong>{email}</strong>
+            </p>
+            <p className="login-message-hint">
+              Haz clic en el enlace para iniciar sesión automáticamente
+            </p>
+            <button
+              onClick={() => setStep('email')}
+              className="login-button login-button-secondary"
+            >
+              Volver e intentar con otro email
+            </button>
+          </div>
+        );
+      
+      default:
+        return (
+          <form onSubmit={handleSendMagicLink} className="login-form">
+            {error && (
+              <div className="login-error">
+                {error}
+              </div>
+            )}
+            
+            <div className="login-input-group">
+              <label className="login-label">
+                Email de tu negocio
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@negocio.com"
+                className="login-input"
+                disabled={loading}
+              />
+            </div>
+            
+            <button
+              type="submit"
+              disabled={loading}
+              className={`login-button ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {loading ? 'Enviando código...' : 'Enviar código mágico'}
+            </button>
+          </form>
+        );
     }
   };
   
@@ -79,62 +129,26 @@ function Login() {
           </p>
         </div>
         
-        {/* Formulario */}
-        <form onSubmit={handleSubmit} className="login-form">
-          {error && (
-            <div className="login-error">
-              {error}
-            </div>
-          )}
-          
-          <div className="login-input-group">
-            <label className="login-label">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="tu@email.com"
-              className="login-input"
-            />
-          </div>
-          
-          <div className="login-input-group">
-            <label className="login-label">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="••••••••"
-              className="login-input"
-            />
-          </div>
-          
-          <button
-            type="submit"
-            disabled={loading}
-            className={`login-button ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
-          </button>
-        </form>
+        {/* Contenido dinámico según el paso */}
+        {renderStep()}
         
         {/* Info adicional */}
         <div className="login-info">
           <p className="login-info-text">
-            ¿Olvidaste tu contraseña? Contacta a soporte
+            ¿Necesitas ayuda? Contacta a soporte
           </p>
         </div>
         
         {/* Demo info */}
         <div className="login-demo-info">
-          <p className="login-demo-info-text">
-            Modo demo: cualquier email y contraseña funcionarán
+          <p className="login-demo-info-title">¿Cómo funciona?</p>
+          <ol className="login-demo-info-steps">
+            <li>Ingresa tu email</li>
+            <li>Recibe un código mágico en tu bandeja de entrada</li>
+            <li>Haz clic en el enlace y listo! ✅</li>
+          </ol>
+          <p className="login-demo-info-note">
+            No necesitas contraseña. Es más seguro y fácil.
           </p>
         </div>
       </div>
