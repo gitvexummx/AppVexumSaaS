@@ -1,56 +1,193 @@
 /**
- * useAuthStore - Store de autenticación y suscripción
+ * useAuthStore - Store de autenticación y suscripción para Vexum MX
  * 
- * Maneja el estado del usuario y validación de suscripción activa
- * Offline-first: los datos se guardan en settings de IndexedDB
+ * Maneja el estado del usuario con Supabase Auth + IndexedDB local
+ * Soporta Magic Link (código mágico) y sincronización offline-first
  */
 import { create } from 'zustand';
 import db from '../db';
+import { supabase, sendMagicLink, signOut, getSession, onAuthStateChange, getProfile } from '../lib/supabase';
 
 const useAuthStore = create((set, get) => ({
   // Estado del usuario
   user: null,
   isAuthenticated: false,
+  businessId: null,
+  businessName: null,
   
   // Estado de suscripción
   subscription: null,
   isActive: false,
   
-  // Cargar datos de autenticación desde IndexedDB
-  loadAuth: async () => {
+  // Estado de carga
+  loading: false,
+  magicLinkSent: false,
+  error: null,
+  
+  /**
+   * Inicializa el listener de autenticación de Supabase
+   * Debe llamarse una vez al iniciar la app
+   */
+  initAuthListener: () => {
+    const { subscription } = onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        // Usuario autenticado en Supabase
+        const profile = await get().fetchUserProfile(session.user.id);
+        
+        set({
+          user: {
+            id: session.user.id,
+            email: session.user.email,
+            ...profile
+          },
+          isAuthenticated: true,
+          businessId: profile?.business_id || null,
+          businessName: profile?.business_name || null,
+          loading: false
+        });
+        
+        // Guardar en IndexedDB para offline
+        await get().saveUserToLocal({
+          id: session.user.id,
+          email: session.user.email,
+          ...profile
+        });
+      } else if (event === 'SIGNED_OUT') {
+        // Usuario cerró sesión
+        await get().clearLocalAuth();
+        set({
+          user: null,
+          isAuthenticated: false,
+          businessId: null,
+          businessName: null,
+          subscription: null,
+          isActive: false,
+          loading: false
+        });
+      }
+    });
+    
+    return subscription;
+  },
+  
+  /**
+   * Envía código mágico al email del usuario
+   * @param {string} email - Email del usuario
+   */
+  sendMagicLink: async (email) => {
+    set({ loading: true, error: null, magicLinkSent: false });
+    
     try {
-      const [userEntry, subscriptionEntry] = await Promise.all([
-        db.settings.get('user'),
-        db.settings.get('subscription')
-      ]);
+      const { error } = await sendMagicLink(email);
       
-      const user = userEntry?.value || null;
-      const subscription = subscriptionEntry?.value || null;
+      if (error) throw error;
       
-      set({
-        user,
-        isAuthenticated: !!user,
-        subscription,
-        isActive: subscription?.status === 'active'
-      });
+      set({ magicLinkSent: true, loading: false });
+      return { success: true };
     } catch (error) {
-      console.error('Error cargando auth:', error);
-      set({ user: null, isAuthenticated: false, subscription: null, isActive: false });
+      console.error('Error enviando magic link:', error);
+      set({ 
+        error: error.message || 'Error al enviar código mágico',
+        loading: false 
+      });
+      return { success: false, error };
     }
   },
   
-  // Guardar usuario en IndexedDB
-  setUser: async (userData) => {
+  /**
+   * Verifica si hay una sesión activa al cargar la app
+   */
+  checkSession: async () => {
+    set({ loading: true });
+    
+    try {
+      const { session, error } = await getSession();
+      
+      if (error) throw error;
+      
+      if (session?.user) {
+        const profile = await get().fetchUserProfile(session.user.id);
+        
+        set({
+          user: {
+            id: session.user.id,
+            email: session.user.email,
+            ...profile
+          },
+          isAuthenticated: true,
+          businessId: profile?.business_id || null,
+          businessName: profile?.business_name || null,
+          loading: false
+        });
+        
+        // Cargar suscripción desde IndexedDB
+        await get().loadSubscription();
+      } else {
+        set({ loading: false });
+      }
+    } catch (error) {
+      console.error('Error verificando sesión:', error);
+      set({ loading: false });
+    }
+  },
+  
+  /**
+   * Obtiene el perfil del usuario desde Supabase
+   * @param {string} userId - ID del usuario
+   */
+  fetchUserProfile: async (userId) => {
+    try {
+      const { profile } = await getProfile(userId);
+      return profile || {};
+    } catch (error) {
+      console.error('Error obteniendo perfil:', error);
+      return {};
+    }
+  },
+  
+  /**
+   * Guarda datos del usuario en IndexedDB (offline-first)
+   * @param {object} userData - Datos del usuario
+   */
+  saveUserToLocal: async (userData) => {
     try {
       await db.settings.put({ key: 'user', value: userData });
-      set({ user: userData, isAuthenticated: true });
     } catch (error) {
-      console.error('Error guardando usuario:', error);
-      throw error;
+      console.error('Error guardando usuario local:', error);
     }
   },
   
-  // Guardar suscripción en IndexedDB
+  /**
+   * Carga suscripción desde IndexedDB
+   */
+  loadSubscription: async () => {
+    try {
+      const subscriptionEntry = await db.settings.get('subscription');
+      const subscription = subscriptionEntry?.value || null;
+      
+      if (subscription) {
+        const now = new Date();
+        const expirationDate = new Date(subscription.expiresAt);
+        const isActive = subscription.status === 'active' && now < expirationDate;
+        
+        set({ 
+          subscription,
+          isActive,
+          loading: false
+        });
+      } else {
+        set({ subscription: null, isActive: false, loading: false });
+      }
+    } catch (error) {
+      console.error('Error cargando suscripción:', error);
+      set({ subscription: null, isActive: false, loading: false });
+    }
+  },
+  
+  /**
+   * Guarda suscripción en IndexedDB
+   * @param {object} subscriptionData - Datos de suscripción
+   */
   setSubscription: async (subscriptionData) => {
     try {
       await db.settings.put({ key: 'subscription', value: subscriptionData });
@@ -64,49 +201,47 @@ const useAuthStore = create((set, get) => ({
     }
   },
   
-  // Cerrar sesión
+  /**
+   * Cierra sesión en Supabase y limpia estado local
+   */
   logout: async () => {
+    set({ loading: true });
+    
     try {
-      await db.settings.delete('user');
-      set({ user: null, isAuthenticated: false });
+      await signOut();
+      await get().clearLocalAuth();
+      
+      set({
+        user: null,
+        isAuthenticated: false,
+        businessId: null,
+        businessName: null,
+        subscription: null,
+        isActive: false,
+        loading: false
+      });
     } catch (error) {
       console.error('Error cerrando sesión:', error);
+      set({ loading: false });
       throw error;
     }
   },
-
-  // Verificar si la suscripción está activa
-  checkSubscription: async () => {
+  
+  /**
+   * Limpia datos de autenticación locales
+   */
+  clearLocalAuth: async () => {
     try {
-      const subscriptionEntry = await db.settings.get('subscription');
-      const subscription = subscriptionEntry?.value || null;
-      
-      if (!subscription) {
-        set({ subscription: null, isActive: false });
-        return false;
-      }
-
-      const now = new Date();
-      const expirationDate = new Date(subscription.expiresAt);
-      const isActive = subscription.status === 'active' && now < expirationDate;
-
-      // Actualizar estado si cambió
-      if (isActive !== get().isActive) {
-        set({ 
-          subscription,
-          isActive 
-        });
-      }
-
-      return isActive;
+      await db.settings.delete('user');
     } catch (error) {
-      console.error('Error verificando suscripción:', error);
-      set({ subscription: null, isActive: false });
-      return false;
+      console.error('Error limpiando auth local:', error);
     }
   },
-
-  // Activar suscripción demo (para pruebas)
+  
+  /**
+   * Activa suscripción demo (para pruebas)
+   * @param {number} days - Días de duración
+   */
   activateDemoSubscription: async (days = 30) => {
     try {
       const now = new Date();
@@ -132,7 +267,23 @@ const useAuthStore = create((set, get) => ({
       console.error('Error activando suscripción demo:', error);
       throw error;
     }
+  },
+  
+  /**
+   * Actualiza el nombre del negocio
+   * @param {string} newName - Nuevo nombre
+   */
+  updateBusinessName: async (newName) => {
+    set({ businessName: newName });
+    
+    const currentUser = get().user;
+    if (currentUser?.id) {
+      // Actualizar en Supabase (se implementará después)
+      // Por ahora solo actualizamos localmente
+      await get().saveUserToLocal({ ...currentUser, business_name: newName });
+    }
   }
 }));
 
 export default useAuthStore;
+

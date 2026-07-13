@@ -3,7 +3,9 @@
  * 
  * Configura las rutas de la aplicación Vexum MX
  * Incluye navegación responsiva y protección de rutas
+ * Inicializa listener de autenticación de Supabase
  */
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import BottomNav from './components/BottomNav';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -14,9 +16,23 @@ import POS from './pages/POS';
 import Inventario from './pages/Inventario';
 import Ajustes from './pages/Ajustes';
 import { useDarkMode } from './hooks/useDarkMode';
+import useAuthStore from './stores/useAuthStore';
 
 function App() {
   const { isDarkMode } = useDarkMode();
+  const { initAuthListener } = useAuthStore();
+  
+  // Inicializar listener de autenticación una vez al montar
+  useEffect(() => {
+    const authSubscription = initAuthListener();
+    
+    // Cleanup al desmontar
+    return () => {
+      if (authSubscription?.unsubscribe) {
+        authSubscription.unsubscribe();
+      }
+    };
+  }, []);
   
   return (
     <Router>
