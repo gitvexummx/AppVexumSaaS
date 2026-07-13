@@ -1,137 +1,97 @@
-/**
- * useAuthStore - Store de autenticación y suscripción
- * 
- * Maneja el estado del usuario y validación de suscripción activa
- * Offline-first: los datos se guardan en settings de IndexedDB
- */
 import { create } from 'zustand';
-import db from '../db';
 
+/**
+ * Store de autenticación y gestión del negocio actual
+ * Maneja el estado del usuario logueado y su businessId para scoped IDs
+ */
 const useAuthStore = create((set, get) => ({
   // Estado del usuario
   user: null,
   isAuthenticated: false,
   
-  // Estado de suscripción
-  subscription: null,
-  isActive: false,
+  // Datos del negocio
+  businessId: null,
+  businessName: null,
+  subscriptionStatus: 'inactive', // 'active', 'inactive', 'suspended'
+  subscriptionExpiry: null,
   
-  // Cargar datos de autenticación desde IndexedDB
-  loadAuth: async () => {
-    try {
-      const [userEntry, subscriptionEntry] = await Promise.all([
-        db.settings.get('user'),
-        db.settings.get('subscription')
-      ]);
-      
-      const user = userEntry?.value || null;
-      const subscription = subscriptionEntry?.value || null;
-      
-      set({
-        user,
-        isAuthenticated: !!user,
-        subscription,
-        isActive: subscription?.status === 'active'
-      });
-    } catch (error) {
-      console.error('Error cargando auth:', error);
-      set({ user: null, isAuthenticated: false, subscription: null, isActive: false });
-    }
-  },
+  // Acciones de autenticación
+  login: (userData) => set({
+    user: userData,
+    isAuthenticated: true,
+    businessId: userData.businessId || null,
+    businessName: userData.businessName || null,
+    subscriptionStatus: userData.subscriptionStatus || 'inactive',
+    subscriptionExpiry: userData.subscriptionExpiry || null
+  }),
   
-  // Guardar usuario en IndexedDB
-  setUser: async (userData) => {
-    try {
-      await db.settings.put({ key: 'user', value: userData });
-      set({ user: userData, isAuthenticated: true });
-    } catch (error) {
-      console.error('Error guardando usuario:', error);
-      throw error;
-    }
-  },
+  logout: () => set({
+    user: null,
+    isAuthenticated: false,
+    businessId: null,
+    businessName: null,
+    subscriptionStatus: 'inactive',
+    subscriptionExpiry: null
+  }),
   
-  // Guardar suscripción en IndexedDB
-  setSubscription: async (subscriptionData) => {
-    try {
-      await db.settings.put({ key: 'subscription', value: subscriptionData });
-      set({ 
-        subscription: subscriptionData,
-        isActive: subscriptionData.status === 'active'
-      });
-    } catch (error) {
-      console.error('Error guardando suscripción:', error);
-      throw error;
-    }
-  },
+  // Actualizar datos del negocio
+  updateBusiness: (businessData) => set((state) => ({
+    ...state,
+    ...businessData
+  })),
   
-  // Cerrar sesión
-  logout: async () => {
-    try {
-      await db.settings.delete('user');
-      set({ user: null, isAuthenticated: false });
-    } catch (error) {
-      console.error('Error cerrando sesión:', error);
-      throw error;
-    }
-  },
-
   // Verificar si la suscripción está activa
-  checkSubscription: async () => {
-    try {
-      const subscriptionEntry = await db.settings.get('subscription');
-      const subscription = subscriptionEntry?.value || null;
-      
-      if (!subscription) {
-        set({ subscription: null, isActive: false });
-        return false;
-      }
-
-      const now = new Date();
-      const expirationDate = new Date(subscription.expiresAt);
-      const isActive = subscription.status === 'active' && now < expirationDate;
-
-      // Actualizar estado si cambió
-      if (isActive !== get().isActive) {
-        set({ 
-          subscription,
-          isActive 
-        });
-      }
-
-      return isActive;
-    } catch (error) {
-      console.error('Error verificando suscripción:', error);
-      set({ subscription: null, isActive: false });
-      return false;
-    }
+  isActiveSubscription: () => {
+    const state = get();
+    if (!state.subscriptionExpiry) return false;
+    
+    const expiryDate = new Date(state.subscriptionExpiry);
+    const now = new Date();
+    
+    return state.subscriptionStatus === 'active' && expiryDate > now;
   },
-
-  // Activar suscripción demo (para pruebas)
-  activateDemoSubscription: async (days = 30) => {
+  
+  // Obtener businessId actual (helper para otros módulos)
+  getCurrentBusinessId: () => get().businessId,
+  
+  // Inicializar store desde localStorage o sesión
+  initialize: () => {
     try {
-      const now = new Date();
-      const expiresAt = new Date(now);
-      expiresAt.setDate(expiresAt.getDate() + days);
-
-      const subscriptionData = {
-        status: 'active',
-        plan: 'demo',
-        startedAt: now.toISOString(),
-        expiresAt: expiresAt.toISOString(),
-        isDemo: true
-      };
-
-      await db.settings.put({ key: 'subscription', value: subscriptionData });
-      set({ 
-        subscription: subscriptionData,
-        isActive: true 
-      });
-
-      return subscriptionData;
+      const savedAuth = localStorage.getItem('vexum_auth');
+      if (savedAuth) {
+        const parsed = JSON.parse(savedAuth);
+        set(parsed);
+        return true;
+      }
     } catch (error) {
-      console.error('Error activando suscripción demo:', error);
-      throw error;
+      console.error('Error al inicializar auth store:', error);
     }
+    return false;
+  },
+  
+  // Persistir en localStorage
+  persist: () => {
+    const state = get();
+    const toSave = {
+      user: state.user,
+      isAuthenticated: state.isAuthenticated,
+      businessId: state.businessId,
+      businessName: state.businessName,
+      subscriptionStatus: state.subscriptionStatus,
+      subscriptionExpiry: state.subscriptionExpiry
+    };
+    localStorage.setItem('vexum_auth', JSON.stringify(toSave));
+    
+    // Exponer para acceso desde db.js (temporal hasta tener mejor integración)
+    window.__VEXUM_AUTH_STORE__ = {
+      businessId: state.businessId
+    };
+  },
+  
+  // Limpiar localStorage al hacer logout
+  clearPersistence: () => {
+    localStorage.removeItem('vexum_auth');
+    window.__VEXUM_AUTH_STORE__ = null;
   }
 }));
 

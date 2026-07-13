@@ -1,124 +1,264 @@
-/**
- * useProductsStore - Store de productos e inventario
- * 
- * Maneja CRUD de productos offline-first
- * Todos los cambios se sincronizan con IndexedDB
- */
 import { create } from 'zustand';
-import db from '../db';
+import { queryRecords, createRecord, updateRecord, deleteRecord } from '../db/db.js';
 
+/**
+ * Store de productos para gestión del inventario
+ * Maneja CRUD local de productos con scoped IDs por negocio
+ */
 const useProductsStore = create((set, get) => ({
-  // Estado de productos
+  // Estado
   products: [],
-  loading: false,
+  isLoading: false,
+  error: null,
+  lastSync: null,
   
-  // Cargar todos los productos desde IndexedDB
+  // Filtros y búsqueda
+  searchQuery: '',
+  categoryFilter: null,
+  
+  // Acciones - Carga de productos
   loadProducts: async () => {
-    set({ loading: true });
+    set({ isLoading: true, error: null });
     try {
-      const products = await db.products.toArray();
-      set({ products, loading: false });
+      const products = await queryRecords('productos');
+      set({ 
+        products, 
+        isLoading: false,
+        lastSync: new Date()
+      });
+      return products;
     } catch (error) {
-      console.error('Error cargando productos:', error);
-      set({ loading: false });
+      console.error('Error al cargar productos:', error);
+      set({ 
+        error: 'No se pudieron cargar los productos', 
+        isLoading: false 
+      });
       throw error;
     }
   },
   
-  // Agregar nuevo producto
-  addProduct: async (productData) => {
+  // Crear producto
+  createProduct: async (productData) => {
+    set({ isLoading: true, error: null });
     try {
-      const id = await db.products.add({
+      const newProduct = {
         ...productData,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
+        activo: productData.activo !== undefined ? productData.activo : true,
+        stock: productData.stock || 0,
+        stockMinimo: productData.stockMinimo || 5,
+        impuestos: productData.impuestos || 16,
+        permiteDescuento: productData.permiteDescuento !== undefined ? productData.permiteDescuento : true,
+        unidadMedida: productData.unidadMedida || 'pieza'
+      };
+      
+      const id = await createRecord('productos', newProduct);
+      const created = { ...newProduct, id };
       
       set((state) => ({
-        products: [...state.products, { ...productData, id }]
+        products: [...state.products, created],
+        isLoading: false
       }));
       
-      return id;
+      return created;
     } catch (error) {
-      console.error('Error agregando producto:', error);
+      console.error('Error al crear producto:', error);
+      set({ 
+        error: 'No se pudo crear el producto', 
+        isLoading: false 
+      });
       throw error;
     }
   },
   
-  // Actualizar producto existente
-  updateProduct: async (id, updates) => {
+  // Actualizar producto
+  updateProduct: async (id, productData) => {
+    set({ isLoading: true, error: null });
     try {
-      await db.products.update(id, {
-        ...updates,
-        updatedAt: new Date()
-      });
+      await updateRecord('productos', id, productData);
       
       set((state) => ({
         products: state.products.map(p => 
-          p.id === id ? { ...p, ...updates } : p
-        )
+          p.id === id 
+            ? { ...p, ...productData, updatedAt: new Date() }
+            : p
+        ),
+        isLoading: false
       }));
+      
+      return true;
     } catch (error) {
-      console.error('Error actualizando producto:', error);
+      console.error('Error al actualizar producto:', error);
+      set({ 
+        error: 'No se pudo actualizar el producto', 
+        isLoading: false 
+      });
       throw error;
     }
   },
   
-  // Eliminar producto
+  // Eliminar producto (soft delete marcando como inactivo)
   deleteProduct: async (id) => {
+    set({ isLoading: true, error: null });
     try {
-      await db.products.delete(id);
+      // Opción A: Soft delete (recomendado para mantener historial de ventas)
+      await updateRecord('productos', id, { activo: false });
       
       set((state) => ({
-        products: state.products.filter(p => p.id !== id)
+        products: state.products.map(p => 
+          p.id === id ? { ...p, activo: false, updatedAt: new Date() } : p
+        ),
+        isLoading: false
       }));
+      
+      return true;
     } catch (error) {
-      console.error('Error eliminando producto:', error);
+      console.error('Error al eliminar producto:', error);
+      set({ 
+        error: 'No se pudo eliminar el producto', 
+        isLoading: false 
+      });
       throw error;
     }
   },
   
-  // Buscar productos por nombre o categoría
-  searchProducts: (query) => {
-    const { products } = get();
-    if (!query.trim()) return products;
+  // Hard delete (solo si es absolutamente necesario)
+  hardDeleteProduct: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await deleteRecord('productos', id);
+      
+      set((state) => ({
+        products: state.products.filter(p => p.id !== id),
+        isLoading: false
+      }));
+      
+      return true;
+    } catch (error) {
+      console.error('Error al eliminar permanentemente el producto:', error);
+      set({ 
+        error: 'No se pudo eliminar el producto', 
+        isLoading: false 
+      });
+      throw error;
+    }
+  },
+  
+  // Actualizar stock
+  updateStock: async (id, quantityChange, operation = 'add') => {
+    try {
+      const product = get().products.find(p => p.id === id);
+      if (!product) {
+        throw new Error('Producto no encontrado');
+      }
+      
+      let newStock = product.stock;
+      if (operation === 'add') {
+        newStock += quantityChange;
+      } else if (operation === 'subtract') {
+        newStock -= quantityChange;
+      } else if (operation === 'set') {
+        newStock = quantityChange;
+      }
+      
+      // Validar stock no negativo
+      if (newStock < 0) {
+        throw new Error('El stock no puede ser negativo');
+      }
+      
+      await updateRecord('productos', id, { stock: newStock });
+      
+      set((state) => ({
+        products: state.products.map(p => 
+          p.id === id ? { ...p, stock: newStock, updatedAt: new Date() } : p
+        )
+      }));
+      
+      return newStock;
+    } catch (error) {
+      console.error('Error al actualizar stock:', error);
+      throw error;
+    }
+  },
+  
+  // Búsqueda de productos
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  
+  // Filtro por categoría
+  setCategoryFilter: (category) => set({ categoryFilter: category }),
+  
+  // Obtener productos filtrados
+  getFilteredProducts: () => {
+    const state = get();
+    let filtered = state.products;
     
-    const lowerQuery = query.toLowerCase();
-    return products.filter(p => 
-      p.name?.toLowerCase().includes(lowerQuery) ||
-      p.category?.toLowerCase().includes(lowerQuery)
+    // Filtrar por búsqueda
+    if (state.searchQuery) {
+      const query = state.searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.nombre.toLowerCase().includes(query) ||
+        p.codigo?.toLowerCase().includes(query) ||
+        p.codigoBarras?.toLowerCase().includes(query)
+      );
+    }
+    
+    // Filtrar por categoría
+    if (state.categoryFilter) {
+      filtered = filtered.filter(p => p.categoria === state.categoryFilter);
+    }
+    
+    // Solo mostrar activos
+    filtered = filtered.filter(p => p.activo !== false);
+    
+    return filtered;
+  },
+  
+  // Obtener categorías únicas
+  getCategories: () => {
+    const state = get();
+    const categories = [...new Set(
+      state.products
+        .filter(p => p.activo !== false && p.categoria)
+        .map(p => p.categoria)
+    )];
+    return categories.sort();
+  },
+  
+  // Buscar producto por código de barras
+  findByBarcode: (barcode) => {
+    const state = get();
+    return state.products.find(p => 
+      p.codigoBarras === barcode && p.activo !== false
+    ) || null;
+  },
+  
+  // Buscar producto por código/SKU
+  findByCode: (code) => {
+    const state = get();
+    return state.products.find(p => 
+      p.codigo === code && p.activo !== false
+    ) || null;
+  },
+  
+  // Verificar stock bajo
+  getLowStockProducts: () => {
+    const state = get();
+    return state.products.filter(p => 
+      p.activo !== false && p.stock <= p.stockMinimo
     );
   },
   
-  // Obtener producto por ID
-  getProductById: (id) => {
-    const { products } = get();
-    return products.find(p => p.id === id);
-  },
+  // Limpiar errores
+  clearError: () => set({ error: null }),
   
-  // Descontar stock después de una venta
-  decreaseStock: async (productId, quantity) => {
-    try {
-      const product = await db.products.get(productId);
-      if (!product) throw new Error('Producto no encontrado');
-      
-      const newStock = Math.max(0, (product.stock || 0) - quantity);
-      
-      await db.products.update(productId, { 
-        stock: newStock,
-        updatedAt: new Date()
-      });
-      
-      set((state) => ({
-        products: state.products.map(p =>
-          p.id === productId ? { ...p, stock: newStock } : p
-        )
-      }));
-    } catch (error) {
-      console.error('Error descontando stock:', error);
-      throw error;
-    }
-  }
+  // Reiniciar estado
+  reset: () => set({
+    products: [],
+    isLoading: false,
+    error: null,
+    lastSync: null,
+    searchQuery: '',
+    categoryFilter: null
+  })
 }));
 
 export default useProductsStore;

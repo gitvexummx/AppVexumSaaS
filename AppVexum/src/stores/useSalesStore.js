@@ -1,239 +1,322 @@
-/**
- * useSalesStore - Store de ventas y historial
- *
- * Maneja el registro de ventas en IndexedDB
- * Permite consultar historial, totales por fecha y estadísticas
- */
 import { create } from 'zustand';
-import db from '../db';
+import { queryRecords, createRecord, updateRecord } from '../db/db.js';
 
+/**
+ * Store de ventas para gestión del historial y procesamiento de cobros
+ * Maneja CRUD de ventas, items de venta y pagos
+ */
 const useSalesStore = create((set, get) => ({
-  // Estado de ventas
+  // Estado
   sales: [],
-  loading: false,
-
-  // Cargar ventas desde IndexedDB
+  saleItems: [],
+  payments: [],
+  isLoading: false,
+  error: null,
+  lastSync: null,
+  
+  // Filtros
+  dateFilter: {
+    start: null,
+    end: null
+  },
+  statusFilter: null,
+  
+  // === ACCIONES DE VENTAS ===
+  
+  /**
+   * Carga todas las ventas del negocio
+   */
   loadSales: async () => {
-    set({ loading: true });
+    set({ isLoading: true, error: null });
     try {
-      const sales = await db.sales.reverse().sortBy('date');
-      set({ sales, loading: false });
-    } catch (error) {
-      console.error('Error cargando ventas:', error);
-      set({ loading: false });
-      throw error;
-    }
-  },
-
-  // Guardar nueva venta con sus items
-  saveSale: async (saleData, items) => {
-    try {
-      // Transacción para guardar venta e items juntos
-      const saleId = await db.transaction('rw', db.sales, db.saleItems, async () => {
-        // Guardar venta principal
-        const id = await db.sales.add(saleData);
-
-        // Guardar cada item de la venta
-        for (const item of items) {
-          await db.saleItems.add({
-            ...item,
-            saleId: id
-          });
-        }
-
-        return id;
+      const [sales, saleItems, payments] = await Promise.all([
+        queryRecords('ventas'),
+        queryRecords('venta_items'),
+        queryRecords('pagos')
+      ]);
+      
+      set({ 
+        sales,
+        saleItems,
+        payments,
+        isLoading: false,
+        lastSync: new Date()
       });
-
-      // Recargar ventas después de guardar
-      await get().loadSales();
-
-      return saleId;
+      
+      return { sales, saleItems, payments };
     } catch (error) {
-      console.error('Error guardando venta:', error);
-      throw error;
-    }
-  },
-
-  // Obtener ventas por fecha
-  getSalesByDate: async (startDate, endDate) => {
-    try {
-      const sales = await db.sales
-        .filter(sale => {
-          const saleDate = new Date(sale.date);
-          return saleDate >= startDate && saleDate <= endDate;
-        })
-        .toArray();
-      return sales;
-    } catch (error) {
-      console.error('Error obteniendo ventas por fecha:', error);
-      throw error;
-    }
-  },
-
-  // Calcular total vendido hoy
-  getTodayTotal: async () => {
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const todaySales = await db.sales
-        .filter(sale => {
-          const saleDate = new Date(sale.date);
-          return saleDate >= today && saleDate < tomorrow;
-        })
-        .toArray();
-
-      return todaySales.reduce((sum, sale) => sum + sale.total, 0);
-    } catch (error) {
-      console.error('Error calculando total del día:', error);
-      return 0;
-    }
-  },
-
-  // Contar ventas hoy
-  getTodayCount: async () => {
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const count = await db.sales
-        .filter(sale => {
-          const saleDate = new Date(sale.date);
-          return saleDate >= today && saleDate < tomorrow;
-        })
-        .count();
-
-      return count;
-    } catch (error) {
-      console.error('Error contando ventas:', error);
-      return 0;
-    }
-  },
-
-  // NUEVA: Obtener estadísticas completas de hoy (total y count)
-  getTodayStats: async () => {
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      const todaySales = await db.sales
-        .filter(sale => {
-          const saleDate = new Date(sale.date);
-          return saleDate >= today && saleDate < tomorrow;
-        })
-        .toArray();
-
-      const total = todaySales.reduce((sum, sale) => sum + sale.total, 0);
-      const count = todaySales.length;
-
-      return { total, count };
-    } catch (error) {
-      console.error('Error obteniendo estadísticas de hoy:', error);
-      return { total: 0, count: 0 };
-    }
-  },
-
-  // Obtener últimas N ventas
-  getRecentSales: async (limit = 5) => {
-    try {
-      const sales = await db.sales
-        .orderBy('date')
-        .reverse()
-        .limit(limit)
-        .toArray();
-      return sales;
-    } catch (error) {
-      console.error('Error obteniendo ventas recientes:', error);
-      return [];
-    }
-  },
-
-  // Obtener producto más vendido del día
-  getTopProductToday: async () => {
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      // Obtener ventas de hoy
-      const todaySales = await db.sales
-        .filter(sale => {
-          const saleDate = new Date(sale.date);
-          return saleDate >= today && saleDate < tomorrow;
-        })
-        .toArray();
-
-      if (todaySales.length === 0) return null;
-
-      // Obtener todos los items de las ventas de hoy
-      const allItems = [];
-      for (const sale of todaySales) {
-        const items = await db.saleItems.where('saleId').equals(sale.id).toArray();
-        allItems.push(...items);
-      }
-
-      if (allItems.length === 0) return null;
-
-      // Contar cantidad vendida por producto
-      const productCounts = {};
-      for (const item of allItems) {
-        const productId = item.productId;
-        productCounts[productId] = (productCounts[productId] || 0) + (item.quantity || 1);
-      }
-
-      // Encontrar el producto con más ventas
-      let topProductId = null;
-      let maxCount = 0;
-      for (const [productId, count] of Object.entries(productCounts)) {
-        if (count > maxCount) {
-          maxCount = count;
-          topProductId = productId;
-        }
-      }
-
-      if (!topProductId) return null;
-
-      // Obtener información del producto
-      const product = await db.products.get(parseInt(topProductId));
-      return product ? { ...product, soldQty: maxCount } : null;
-
-    } catch (error) {
-      console.error('Error obteniendo producto más vendido:', error);
-      return null;
-    }
-  },
-
-  // Alias para getTopProductToday (para consistencia con el Dashboard)
-  getTopProduct: async () => {
-    return await get().getTopProductToday();
-  },
-
-  // Eliminar venta (con todos sus items)
-  deleteSale: async (saleId) => {
-    try {
-      await db.transaction('rw', db.sales, db.saleItems, async () => {
-        await db.sales.delete(saleId);
-        await db.saleItems.where('saleId').equals(saleId).delete();
+      console.error('Error al cargar ventas:', error);
+      set({ 
+        error: 'No se pudieron cargar las ventas', 
+        isLoading: false 
       });
-
-      await get().loadSales();
-    } catch (error) {
-      console.error('Error eliminando venta:', error);
       throw error;
     }
-  }
+  },
+  
+  /**
+   * Procesa una nueva venta completa
+   * @param {Object} saleData - Datos de la cabecera de venta
+   * @param {Array} items - Items de la venta
+   * @param {Array} payments - Pagos aplicados
+   * @returns {Promise<Object>} Venta creada con todos sus detalles
+   */
+  processSale: async (saleData, items, payments) => {
+    set({ isLoading: true, error: null });
+    
+    try {
+      // 1. Crear la venta
+      const saleId = await createRecord('ventas', {
+        turnoId: saleData.turnoId,
+        cajaId: saleData.cajaId,
+        userId: saleData.userId,
+        folio: saleData.folio,
+        subtotal: saleData.subtotal,
+        descuento: saleData.descuento,
+        impuestos: saleData.impuestos,
+        total: saleData.total,
+        estado: 'completada',
+        fecha: new Date(),
+        clienteNombre: saleData.clienteNombre,
+        clienteTelefono: saleData.clienteTelefono,
+        observaciones: saleData.observaciones
+      });
+      
+      // 2. Crear cada item de la venta
+      const createdItems = [];
+      for (const item of items) {
+        const itemId = await createRecord('venta_items', {
+          ventaId: saleId,
+          productoId: item.productId,
+          productoNombre: item.nombre,
+          productoCodigo: item.codigo,
+          cantidad: item.cantidad,
+          precioUnitario: item.precioUnitario,
+          subtotal: item.subtotal * item.cantidad,
+          descuento: item.descuento * item.cantidad,
+          impuestos: item.impuestos,
+          total: item.total,
+          notas: item.notas
+        });
+        createdItems.push({ ...item, id: itemId, ventaId: saleId });
+      }
+      
+      // 3. Crear los pagos
+      const createdPayments = [];
+      for (const payment of payments) {
+        const paymentId = await createRecord('pagos', {
+          ventaId: saleId,
+          metodoPago: payment.method,
+          monto: payment.amount,
+          referencia: payment.reference,
+          estado: 'aprobado',
+          fechaProcesamiento: new Date()
+        });
+        createdPayments.push({ ...payment, id: paymentId, ventaId: saleId });
+      }
+      
+      // 4. Actualizar el estado local
+      const newSale = {
+        id: saleId,
+        ...saleData,
+        estado: 'completada',
+        fecha: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      set((state) => ({
+        sales: [...state.sales, newSale],
+        saleItems: [...state.saleItems, ...createdItems],
+        payments: [...state.payments, ...createdPayments],
+        isLoading: false
+      }));
+      
+      console.log('✅ Venta procesada exitosamente:', saleId);
+      return {
+        sale: newSale,
+        items: createdItems,
+        payments: createdPayments
+      };
+      
+    } catch (error) {
+      console.error('Error al procesar venta:', error);
+      set({ 
+        error: 'No se pudo procesar la venta', 
+        isLoading: false 
+      });
+      throw error;
+    }
+  },
+  
+  /**
+   * Cancela una venta existente
+   * @param {string} saleId - ID de la venta a cancelar
+   * @param {string} reason - Motivo de la cancelación
+   */
+  cancelSale: async (saleId, reason = '') => {
+    set({ isLoading: true, error: null });
+    try {
+      await updateRecord('ventas', saleId, {
+        estado: 'cancelada',
+        observaciones: reason ? `Cancelada: ${reason}` : undefined
+      });
+      
+      set((state) => ({
+        sales: state.sales.map(sale => 
+          sale.id === saleId 
+            ? { ...sale, estado: 'cancelada', updatedAt: new Date() }
+            : sale
+        ),
+        isLoading: false
+      }));
+      
+      console.log('✅ Venta cancelada:', saleId);
+      return true;
+    } catch (error) {
+      console.error('Error al cancelar venta:', error);
+      set({ 
+        error: 'No se pudo cancelar la venta', 
+        isLoading: false 
+      });
+      throw error;
+    }
+  },
+  
+  /**
+   * Obtiene los items de una venta específica
+   * @param {string} saleId - ID de la venta
+   */
+  getSaleItems: (saleId) => {
+    const state = get();
+    return state.saleItems.filter(item => item.ventaId === saleId);
+  },
+  
+  /**
+   * Obtiene los pagos de una venta específica
+   * @param {string} saleId - ID de la venta
+   */
+  getSalePayments: (saleId) => {
+    const state = get();
+    return state.payments.filter(payment => payment.ventaId === saleId);
+  },
+  
+  /**
+   * Obtiene ventas filtradas por rango de fechas y estado
+   */
+  getFilteredSales: () => {
+    const state = get();
+    let filtered = state.sales;
+    
+    // Filtrar por fechas
+    if (state.dateFilter.start) {
+      filtered = filtered.filter(sale => 
+        new Date(sale.fecha) >= new Date(state.dateFilter.start)
+      );
+    }
+    if (state.dateFilter.end) {
+      filtered = filtered.filter(sale => 
+        new Date(sale.fecha) <= new Date(state.dateFilter.end)
+      );
+    }
+    
+    // Filtrar por estado
+    if (state.statusFilter) {
+      filtered = filtered.filter(sale => sale.estado === state.statusFilter);
+    }
+    
+    // Ordenar por fecha descendente
+    filtered.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    
+    return filtered;
+  },
+  
+  /**
+   * Establece filtro de fechas
+   */
+  setDateFilter: (start, end) => set({
+    dateFilter: { start, end }
+  }),
+  
+  /**
+   * Establece filtro de estado
+   */
+  setStatusFilter: (status) => set({ statusFilter: status }),
+  
+  /**
+   * Limpia filtros
+   */
+  clearFilters: () => set({
+    dateFilter: { start: null, end: null },
+    statusFilter: null
+  }),
+  
+  /**
+   * Obtiene estadísticas básicas de ventas
+   */
+  getSalesStats: () => {
+    const state = get();
+    const filteredSales = state.getFilteredSales();
+    
+    const totalVentas = filteredSales.length;
+    const totalIngresos = filteredSales.reduce((sum, sale) => sum + sale.total, 0);
+    const ventasCompletadas = filteredSales.filter(s => s.estado === 'completada').length;
+    const ventasCanceladas = filteredSales.filter(s => s.estado === 'cancelada').length;
+    const ticketPromedio = totalVentas > 0 ? totalIngresos / totalVentas : 0;
+    
+    return {
+      totalVentas,
+      totalIngresos,
+      ventasCompletadas,
+      ventasCanceladas,
+      ticketPromedio
+    };
+  },
+  
+  /**
+   * Obtiene el siguiente folio disponible
+   * @param {string} turnoId - ID del turno actual
+   */
+  getNextFolio: (turnoId) => {
+    const state = get();
+    const turnoSales = state.sales.filter(sale => 
+      sale.turnoId === turnoId && sale.estado !== 'cancelada'
+    );
+    
+    if (turnoSales.length === 0) {
+      return 1;
+    }
+    
+    const maxFolio = Math.max(...turnoSales.map(s => s.folio));
+    return maxFolio + 1;
+  },
+  
+  /**
+   * Busca una venta por folio
+   */
+  findByFolio: (folio) => {
+    const state = get();
+    return state.sales.find(sale => sale.folio === folio) || null;
+  },
+  
+  /**
+   * Reinicia el estado del store
+   */
+  reset: () => set({
+    sales: [],
+    saleItems: [],
+    payments: [],
+    isLoading: false,
+    error: null,
+    lastSync: null,
+    dateFilter: { start: null, end: null },
+    statusFilter: null
+  }),
+  
+  /**
+   * Limpia errores
+   */
+  clearError: () => set({ error: null })
 }));
 
 export default useSalesStore;
-export { useSalesStore };
