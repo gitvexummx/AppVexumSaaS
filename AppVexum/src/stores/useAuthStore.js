@@ -249,8 +249,8 @@ const useAuthStore = create((set, get) => ({
     businessName: userData.businessName || null,
     subscriptionStatus: userData.subscriptionStatus || 'inactive',
     subscriptionExpiry: userData.subscriptionExpiry || null
-  }),
-  
+  })}},
+
   logout: () => set({
     user: null,
     isAuthenticated: false,
@@ -356,7 +356,7 @@ const useAuthStore = create((set, get) => ({
     window.__VEXUM_AUTH_STORE__ = {
       businessId: state.businessId
     };
-  },
+  }},
   
   // Limpiar localStorage al hacer logout
   clearPersistence: () => {
